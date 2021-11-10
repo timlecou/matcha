@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  back:
+    build: ./back/
+    container_name: website-back
+    restart: always
+    volumes:
+      - ./back:/app
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: 4000
+      FRONT_URI: "http://localhost:3000"
+    command: "yarn star:dev"
+    depends_on:
+      - db
+  front:
+    build: ./front/
+    container_name: website-front
+    restart: always
+    volumes:
+      - ./front:/app
+    ports:
+        - "3000:3000"
+    environment:
+      PORT: 3000
+      BACK_URI: "http://localhost:4000"
+    command: "yarn dev"
+    depends_on:
+      - back
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      PGDATA: /tmp
