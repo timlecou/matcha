@@ -1,9 +1,14 @@
 {
-  "name": "backend",
-  "version": "0.0.1",
+  "name": "matcha",
+  "version": "1.0.0",
   "description": "",
-  "author": "timlecou",
-  "license": "UNLICENSED",
+  "main": "test.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
   }
 }
