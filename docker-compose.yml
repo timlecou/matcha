@@ -6,14 +6,13 @@ services:
     container_name: website-back
     restart: always
     volumes:
-      - ./back:/usr/app/
-      - /usr/app/node_modules
+      - ./back:/app
     ports:
       - "4000:4000"
     environment:
       PORT: 4000
       FRONT_URI: "http://localhost:3000"
-    command: npm run dev
+    command: "npm run start"
   #  depends_on:
   #    - db
   #front:
