@@ -1,5 +1,5 @@
 #!/bin/bash
 
-yarn install
+npm install --quiet
 
 exec "$@"
