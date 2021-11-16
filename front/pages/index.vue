@@ -1,34 +1,24 @@
 <template>
   <div class="container">
     <div>
-      <Logo />
-      <h1 class="title">
-        matcha
-      </h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+      <h5 class="">
+        {{ phrase }}
+      </h5>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+import axios from 'axios'
+//https://api.nuxtjs.dev/mountains
+export default {
+  async asyncData() {
+    const phrase = await axios.get('http://localhost:4000/').then((response) => {
+      return response.data
+    })
+    return { phrase }
+  }
+}
 </script>
 
 <style>
