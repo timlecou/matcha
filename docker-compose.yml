@@ -13,8 +13,8 @@ services:
       PORT: 4000
       FRONT_URI: "http://localhost:3000"
     command: "npm run start"
-  #  depends_on:
-  #    - db
+    depends_on:
+      - db
   front:
     build: ./front/
     container_name: website-front
@@ -32,10 +32,13 @@ services:
     command: "npm run dev"
     depends_on:
       - back
-  #db:
-  #  image: postgres
-  #  ports:
-  #    - "5432:5432"
-  #  environment:
-  #    POSTGRES_PASSWORD: password
-  #    PGDATA: /tmp
+  db:
+    image: postgres
+    container_name: website-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/db:/var/lib/postgresql/data
+      - ./postgres/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
+    env_file:
+      - postgres/database.env
