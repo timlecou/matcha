@@ -21,6 +21,7 @@ services:
     restart: always
     volumes:
       - ./front/components:/usr/src/app/components
+      - ./front/layouts:/usr/src/app/layouts
       - ./front/pages:/usr/src/app/pages
       - ./front/store:/usr/src/app/store
     ports:

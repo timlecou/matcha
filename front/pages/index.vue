@@ -1,33 +1,32 @@
-<template>
-  <div class="container">
-    <div>
-      <h5 class="">
-        {{ phrase }}
-      </h5>
-    </div>
-  </div>
-</template>
-
 <script>
+
 import axios from 'axios'
-//https://api.nuxtjs.dev/mountains
+import Header from '../components/Header.vue';
+
 export default {
-  async asyncData() {
-    const phrase = await axios.get('http://localhost:4000/').then((response) => {
-      return response.data
-    })
-    return { phrase }
-  }
+	components: { Header }
+	// async asyncData()
+	// {
+	// 	const phrase = await axios.get('http://localhost:4000/').then((response) =>
+	// 	{
+	// 		return response.data
+	// 	})
+	// 	return { phrase }
+	// }
 }
 </script>
 
+<template>
+	<div class="container">
+		<Header/>
+	</div>
+</template>
+
 <style>
+
 .container {
   margin: 0 auto;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   text-align: center;
 }
 
@@ -60,4 +59,10 @@ export default {
 .links {
   padding-top: 15px;
 }
+
+.flex
+{
+	display: flex;
+}
+
 </style>
