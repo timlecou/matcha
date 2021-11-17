@@ -1,14 +1,14 @@
-FROM node:15
+FROM node:15-alpine
 
-ENV APP_ROOT /app
+WORKDIR /usr/src/app
 
-RUN mkdir ${APP_ROOT}
-WORKDIR ${APP_ROOT}
-ADD . ${APP_ROOT}
+COPY package.json .
 
-COPY entrypoint.sh /usr/bin/
-RUN chmod +x /usr/bin/entrypoint.sh
+RUN npm install
 
-ENTRYPOINT ["entrypoint.sh"]
+COPY . .
 
-ENV HOST 0.0.0.0
+ENV NUXT_HOST=0.0.0.0
+ENV NUXT_PORT=3000
+
+EXPOSE 3000

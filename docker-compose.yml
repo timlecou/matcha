@@ -6,7 +6,7 @@ services:
     container_name: website-back
     restart: always
     volumes:
-      - ./back:/app
+      - ./back/src:/usr/src/app/src
     ports:
       - "4000:4000"
     environment:
@@ -20,7 +20,9 @@ services:
     container_name: website-front
     restart: always
     volumes:
-      - ./front:/app
+      - ./front/components:/usr/src/app/components
+      - ./front/pages:/usr/src/app/pages
+      - ./front/store:/usr/src/app/store
     ports:
         - "3000:3000"
     environment:
