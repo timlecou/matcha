@@ -33,12 +33,23 @@ services:
     depends_on:
       - back
   db:
-    image: postgres
     container_name: website-db
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: matcha
     ports:
       - "5432:5432"
-    volumes:
-      - ./postgres/db:/var/lib/postgresql/data
-      - ./postgres/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
-    env_file:
-      - postgres/database.env
+    volumes: 
+      - ./dbdata:/var/lib/postgresql/data
+  phppgadmin:
+    container_name: phppgadmin
+    image: dockage/phppgadmin
+    ports:
+      - "1234:80"
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=user
+      - POSTGRES_PASS=mypassword
