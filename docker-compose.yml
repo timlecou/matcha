@@ -15,6 +15,7 @@ services:
     command: "npm run start"
     depends_on:
       - db
+
   front:
     build: ./front/
     container_name: website-front
@@ -32,6 +33,7 @@ services:
     command: "npm run dev"
     depends_on:
       - back
+    
   db:
     container_name: website-db
     image: postgres:latest
@@ -41,15 +43,18 @@ services:
       POSTGRES_DB: matcha
     ports:
       - "5432:5432"
-    volumes: 
-      - ./dbdata:/var/lib/postgresql/data
+    # volumes: 
+      # - ./dbdata:/var/lib/postgresql/data
+
   phppgadmin:
     container_name: phppgadmin
-    image: dockage/phppgadmin
+    image: neimheadh/phppgadmin:7.13.0
     ports:
-      - "1234:80"
+      - 1234:80
     environment:
-      - POSTGRES_HOST=postgres
+      - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=user
       - POSTGRES_PASS=mypassword
+    depends_on:
+      - db
