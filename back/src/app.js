@@ -3,14 +3,27 @@
  */
 const express = require('express')()
 const cors = require('cors')
-
-/**
- * connection to the database
- */
-require('./models/dbConfig.js')
+const db = require('./queries.js')
+const bodyParser = require('body-parser')
 
 let app = express
+app.use(bodyParser.json())
+app.use(
+    bodyParser.urlencoded({
+      extended: true,
+    })
+  )
 app.use(cors())
+
+app.get('/users', db.getUsers)
+
+app.get('/users/:id', db.getUserById)
+
+app.put('/users/:id', db.updateUser)
+
+app.post('/users', db.createUser)
+
+app.delete('/users/:id', db.deleteUser)
 
 app.get('/', async (request, response) => {
     console.log('request recieved')
