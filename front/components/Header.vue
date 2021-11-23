@@ -38,7 +38,8 @@ header
 	align-items: center;
 	width: 100%;
 	padding: 1rem;
-	background: #FB53A3;
+	/* background: #FB53A3; */
+	background: #FF4E41;
 }
 
 .links_toggler
