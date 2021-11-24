@@ -38,8 +38,8 @@ services:
     container_name: website-db
     image: postgres:latest
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: mypassword
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
       POSTGRES_DB: matcha_db
     ports:
       - "5432:5432"
@@ -54,7 +54,7 @@ services:
     environment:
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
-      - POSTGRES_USER=user
-      - POSTGRES_PASS=mypassword
+      - POSTGRES_USER=db_user
+      - POSTGRES_PASS=db_password
     depends_on:
       - db
