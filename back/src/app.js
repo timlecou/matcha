@@ -3,7 +3,7 @@
  */
 const express = require('express')()
 const cors = require('cors')
-const db = require('./queries.js')
+const db = require('./models/users.js')
 const bodyParser = require('body-parser')
 
 let app = express
