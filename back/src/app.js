@@ -20,7 +20,7 @@ app.use(cors())
  */
 app.get('/users', user.getUsers)
 app.get('/users/:id', user.getUserById)
-//app.put('/users/:id', user.updateUser)
+app.put('/users/:id', user.updateUser)
 app.post('/users', user.createUser)
 app.delete('/users/:id', user.deleteUser)
 

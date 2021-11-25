@@ -15,7 +15,7 @@ services:
       PGHOST: website-db
       PGUSER: db_user
       PGPASSWORD: db_password
-      PGDATABASE: matcha_db
+      PGDATABASE: matcha
       PGPORT: 5432
     command: "npm run start"
     depends_on:
@@ -45,11 +45,12 @@ services:
     environment:
       POSTGRES_USER: db_user
       POSTGRES_PASSWORD: db_password
-      POSTGRES_DB: matcha_db
+      POSTGRES_DB: matcha
     ports:
       - "5432:5432"
-    volumes: 
+    volumes:
      - ./postgres/dbdata:/var/lib/postgresql/data
+     - ./postgres/db.sql:/docker-entrypoint-initdb.d/db.sql
 
   phppgadmin:
     container_name: phppgadmin
