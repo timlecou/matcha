@@ -12,6 +12,11 @@ services:
     environment:
       PORT: 4000
       FRONT_URI: "http://localhost:3000"
+      PGHOST: website-db
+      PGUSER: db_user
+      PGPASSWORD: db_password
+      PGDATABASE: matcha_db
+      PGPORT: 5432
     command: "npm run start"
     depends_on:
       - db
