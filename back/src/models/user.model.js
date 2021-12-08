@@ -78,6 +78,7 @@ const getUserById = (req, res) => {
     pool.query('SELECT * FROM "User" WHERE id = $1', [id],
     (error, results) => {
         if (error) throw error
+        delete results.rows[0].password
         res.status(200).json(results.rows)
     })
 }
