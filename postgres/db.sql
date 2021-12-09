@@ -25,6 +25,13 @@ CREATE TABLE "Interest" (
   name varchar(255) NOT NULL
 );
 
+CREATE TABLE "Photo" (
+  id SERIAL PRIMARY KEY NOT NULL,
+  user_id INT NOT NULL,
+  path varchar(255) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES "User"(id) ON DELETE CASCADE
+);
+
 CREATE TABLE "Interests_Users" (
   user_id INT NOT NULL,
   interest_id INT NOT NULL,
@@ -33,46 +40,51 @@ CREATE TABLE "Interests_Users" (
   FOREIGN KEY (interest_id) REFERENCES "Interest"(id) ON UPDATE CASCADE
 );
 
-CREATE TABLE "Photo" (
-  id SERIAL PRIMARY KEY NOT NULL,
-  user_id INT NOT NULL,
-  path varchar(255) NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES "User"(id) ON DELETE CASCADE
+CREATE TABLE "Blocked_user" (
+  blocker_id INT NOT NULL,
+  blocked_id INT NOT NULL,
+  PRIMARY KEY (blocker_id, blocked_id),
+  FOREIGN KEY (blocker_id) REFERENCES "User"(id) ON UPDATE CASCADE,
+  FOREIGN KEY (blocked_id) REFERENCES "User"(id) ON UPDATE CASCADE
 );
 
 CREATE TABLE "Liked_users" (
-  id SERIAL PRIMARY KEY NOT NULL,
-  user_liked_id INT NOT NULL,
-  user_liker_id INT NOT NULL
+  liker_id INT NOT NULL,
+  liked_id INT NOT NULL,
+  PRIMARY KEY (liker_id, liked_id),
+  FOREIGN KEY (liker_id) REFERENCES "User"(id) ON UPDATE CASCADE,
+  FOREIGN KEY (liked_id) REFERENCES "User"(id) ON UPDATE CASCADE
 );
 
 CREATE TABLE "Viewed_users" (
-  id SERIAL PRIMARY KEY NOT NULL,
-  user_viewed_id INT NOT NULL,
-  user_viewer_id INT NOT NULL
+  viewer_id INT NOT NULL,
+  viewed_id INT NOT NULL,
+  PRIMARY KEY (viewer_id, viewed_id),
+  FOREIGN KEY (viewer_id) REFERENCES "User"(id) ON UPDATE CASCADE,
+  FOREIGN KEY (viewed_id) REFERENCES "User"(id) ON UPDATE CASCADE
 );
 
 CREATE TABLE "Matched_user" (
-  id SERIAL PRIMARY KEY NOT NULL,
   user1_id INT NOT NULL,
-  user2_id INT NOT NULL
+  user2_id INT NOT NULL,
+  PRIMARY KEY (user1_id, user2_id),
+  FOREIGN KEY (user1_id) REFERENCES "User"(id) ON UPDATE CASCADE,
+  FOREIGN KEY (user2_id) REFERENCES "User"(id) ON UPDATE CASCADE
 );
 
 CREATE TABLE "Reported_user" (
-  id SERIAL PRIMARY KEY NOT NULL,
-  author_id INT NOT NULL,
-  victim_id INT NOT NULL
-);
-
-CREATE TABLE "Blocked_user" (
-  id SERIAL PRIMARY KEY NOT NULL,
-  blocker_id INT NOT NULL,
-  blocked_id INT NOT NULL
+  reporter_id INT NOT NULL,
+  reported_id INT NOT NULL,
+  PRIMARY KEY (reporter_id, reported_id),
+  FOREIGN KEY (reporter_id) REFERENCES "User"(id) ON UPDATE CASCADE,
+  FOREIGN KEY (reported_id) REFERENCES "User"(id) ON UPDATE CASCADE
 );
 
 CREATE TABLE "Message" (
-  id SERIAL PRIMARY KEY NOT NULL,
   from_id INT NOT NULL,
   to_id INT NOT NULL,
-  "date" date NOT NULL
+  "date" date NOT NULL,
+  PRIMARY KEY (from_id, to_id),
+  FOREIGN KEY (from_id) REFERENCES "User"(id) ON UPDATE CASCADE,
+  FOREIGN KEY (to_id) REFERENCES "User"(id) ON UPDATE CASCADE
 );
