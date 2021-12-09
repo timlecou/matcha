@@ -1,8 +1,6 @@
 import json
 import random
-from bs4 import BeautifulSoup
 import requests
-import pandas as pd
 
 
 headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
@@ -10,9 +8,9 @@ headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
 nb = random.randint(0, 100)
 # Data to be written
 data ={
-    "username": "alongcha",
-    "email": "alongcha@student.42.fr",
-    "password": "testpassword",
+    "username": "yel-alou",
+    "email": "yela-lou@student.42.fr",
+    "password": "password",
     "birth_date": "2001-04-20T00:00:00.000Z",
     "last_sign_in": "2021-11-25T00:00:00.000Z",
     "latitude": "45.435423",
@@ -20,10 +18,10 @@ data ={
     "gender": "M",
     "sexual_orientation": "F",
     "online": "false",
-    "biography": "salut les minettes",
+    "biography": "salut la zone wesh",
     "score": 97,
-    "first_name": "Allan",
-    "last_name": "Longchamps",
+    "first_name": "Yassine",
+    "last_name": "El-Alouani",
     "activated": "false"
 }
   

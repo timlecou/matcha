@@ -66,8 +66,8 @@ CREATE TABLE "Reported_user" (
 
 CREATE TABLE "Blocked_user" (
   id SERIAL PRIMARY KEY NOT NULL,
-  user1_id INT NOT NULL,
-  user2_id INT NOT NULL
+  blocker_id INT NOT NULL,
+  blocked_id INT NOT NULL
 );
 
 CREATE TABLE "Message" (

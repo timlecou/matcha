@@ -24,19 +24,15 @@ app.use(
 app.use(cors())
 
 /**
- * users routes
-*/
-app.get('/users', user.getUsers)
-app.get('/users/:id', user.getUserById)
-app.put('/users/:id', user.updateUser)
-app.post('/users', user.createUser)
-app.delete('/users/:id', user.deleteUser)
-
-/**
- * photos routes
+ * routes
  */
  const  photoRoute = require('./routes/photo.route')(app);
+ const  userRoute = require('./routes/user.route')(app);
 
+
+
+
+ 
 app.get('/', async (request, response) => {
     console.log('request recieved')
     response.send('salut gros')
