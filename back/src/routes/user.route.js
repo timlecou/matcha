@@ -75,7 +75,7 @@ module.exports = function(app) {
             (error, results) => {
                 if (error) throw error;
                 if (results.rowCount == 1) {        //check if the user exists
-                    pool.query('SELECT u.* FROM "User" u INNER JOIN "Matched_user" m ON u.id = m.user1_id OR u.id = user2_id WHERE m.user1_id = $1 OR user2_id = $1',
+                    pool.query('SELECT u.* FROM "User" u INNER JOIN "Matched_user" m ON (u.id = m.user1_id OR u.id = user2_id) AND u.id != $1 WHERE m.user1_id = $1 OR user2_id = $1',
                     [id],
                     (error, results) => {
                         if (error) throw error;
@@ -257,5 +257,25 @@ module.exports = function(app) {
             console.err(err);
         }
         res.status(200).send('user unliked')
+    });
+
+    /**
+     * Delete a match
+     */
+    app.delete("/users/:id/matches/:user_id", (req, res) => {
+        const   id = parseInt(req.params.id);
+        const   user_id = parseInt(req.params.user_id);
+
+        try {
+            pool.query('DELETE FROM "Matched_user" WHERE (user1_id = $1 AND user2_id = $2) OR (user1_id = $2 AND user2_id = $1)',
+            [id, user_id],
+            (error) => {
+                if (error) throw error;
+                res.status(200).send('match deleted');
+            });
+        }
+        catch (err) {
+            console.err(err);
+        }
     });
 }

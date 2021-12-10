@@ -54,7 +54,7 @@ module.exports = function(app){
      * GET
      */
     app.get("/users/:id/photos", (req, res) => {
-        res.download('app/src/uploads/userPhoto_1639050197075.jpg')
+        res.download('src/uploads/userPhoto_1639153077385.jpg')
     });
 
     /**
