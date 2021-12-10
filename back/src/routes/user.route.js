@@ -40,15 +40,22 @@ module.exports = function(app) {
         }
     });
 
+    /**
+     * gets a user by its id
+     */
     app.get("/users/:id", (req, res) => {
-        const id = parseInt(req.params.id)
+        const   id = parseInt(req.params.id);
 
         try {
             pool.query('SELECT * FROM "User" WHERE id = $1', [id],
             (error, results) => {
-                if (error) throw error
-                delete results.rows[0].password
-                res.status(200).json(results.rows)
+                if (error) throw error;
+                if (results.rowCount == 1) {        //check if the user exists
+                    delete results.rows[0].password;
+                    res.status(200).json(results.rows);
+                } else {
+                    res.status(404).send('user doesn\'t exist');
+                }
             })
         }
         catch (err) {
@@ -56,6 +63,38 @@ module.exports = function(app) {
         }
     });
 
+    /**
+     * gets a user's matches
+     */
+    app.get("/users/:id/matches", (req, res) => {
+        const   id = parseInt(req.params.id);
+
+        try {
+            pool.query('SELECT FROM "User" WHERE id = $1',
+            [id],
+            (error, results) => {
+                if (error) throw error;
+                if (results.rowCount == 1) {        //check if the user exists
+                    pool.query('SELECT * FROM "Matched_user" WHERE user1_id = $1 OR user2_id = $1',
+                    [id],
+                    (error, results) => {
+                        if (error) throw error;
+                        if (results.rowCount > 0) {
+                            console.log(results.rows[0]);
+                            res.status(200).json(results.rows);
+                        } else {
+                            res.status(404).send('user has no matches');
+                        }
+                    })
+                } else {
+                    res.status(404).send('user doesn\'t exist');
+                }
+            })
+        }
+        catch (err) {
+            console.err(err);
+        }
+    });
 
     /**
      * 
@@ -124,7 +163,24 @@ module.exports = function(app) {
                         [liker_id, liked_id],
                         (error) => {
                             if (error) throw error;
-                            res.status(201).send('user liked');
+
+                            //check if both users have matched
+                            pool.query('SELECT * FROM "Liked_user" WHERE (liked_id = $1 AND liker_id = $2) OR (liker_id = $1 AND liked_id = $2)',
+                            [liker_id, liked_id],
+                            (error, results) => {
+                                if (error) throw error;
+                                if (results.rowCount == 2) {    //if both users have liked each other
+                                    pool.query('INSERT INTO "Matched_user" (user1_id, user2_id) VALUES ($1, $2)',
+                                    [liker_id, liked_id],
+                                    (error) => {
+                                        if (error) throw error;
+                                        res.status(200).send('users just matched !');
+                                    })
+                                } else {
+                                    res.status(201).send('user liked');
+                                }
+                            })
+
                         })
                     } else {
                         res.send('user already liked');
