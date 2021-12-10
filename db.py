@@ -8,8 +8,8 @@ headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
 nb = random.randint(0, 100)
 # Data to be written
 data ={
-    "username": "clucien",
-    "email": "clucien@student.42.fr",
+    "username": "alongcha",
+    "email": "alongcha@student.42.fr",
     "password": "password",
     "birth_date": "2001-04-20T00:00:00.000Z",
     "last_sign_in": "2021-11-25T00:00:00.000Z",
@@ -18,10 +18,10 @@ data ={
     "gender": "M",
     "sexual_orientation": "F",
     "online": "false",
-    "biography": "salut la zone wesh",
+    "biography": "ca drague fort",
     "score": 97,
-    "first_name": "Clement",
-    "last_name": "Lucien",
+    "first_name": "Allan",
+    "last_name": "Longchamps",
     "activated": "false"
 }
 

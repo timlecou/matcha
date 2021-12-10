@@ -75,12 +75,11 @@ module.exports = function(app) {
             (error, results) => {
                 if (error) throw error;
                 if (results.rowCount == 1) {        //check if the user exists
-                    pool.query('SELECT * FROM "Matched_user" WHERE user1_id = $1 OR user2_id = $1',
+                    pool.query('SELECT u.* FROM "User" u INNER JOIN "Matched_user" m ON u.id = m.user1_id OR u.id = user2_id WHERE m.user1_id = $1 OR user2_id = $1',
                     [id],
                     (error, results) => {
                         if (error) throw error;
                         if (results.rowCount > 0) {
-                            console.log(results.rows[0]);
                             res.status(200).json(results.rows);
                         } else {
                             res.status(404).send('user has no matches');
