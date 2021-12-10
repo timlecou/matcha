@@ -32,7 +32,7 @@ CREATE TABLE "Photo" (
   FOREIGN KEY (user_id) REFERENCES "User"(id) ON DELETE CASCADE
 );
 
-CREATE TABLE "Interests_Users" (
+CREATE TABLE "Interest_User" (
   user_id INT NOT NULL,
   interest_id INT NOT NULL,
   PRIMARY KEY (user_id, interest_id),
@@ -48,7 +48,7 @@ CREATE TABLE "Blocked_user" (
   FOREIGN KEY (blocked_id) REFERENCES "User"(id) ON UPDATE CASCADE
 );
 
-CREATE TABLE "Liked_users" (
+CREATE TABLE "Liked_user" (
   liker_id INT NOT NULL,
   liked_id INT NOT NULL,
   PRIMARY KEY (liker_id, liked_id),
@@ -56,7 +56,7 @@ CREATE TABLE "Liked_users" (
   FOREIGN KEY (liked_id) REFERENCES "User"(id) ON UPDATE CASCADE
 );
 
-CREATE TABLE "Viewed_users" (
+CREATE TABLE "Viewed_user" (
   viewer_id INT NOT NULL,
   viewed_id INT NOT NULL,
   PRIMARY KEY (viewer_id, viewed_id),

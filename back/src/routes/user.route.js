@@ -24,29 +24,43 @@ module.exports = function(app) {
      * GET
      */
     app.get("/users", (req, res) => {
-        pool.query('SELECT * FROM "User" ORDER BY id ASC',
-        (error, results) => {
-            if (error) throw error
-            results.rows.forEach(element => {
-                delete element.password
-            });
-            res.status(200).json(results.rows)
-        })
+
+        try {
+            pool.query('SELECT * FROM "User" ORDER BY id ASC',
+            (error, results) => {
+                if (error) throw error
+                results.rows.forEach(element => {
+                    delete element.password
+                });
+                res.status(200).json(results.rows)
+            })
+        }
+        catch (err) {
+            console.err(err);
+        }
     });
 
     app.get("/users/:id", (req, res) => {
         const id = parseInt(req.params.id)
-        pool.query('SELECT * FROM "User" WHERE id = $1', [id],
-        (error, results) => {
-            if (error) throw error
-            delete results.rows[0].password
-            res.status(200).json(results.rows)
-        })
+
+        try {
+            pool.query('SELECT * FROM "User" WHERE id = $1', [id],
+            (error, results) => {
+                if (error) throw error
+                delete results.rows[0].password
+                res.status(200).json(results.rows)
+            })
+        }
+        catch (err) {
+            console.err(err);
+        }
     });
 
 
     /**
+     * 
      * POST
+     * 
      */
     app.post("/users", (req, res) => {
         const user = new User(req.body);
@@ -57,45 +71,136 @@ module.exports = function(app) {
         res.status(201).send('user created')
     });
 
-    //TODO
-    app.post("/users/:id/blocked", (req, res) => {
-        const blocker_id = req.params.id;
-        const blocked_id = req.params.blocked_id;
+    /**
+     * Block an other user
+     */
+    app.post("/users/:blocker_id/blocked/:blocked_id", (req, res) => {
+        const blocker_id = parseInt(req.params.blocker_id);
+        const blocked_id = parseInt(req.params.blocked_id);
 
-        if (blocker_id == blocked_id)
-        {
-            res.send('you can\'t block yourself')
+        if (blocker_id == blocked_id) {
+            res.status(400).send('you can\'t block yourself');
+        } else {
+            try {
+                pool.query('SELECT FROM "Blocked_user" WHERE blocker_id = $1 AND blocked_id = $2',
+                [blocker_id, blocked_id],
+                (error, results) => {
+                    if (error) throw error;
+                    if (results.rowCount == 0) {
+                        pool.query('INSERT INTO "Blocked_user" (blocker_id, blocked_id) VALUES ($1, $2)',
+                        [blocker_id, blocked_id],
+                        (error) => {
+                            if (error) throw error;
+                            res.status(201).send('user blocked');
+                        })
+                    } else {
+                        res.send('user already blocked');
+                    }
+                })
+            }
+            catch (err) {
+                console.err(err);
+            }
         }
-
-        pool.query('INSERT INTO "Blocked_user" (blocker_id, blocked_id) VALUES ($1, $2)',
-        [blocker_id, blocked_id],
-        (error) => {
-            if (error) throw error;
-            res.status(201).send('user blocked');
-        })
     });
     
+    /**
+     * Like an other user
+     */
+    app.post("/users/:liker_id/liked/:liked_id", (req, res) => {
+        const liker_id = parseInt(req.params.liker_id);
+        const liked_id = parseInt(req.params.liked_id);
+
+        if (liker_id == liked_id) {
+            res.status(400).send('you can\'t like yourself');
+        } else {
+            try {
+                pool.query('SELECT FROM "Liked_user" WHERE liker_id = $1 AND liked_id = $2',
+                [liker_id, liked_id],
+                (error, results) => {
+                    if (error) throw error;
+                    if (results.rowCount == 0) {
+                        pool.query('INSERT INTO "Liked_user" (liker_id, liked_id) VALUES ($1, $2)',
+                        [liker_id, liked_id],
+                        (error) => {
+                            if (error) throw error;
+                            res.status(201).send('user liked');
+                        })
+                    } else {
+                        res.send('user already liked');
+                    }
+                })
+            }
+            catch (err) {
+                console.err(err);
+            }
+        }
+    });
 
     /**
+     * 
      * PUT
+     * 
      */
     app.put("/users/:id", (req, res) => {
         const user = new User({id: parseInt(req.params.id), ...req.body})
 
         //validation
 
-        user.update()
-        res.status(200).send('user modified')
+        user.update();
+        res.status(200).send('user modified');
     });
 
 
     /**
+     * 
      * DELETE
+     * 
      */
     app.delete("/users/:id", (req, res) => {
         const user = new User({id: parseInt(req.params.id), ...req.body})
 
-        user.delete()
-        res.status(200).send('user deleted')
+        user.delete();
+        res.status(200).send('user deleted');
+    });
+
+    /**
+     * Unblock an other user
+     */
+    app.delete("/users/:blocker_id/blocked/:blocked_id", (req, res) => {
+        const blocker_id = parseInt(req.params.blocker_id);
+        const blocked_id = parseInt(req.params.blocked_id);
+
+        try {
+            pool.query('DELETE FROM "Blocked_user" WHERE blocker_id = $1 AND blocked_id = $2',
+            [blocker_id, blocked_id],
+            (error) => {
+                if (error) throw error;
+            })
+        }
+        catch (err) {
+            console.err(err);
+        }
+        res.status(200).send('user unblocked');
+    });
+
+    /**
+     * Unlike an other user
+     */
+    app.delete("/users/:liker_id/liked/:liked_id", (req, res) => {
+        const   liker_id = parseInt(req.params.liker_id);
+        const   liked_id = parseInt(req.params.liked_id);
+
+        try {
+            pool.query('DELETE FROM "Liked_user" WHERE liker_id = $1 AND liked_id = $2',
+            [liker_id, liked_id],
+            (error) => {
+                if (error) throw error;
+            })
+        }
+        catch (err) {
+            console.err(err);
+        }
+        res.status(200).send('user unliked')
     });
 }
