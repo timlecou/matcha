@@ -28,6 +28,7 @@ app.use(cors())
  */
  const  photoRoute = require('./routes/photo.route')(app);
  const  userRoute = require('./routes/user.route')(app);
+ const  loginRoute = require('./routes/login.route')(app);
 
  
 app.get('/', async (request, response) => {
