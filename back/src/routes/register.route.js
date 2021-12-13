@@ -17,7 +17,7 @@ app.use(
     })
   )
 app.use(cors())
-
+//TODO faire en sorte de pas pouvoir avoir le meme mail ou le meme username qu'un autre utilisateur
 module.exports = function(app) {
 
     app.post("/register", (req, res) => {
