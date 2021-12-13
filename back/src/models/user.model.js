@@ -26,7 +26,6 @@ class User {
 
     //methods
 
-
     register () {
         try {
             pool.query('INSERT INTO "User" (username, email, password, score, activated) VALUES ($1, $2, $3, $4, $5)',
@@ -80,24 +79,9 @@ class User {
         }
     }
 
-    find () {
-        try {
-            pool.query('SELECT * FROM "User" WHERE username = $1',
-            [this.username],
-            (error, results) => {
-                if (error) throw error;
-                if (results.rowCount != 1) {
-                    return 0;
-                } else {
-                    Object.assign(this, results);
-                }
-            })
-        }
-        catch (err) {
-            console.err(err);
-            return 0;
-        }
-    }
 }
 
-module.exports = User
+
+module.exports = {
+    User
+}
