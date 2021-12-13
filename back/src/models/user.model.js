@@ -25,6 +25,22 @@ class User {
     }
 
     //methods
+
+
+    register () {
+        try {
+            pool.query('INSERT INTO "User" (username, email, password, score, activated) VALUES ($1, $2, $3, $4, $5)',
+            [this.username, this.email, this.password, this.score, this.activated],
+            (err) => {
+                if (err) throw err;
+            })
+        }
+        catch (err) {
+            console.err(err);
+        }
+    }
+
+
     insert () {
         try {
             pool.query('INSERT INTO "User" (username, email, password, birth_date, last_sign_in, latitude, longitude, gender, sexual_orientation, online, biography, score, first_name, last_name, activated) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)',

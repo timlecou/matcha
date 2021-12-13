@@ -26,7 +26,7 @@ data ={
 }
 
 data1 ={
-    "username": "test",
+    "username": "houertan",
     "email": "houertan@student.42.fr",
     "password": "password",
     "birth_date": "2001-04-20T00:00:00.000Z",
@@ -44,7 +44,7 @@ data1 ={
 }
   
 # Serializing json 
-json_object = json.dumps(data, indent = 4)
+json_object = json.dumps(data1, indent = 4)
 
 #sending the request to create a user
 requests.post('http://localhost:4000/users', data=json_object, headers=headers)
