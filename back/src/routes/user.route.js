@@ -8,6 +8,7 @@ const User = require('../models/user.model.js');
 
 
 const bodyParser = require('body-parser');
+const authMiddleware = require('../middlewares/auth.middleware.js');
 
 let app = express;
 app.use(bodyParser.json())

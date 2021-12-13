@@ -8,6 +8,7 @@ const pool = new Pool()
 const User = require('../models/user.model.js');
 
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
 
 let app = express;
 app.use(bodyParser.json())
@@ -41,8 +42,12 @@ module.exports = function(app) {
                     return res.status(401).json({ error: 'incorrect password' });
                   }
                   res.status(200).json({
-                    userId: user._id,
-                    token: 'TOKEN'
+                    userId: user.id,
+                    token: jwt.sign(
+                      { userId: user.id },
+                      process.env.ACCESS_TOKEN_SECRET,
+                      { expiresIn: '24h' }
+                    )
                   });
                 })
             }
