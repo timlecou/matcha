@@ -9,6 +9,10 @@ class   Photo
     user_id;
     path;
 
+    constructor (param) {
+        Object.assign(this, param)
+    }
+
     insert () {
         try {
             pool.query('INSERT INTO "Photo" (user_id, path) VALUES ($1, $2)',
@@ -22,3 +26,7 @@ class   Photo
         }
     }
 };
+
+module.exports = {
+    Photo
+} 

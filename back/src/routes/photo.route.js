@@ -1,13 +1,21 @@
 const express = require('express')();
 const cors = require('cors');
 
-const user = require('../models/photo.model.js');
+const { Pool, Client } = require('pg')
+const pool = new Pool()
+
+const Photo = require('../models/photo.model.js');
 
 const bodyParser = require('body-parser');
 
-const multer = require('multer');
 const exp = require('constants');
 const path = require('path/posix');
+
+/**
+ * Middlewares
+ */
+const multerMiddleware = require('../middlewares/multer.middleware.js');
+const authMiddleware = require('../middlewares/auth.middleware.js');
 
 let app = express;
 app.use(bodyParser.json())
@@ -18,59 +26,38 @@ app.use(
   )
 app.use(cors())
 
-//storage engine
-
-const storage = multer.diskStorage({
-  destination: path.join(__dirname, '../uploads'),
-  filename: (req, file, callBack) => {
-    callBack(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`);
-  }
-})
-
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 1000000       //limit (in bytes)
-  },
-  fileFilter: (req, file, callBack) => {              //file filter (extensions)
-    const authorizedExtensions = /jpg|jpeg|png/;
-    const checkExtension = authorizedExtensions.test(path.extname(file.originalname));
-    const checkMime = authorizedExtensions.test(file.mimetype);
-
-    if (checkExtension && checkMime)
-    {
-      callBack(null, 'photo format is fine');
-    }
-    else
-    {
-      callBack('image format is not fine');
-    }
-  }
-}).single('userPhoto')
-
 module.exports = function(app){
 
     /**
      * GET
      */
     app.get("/users/:id/photos", (req, res) => {
-        res.download('src/uploads/userPhoto_1639153077385.jpg')
+        const id = parseInt(req.params.id);
+
+        pool.query('SELECT * FROM "Photo" WHERE user_id = $1',
+        [id],
+        (error, results) => {
+          if (error) throw error;
+
+          res.status(200).download(results.rows[0].path);
+        })
     });
 
     /**
      * POST
-     */
-    app.post("/users/:id/photos", (req, res) => {
-        upload(req, res, err => {
-          if (err)
-          {
-            throw err;
-          }
-          else
-          {
-            const file = req.file;
-            console.log(file);
-          }
-        })
+     */                 //TODO mettre une limite de 5 photos par personne
+    app.post("/users/:id/photos", authMiddleware.getUserParams, multerMiddleware, (req, res) => {
+
+        const photo = new Photo.Photo( {
+          user_id: req.params.id,
+          path: `src/uploads/users/${req.file.filename}`
+          //path: `${req.protocol}://${req.get('host')}/users/${req.params.id}/photos/${req.file.filename}`
+        });
+
+        console.log(photo.path);
+
+        photo.insert();
+
+        res.status(201).json({ message: 'photo uploaded' })
     });
 }

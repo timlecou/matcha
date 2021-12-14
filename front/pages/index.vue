@@ -19,7 +19,7 @@ export default {
 <template>
 	<div class="container">
 		<Header/>
-    <img src="http://localhost:4000/users/1/photos"/>
+    <img src="src/uploads/users/_os0cgiqx61639491448549.jpg"/>
 	</div>
 </template>
 
