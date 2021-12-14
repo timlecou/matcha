@@ -24,7 +24,7 @@ module.exports = function(app) {
     /**
      * GET
      */
-    app.get("/users", (req, res) => {
+    app.get("/users", authMiddleware.getUserBody, (req, res) => {
 
         try {
             pool.query('SELECT * FROM "User" ORDER BY id ASC',
@@ -44,7 +44,7 @@ module.exports = function(app) {
     /**
      * gets a user by its id
      */
-    app.get("/users/:id", (req, res) => {
+    app.get("/users/:id", authMiddleware.getUserParams, (req, res) => {
         const   id = parseInt(req.params.id);
 
         try {
@@ -67,7 +67,7 @@ module.exports = function(app) {
     /**
      * gets a user's matches
      */
-    app.get("/users/:id/matches", (req, res) => {
+    app.get("/users/:id/matches", authMiddleware.getUserParams, (req, res) => {
         const   id = parseInt(req.params.id);
 
         try {
@@ -113,7 +113,7 @@ module.exports = function(app) {
     /**
      * Block an other user
      */
-    app.post("/users/:blocker_id/blocked/:blocked_id", (req, res) => {
+    app.post("/users/:blocker_id/blocked/:blocked_id", authMiddleware.block, (req, res) => {
         const blocker_id = parseInt(req.params.blocker_id);
         const blocked_id = parseInt(req.params.blocked_id);
 
@@ -144,9 +144,9 @@ module.exports = function(app) {
     });
     
     /**
-     * Like an other user
+     * Like an other user           //TODO verifier que le match n'existe pas deja
      */
-    app.post("/users/:liker_id/liked/:liked_id", (req, res) => {
+    app.post("/users/:liker_id/liked/:liked_id", authMiddleware.like, (req, res) => {
         const liker_id = parseInt(req.params.liker_id);
         const liked_id = parseInt(req.params.liked_id);
 
@@ -198,7 +198,7 @@ module.exports = function(app) {
      * PUT
      * 
      */
-    app.put("/users/:id", (req, res) => {
+    app.put("/users/:id", authMiddleware.getUserParams, (req, res) => {
         const user = new User({id: parseInt(req.params.id), ...req.body})
 
         //validation
@@ -213,7 +213,7 @@ module.exports = function(app) {
      * DELETE
      * 
      */
-    app.delete("/users/:id", (req, res) => {
+    app.delete("/users/:id", authMiddleware.getUserParams, (req, res) => {
         const user = new User({id: parseInt(req.params.id), ...req.body})
 
         user.delete();
@@ -223,7 +223,7 @@ module.exports = function(app) {
     /**
      * Unblock an other user
      */
-    app.delete("/users/:blocker_id/blocked/:blocked_id", (req, res) => {
+    app.delete("/users/:blocker_id/blocked/:blocked_id", authMiddleware.block, (req, res) => {
         const blocker_id = parseInt(req.params.blocker_id);
         const blocked_id = parseInt(req.params.blocked_id);
 
@@ -243,7 +243,7 @@ module.exports = function(app) {
     /**
      * Unlike an other user
      */
-    app.delete("/users/:liker_id/liked/:liked_id", (req, res) => {
+    app.delete("/users/:liker_id/liked/:liked_id", authMiddleware.like, (req, res) => {
         const   liker_id = parseInt(req.params.liker_id);
         const   liked_id = parseInt(req.params.liked_id);
 
@@ -263,7 +263,7 @@ module.exports = function(app) {
     /**
      * Delete a match
      */
-    app.delete("/users/:id/matches/:user_id", (req, res) => {
+    app.delete("/users/:id/matches/:user_id", authMiddleware.match, (req, res) => {
         const   id = parseInt(req.params.id);
         const   user_id = parseInt(req.params.user_id);
 
