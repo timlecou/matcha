@@ -267,6 +267,7 @@ module.exports = function(app) {
         const   id = parseInt(req.params.id);
         const   user_id = parseInt(req.params.user_id);
 
+        //TODO check if the match exists
         try {
             pool.query('DELETE FROM "Matched_user" WHERE (user1_id = $1 AND user2_id = $2) OR (user1_id = $2 AND user2_id = $1)',
             [id, user_id],

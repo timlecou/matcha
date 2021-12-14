@@ -1,5 +1,6 @@
 const express = require('express')();
 const cors = require('cors');
+const fs = require('fs');
 
 const { Pool, Client } = require('pg')
 const pool = new Pool()
@@ -31,33 +32,99 @@ module.exports = function(app){
     /**
      * GET
      */
-    app.get("/users/:id/photos", (req, res) => {
+    app.get("/users/:id/photos", authMiddleware.getUserParams, (req, res) => {
         const id = parseInt(req.params.id);
 
         pool.query('SELECT * FROM "Photo" WHERE user_id = $1',
         [id],
         (error, results) => {
           if (error) throw error;
+          var photos = {};
+          var paths = [];
 
-          res.status(200).download(results.rows[0].path);
+          photos.paths = paths;
+          results.rows.forEach(element => {
+            photos.paths.push(element.path);
+          });
+          res.status(200).send(photos.paths);
         })
     });
 
     /**
      * POST
-     */                 //TODO mettre une limite de 5 photos par personne
+     */                 //TODO upload plusieurs fichiers d'un coup
+
+     //https://www.it-swarm-fr.com/fr/node.js/telechargement-de-plusieurs-fichiers-avec-multer-mais-partir-de-differents-champs/823295817/
     app.post("/users/:id/photos", authMiddleware.getUserParams, multerMiddleware, (req, res) => {
+      const id = parseInt(req.params.id);
 
-        const photo = new Photo.Photo( {
-          user_id: req.params.id,
-          path: `src/uploads/users/${req.file.filename}`
-          //path: `${req.protocol}://${req.get('host')}/users/${req.params.id}/photos/${req.file.filename}`
+      try {
+        pool.query('SELECT * FROM "Photo" WHERE user_id = $1',
+        [id],
+        (error, results) => {
+          if (error) throw error;
+
+          if (results.rowCount < 5) {
+            const photo = new Photo.Photo( {
+              user_id: id,
+              path: `uploads/users/${req.file.filename}`
+            });    
+            photo.insert();
+    
+            res.status(201).json({ message: 'photo uploaded' })
+          } else {
+            res.status(400).send('user can\'t have more than 5 photos');
+          }
+        })
+      }
+      catch (err) {
+        console.error(err);
+      }  
+    });
+
+
+    /**
+     * 
+     * DELETE
+     * 
+     */
+
+
+    /**
+     * Deletes a photo owned by the user(id)
+     */
+    app.delete("/users/:id/photos/:photo_id", authMiddleware.getUserParams, (req, res) => {
+
+      const user_id = parseInt(req.params.id);
+      const photo_id = parseInt(req.params.photo_id);
+
+      try {
+        pool.query('SELECT * FROM "Photo" WHERE user_id = $1 AND id = $2',
+        [user_id, photo_id],
+        (error, results) => {
+          const photo = new Photo.Photo(results.rows[0]);
+          if (error) throw error;
+          if (results.rowCount == 1) {
+
+            fs.unlink('/usr/src/app/src/' + results.rows[0].path, (err) => {    //deletes the file
+              if (err) throw err;
+              pool.query('DELETE FROM "Photo" WHERE user_id = $1 AND id = $2',
+              [user_id, photo_id],
+              (error) => {
+                if (error) throw error;
+              
+              });
+
+              res.status(200).send('photo deleted');
+            });
+            
+          } else {
+            res.status(404).send('photo not found');
+          }
         });
-
-        console.log(photo.path);
-
-        photo.insert();
-
-        res.status(201).json({ message: 'photo uploaded' })
+      }
+      catch (err) {
+        console.error(err);
+      }
     });
 }
