@@ -52,7 +52,8 @@ CREATE TABLE "Liked_user" (
 CREATE TABLE "Viewed_user" (
   viewer_id INT NOT NULL,
   viewed_id INT NOT NULL,
-  PRIMARY KEY (viewer_id, viewed_id)
+  PRIMARY KEY (viewer_id, viewed_id),
+  "date" date NOT NULL
 );
 
 CREATE TABLE "Matched_user" (

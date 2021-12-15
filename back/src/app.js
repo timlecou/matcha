@@ -30,6 +30,7 @@ app.use(cors())
  const  userRoute = require('./routes/user.route')(app);
  const  loginRoute = require('./routes/login.route')(app);
  const  registerRoute = require('./routes/register.route')(app);
+ const  interestRoute = require('./routes/interest.route')(app);
 
  
 app.get('/', async (request, response) => {

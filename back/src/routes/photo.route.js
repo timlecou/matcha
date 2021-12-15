@@ -52,11 +52,13 @@ module.exports = function(app){
 
     /**
      * POST
-     */                 //TODO upload plusieurs fichiers d'un coup
+     */                 
 
-     //https://www.it-swarm-fr.com/fr/node.js/telechargement-de-plusieurs-fichiers-avec-multer-mais-partir-de-differents-champs/823295817/
     app.post("/users/:id/photos", authMiddleware.getUserParams, multerMiddleware, (req, res) => {
       const id = parseInt(req.params.id);
+      const files = req.files;
+
+      console.log(files);
 
       try {
         pool.query('SELECT * FROM "Photo" WHERE user_id = $1',
@@ -64,13 +66,15 @@ module.exports = function(app){
         (error, results) => {
           if (error) throw error;
 
-          if (results.rowCount < 5) {
-            const photo = new Photo.Photo( {
+          if (results.rowCount + files.length < 5) {
+            files.forEach(element => {
+              const photo = new Photo.Photo( {
               user_id: id,
-              path: `uploads/users/${req.file.filename}`
-            });    
-            photo.insert();
-    
+              path: `uploads/users/${element.filename}`
+              });    
+              photo.insert();
+            });
+            
             res.status(201).json({ message: 'photo uploaded' })
           } else {
             res.status(400).send('user can\'t have more than 5 photos');
