@@ -79,4 +79,34 @@ module.exports = function(app) {
           }
 
       });
+
+
+      /**
+       *
+       * DELETE
+       *
+       */
+
+        app.delete("/interests/:interest_id", (req, res) => {
+            const interest = new Interest.Interest({
+                id: parseInt(req.params.interest_id)
+            });
+
+            try {
+                pool.query('SELECT * FROM "Interest" WHERE id = $1',
+                [interest.id],
+                (error, results) => {
+                    if (error) throw error;
+                    if (results.rowCount > 0) {
+                        interest.delete();
+                        res.status(200).json({ message: 'interest deleted' });
+                    } else {
+                        res.status(404).json({ message: 'interest not found' });
+                    }
+                });
+            }
+            catch (error) {
+                console.error(error);
+            }
+        });
 }

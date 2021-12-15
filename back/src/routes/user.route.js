@@ -101,14 +101,6 @@ module.exports = function(app) {
      * POST
      * 
      */
-    app.post("/users", (req, res) => {
-        const user = new User(req.body);
-        
-        //validation
-
-        user.insert();
-        res.status(201).send('user created')
-    });
 
     /**
      * Block an other user
@@ -198,6 +190,45 @@ module.exports = function(app) {
      * PUT
      * 
      */
+
+    /**
+    * Set an interest to a user                 //TODO check si les interest existent et le user existe
+    */
+    app.put("/users/:user_id/interests", authMiddleware.getUserParams, (req, res) => {
+
+        const user_id = parseInt(req.params.user_id);
+        const interests = req.body.interest;
+
+        console.log(req.body);
+
+        try {
+            //delete all interests owned by the user
+            pool.query('DELETE FROM "Interest_User" WHERE user_id = $1',
+            [user_id],
+            (error) => {
+                if (error) throw error;
+
+                //add all the new interests
+
+                for (let index = 0; index < interests.length; index++) {
+                    const element = interests[index];
+                    pool.query('INSERT INTO "Interest_User" (user_id, interest_id) VALUES ($1, $2)',
+                    [user_id, element],
+                    (error) => {
+                        if (error) throw error;
+                    });
+                }
+                res.status(200).json({ message: 'interests updated' });
+                
+            });
+        }
+        catch (error) {
+            console.error(error);
+        }
+
+    });
+
+
     app.put("/users/:id", authMiddleware.getUserParams, (req, res) => {
         const user = new User({id: parseInt(req.params.id), ...req.body})
 
