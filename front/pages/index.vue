@@ -2,33 +2,48 @@
 
 import axios from 'axios'
 import Header from '../components/Header.vue';
+import Swiper from '../components/Swiper.vue';
 
 export default {
-	components: { Header }
-	// async asyncData()
-	// {
-	// 	const phrase = await axios.get('http://localhost:4000/').then((response) =>
-	// 	{
-	// 		return response.data
-	// 	})
-	// 	return { phrase }
-	// }
+	components: { Header, Swiper },
+	layout: 'index',
+	data()
+	{
+		return {
+			users:
+			[
+				{
+					id: 0,
+					name: "Test 1",
+					photos:
+					[
+						{
+							id: 0,
+							url: "/images/photo-2.png"
+						},
+						{
+							id: 1,
+							url: "/images/photo-4.jpg"
+						}
+					],
+				},
+			]
+		}
+	}
 }
 </script>
 
 <template>
 	<div class="container">
-		<Header/>
-    <img src="src/uploads/users/_os0cgiqx61639491448549.jpg"/>
+		<Swiper :user="user" v-for="user in users" :key="'swiper_' + user.id"/>
 	</div>
 </template>
 
 <style>
 
-.container {
+.container
+{
   margin: 0 auto;
-  min-height: 100vh;
-  text-align: center;
 }
 
 .title {

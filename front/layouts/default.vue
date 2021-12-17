@@ -1,5 +1,15 @@
+<script>
+
+import Header from '../components/Header.vue';
+
+export default {
+  components: { Header }
+}
+</script>
+
 <template>
   <div>
+    <Header/>
     <Nuxt />
   </div>
 </template>
@@ -22,6 +32,14 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+  overflow-y: auto;
+}
+
+body
+{
+  min-height: 100vh;
+  background: #FB53A3;
+  color: white;
 }
 
 *,
@@ -29,6 +47,9 @@ html {
 *::after {
   box-sizing: border-box;
   margin: 0;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .button--green {

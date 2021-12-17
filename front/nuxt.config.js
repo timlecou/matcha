@@ -15,6 +15,12 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script:
+    [
+      {
+        src: "https://maps.googleapis.com/maps/api/js?key=AIzaSyB4Io5BFJ2alGrKIY6n5WHAXjpcGfQl13E&libraries=places"
+      }
     ]
   },
 
@@ -24,6 +30,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -35,6 +42,8 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/axios',
+    // ['vuejs-google-maps/nuxt', {apiKey: 'AIzaSyB4Io5BFJ2alGrKIY6n5WHAXjpcGfQl13E', libraries: [/* rest of libraries */]}]
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

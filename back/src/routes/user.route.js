@@ -197,7 +197,7 @@ module.exports = function(app) {
     app.put("/users/:user_id/interests", authMiddleware.getUserParams, (req, res) => {
 
         const user_id = parseInt(req.params.user_id);
-        const interests = req.body.interest;
+        const interests = req.body.names;
 
         try {
 

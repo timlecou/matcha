@@ -40,7 +40,7 @@ module.exports = function(app) {
              pool.query('SELECT * FROM "Interest"',
              (error, results) => {
                  if (error) throw error;
-                 res.status(200).send(results);
+                 res.status(200).send(results.rows);
              })
          }
          catch (error) {
@@ -58,7 +58,7 @@ module.exports = function(app) {
       app.post("/interests", (req, res) => {
 
           const interest = new Interest.Interest({
-              name: req.body.interest
+              name: req.body.name
           });
 
           try {
@@ -75,7 +75,7 @@ module.exports = function(app) {
               })
           }
           catch (error) {
-
+            console.log("ERROR POST INTEREST")
           }
 
       });
