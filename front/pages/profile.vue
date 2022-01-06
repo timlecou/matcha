@@ -112,7 +112,7 @@ export default {
 				<input type="text" v-model="user.username"/>
 			</div>
 			<div class="biography input_container">
-				<textarea type="text" v-model="user.biography"></textarea>
+				<textarea rows="5" type="text" v-model="user.biography"></textarea>
 			</div>
 		</div>
 
@@ -227,6 +227,7 @@ export default {
 	width: 40rem;
 	max-width: 100%;
 	margin: 0 auto;
+	padding: 1rem;
 }
 
 img
