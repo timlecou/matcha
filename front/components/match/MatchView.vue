@@ -1,18 +1,23 @@
 <script>
 export default {
 	name: "MatchView",
-	data()
-	{
-		return {
-			message: ""
-		}
-	},
 	props:
 	{
 		match:
 		{
 			type: Object | null,
 			required: true,
+		},
+		show:
+		{
+			type: Boolean,
+			required: true
+		}
+	},
+	data()
+	{
+		return {
+			message: ""
 		}
 	},
 	methods:
@@ -21,14 +26,21 @@ export default {
 		{
 			console.log(this.message)
 			this.message = "";
+		},
+		back()
+		{
+			this.$emit('back');
 		}
 	}
 }
 </script>
 
 <template>
-	<div class="match_view">
+	<div class="match_view" :class="{show: show}">
 		<div class="header" v-if="match">
+			<div class="back_button" @click="back">
+				<svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10.295 19.716a1 1 0 0 0 1.404-1.425l-5.37-5.29h13.67a1 1 0 1 0 0-2H6.336L11.7 5.714a1 1 0 0 0-1.404-1.424l-6.924 6.822a1.25 1.25 0 0 0 0 1.78l6.924 6.823Z"/></svg>
+			</div>
 			<div class="photo">
 				<img :src="require(`~/assets${match.user.photo}`)"/>
 			</div>
@@ -139,6 +151,38 @@ export default {
 	border-top-right-radius: 1rem;
 	border-bottom-right-radius: 1rem;
 	cursor: pointer;
+}
+
+.back_button
+{
+	display: none;
+}
+
+@media screen and (max-width: 550px)
+{
+	.back_button
+	{
+		display: block;
+		width: 2rem;
+	}
+
+	.photo
+	{
+		display: none;
+	}
+
+	.match_view:not(.show)
+	{
+		display: none;
+		width: 0;
+		transition: all 0.25s;
+	}
+
+	.match_view.show
+	{
+		width: 100%;
+		flex: 0 0 auto;
+	}
 }
 
 </style>

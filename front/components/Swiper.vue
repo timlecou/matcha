@@ -60,15 +60,23 @@ export default {
 
 		like()
 		{
-			this.liked = true;
-			this.$emit('like')
+			this.$axios.post(`http://localhost:4000/users/${this.$store.state.user.id}/liked/${this.user.id}`)
+			.then(res =>
+			{
+				this.liked = true;
+				this.$emit('like')
+			})
+			.catch(err =>
+			{
+				console.error("Failed to like user:", err.response.data);
+			})
 		}
 	},
 	computed:
 	{
 		transform_rotation()
 		{
-			return 'rotateZ(' + parseInt(this.angle).toString() + 'deg)';
+			return 'translateX(-50%) rotateZ(' + parseInt(this.angle).toString() + 'deg)';
 		},
 	}
 }
@@ -77,7 +85,7 @@ export default {
 <template>
 	<div class="swiper" :style="{transform: transform_rotation}">
 		<div class="photo_container" @mousedown="startMove">
-			<img :src="require(`~/assets${photo.url}`)" v-show="key == photo_index" v-for="(photo, key) in user.photos"/>
+			<img :src="require(`~/assets/${photo}`)" v-show="key == photo_index" v-for="(photo, key) in user.photos"/>
 		</div>
 
 		<div class="header">
@@ -115,12 +123,15 @@ export default {
 
 .swiper
 {
-	position: relative;
+	position: absolute;
+	top: 0;
+	left: 50%;
 	height: 100vh;
 	width: 66vh;
-	max-width: 100vw;
+	max-width: 100%;
 	margin: 0 auto;
 	transform-origin: center bottom;
+	transform: translateX(-50%);
 }
 
 .header
@@ -213,6 +224,11 @@ export default {
 {
 	width: 100%;
 	height: 100%;
+}
+
+.heart_button svg
+{
+	fill: transparent;
 }
 
 .heart_button.liked svg

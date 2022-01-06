@@ -32,6 +32,7 @@ services:
       - ./front/layouts:/usr/src/app/layouts
       - ./front/pages:/usr/src/app/pages
       - ./front/store:/usr/src/app/store
+      - ./back/src/uploads:/usr/src/app/assets/uploads
     ports:
         - "3000:3000"
     environment:

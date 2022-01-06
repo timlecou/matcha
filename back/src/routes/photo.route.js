@@ -32,7 +32,7 @@ module.exports = function(app){
     /**
      * GET
      */
-    app.get("/users/:id/photos", authMiddleware.getUserParams, (req, res) => {
+    app.get("/users/:id/photos", (req, res) => {
         const id = parseInt(req.params.id);
 
         pool.query('SELECT * FROM "Photo" WHERE user_id = $1',
@@ -54,7 +54,7 @@ module.exports = function(app){
      * POST
      */                 
 
-    app.post("/users/:id/photos", authMiddleware.getUserParams, multerMiddleware, (req, res) => {
+    app.post("/users/:id/photos"/*, authMiddleware.getUserParams*/, multerMiddleware, (req, res) => {
       const id = parseInt(req.params.id);
       const files = req.files;
 
@@ -97,7 +97,7 @@ module.exports = function(app){
     /**
      * Deletes a photo owned by the user(id)
      */
-    app.delete("/users/:id/photos/:photo_id", authMiddleware.getUserParams, (req, res) => {
+    app.delete("/users/:id/photos/:photo_id"/*, authMiddleware.getUserParams*/, (req, res) => {
 
       const user_id = parseInt(req.params.id);
       const photo_id = parseInt(req.params.photo_id);

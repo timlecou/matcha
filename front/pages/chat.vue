@@ -73,17 +73,36 @@ export default {
 				},
 			],
 			// Object are copied by reference with '=' operator
-			selected_match: null
+			selected_match: null,
+
+			// For little screen
+			show: 'list'
 		}
 	},
+	beforeRouteEnter(to, from, next)
+	{
+		next(vm =>
+		{
+			if (!vm.$store.state.is_logged_in)
+				next('/sign_in')
+		})
+	},
+	methods:
+	{
+		selectMatch(match)
+		{
+			this.selected_match = match;
+			this.show = 'chat';
+		}
+	}
 }
 </script>
 
 
 <template>
 	<div class="chat">
-		<MatchList :matches="matches" @select_match="selected_match = $event"/>
-		<MatchView :match="selected_match"/>
+		<MatchList :show="show == 'list'" :matches="matches" @select_match="selectMatch"/>
+		<MatchView :show="show == 'chat'" :match="selected_match" @back="show = 'list'"/>
 	</div>
 </template>
 

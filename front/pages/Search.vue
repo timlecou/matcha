@@ -4,6 +4,14 @@ import SearchBar from '../components/search/SearchBar.vue';
 export default {
 	name: "Search",
 	components: { SearchBar },
+	beforeRouteEnter(to, from, next)
+	{
+		next(vm =>
+		{
+			if (!vm.$store.state.is_logged_in)
+				next('/sign_in')
+		})
+	},
 	methods:
 	{
 		search(search_data)

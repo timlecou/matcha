@@ -1,6 +1,14 @@
 <script>
 export default {
 	name: "ForgottenPassword",
+	beforeRouteEnter(to, from, next)
+	{
+		next(vm =>
+		{
+			if (!vm.$store.state.is_logged_in)
+				next('/sign_in')
+		})
+	},
 	data()
 	{
 		return {

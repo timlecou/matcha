@@ -2,32 +2,47 @@
 
 import axios from 'axios'
 import Header from '../components/Header.vue';
-import Swiper from '../components/Swiper.vue';
+import Swiper from '../components/Swiper-v2.vue';
 
 export default {
 	components: { Header, Swiper },
-	layout: 'index',
 	data()
 	{
 		return {
-			users:
-			[
-				{
-					id: 0,
-					name: "Test 1",
-					photos:
-					[
-						{
-							id: 0,
-							url: "/images/photo-2.png"
-						},
-						{
-							id: 1,
-							url: "/images/photo-4.jpg"
-						}
-					],
-				},
-			]
+			users: []
+		}
+	},
+	mounted()
+	{
+		this.$axios.get('http://localhost:4000/users')
+		.then(async res =>
+		{
+			let users = res.data;
+			for (let user of users)
+			{
+				let res = await this.$axios(`http://localhost:4000/users/${user.id}/photos`);
+				user['photos'] = res.data;
+			}
+			this.users = users;
+		})
+		.catch(err =>
+		{
+			console.error("Cannot load users");
+		});
+	},
+	beforeRouteEnter(to, from, next)
+	{
+		next(vm =>
+		{
+			if (!vm.$store.state.is_logged_in)
+				next('/sign_in')
+		})
+	},
+	methods:
+	{
+		next(index)
+		{
+			this.users.splice(index, 1);
 		}
 	}
 }
@@ -35,7 +50,7 @@ export default {
 
 <template>
 	<div class="container">
-		<Swiper :user="user" v-for="user in users" :key="'swiper_' + user.id"/>
+		<Swiper :user="user" v-for="(user, index) in users" :key="'swiper_' + user.id" @skip="next(index)"/>
 	</div>
 </template>
 

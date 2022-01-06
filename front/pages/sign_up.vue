@@ -17,8 +17,10 @@ export default {
 		{
 			return (this.email.length > 0 && this.password.length > 0 && this.username.length >= 4 && this.last_name.length > 0 && this.first_name.length > 0 && this.is_email_valid);
 		},
-		signUp()
+		signUp(e)
 		{
+			e.preventDefault();
+
 			if (!this.isFormValid())
 				alert("Form invalid");
 			else
@@ -26,11 +28,11 @@ export default {
 				this.$axios.post('http://localhost:4000/register', {username: this.username, email: this.email, password: this.password})
 				.then (res =>
 				{
-					console.log(res.data);
+					alert(res.data.message)
 				})
 				.catch(err =>
 				{
-					console.error(err);
+					alert(err.response.data.error);
 				})
 			}
 		}
@@ -49,7 +51,7 @@ export default {
 <template>
 	<div class="sign_in">
 		<h1>Sign In</h1>
-		<div class="form">
+		<form @submit="signUp">
 			<div class="field" :class="{active: email.length > 0, valid: is_email_valid}">
 				<input type="email" id="email" v-model="email"/>
 				<label for="email">Email</label>
@@ -78,8 +80,8 @@ export default {
 				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 405.272 405.272" style="enable-background:new 0 0 405.272 405.272;"> <path fill="currentColor" d="M393.401,124.425L179.603,338.208c-15.832,15.835-41.514,15.835-57.361,0L11.878,227.836 c-15.838-15.835-15.838-41.52,0-57.358c15.841-15.841,41.521-15.841,57.355-0.006l81.698,81.699L336.037,67.064 c15.841-15.841,41.523-15.829,57.358,0C409.23,82.902,409.23,108.578,393.401,124.425z"/> </svg>
 			</div>
 			<NuxtLink class="sign_in_link" to="sign_in">Déjà un compte ? Connectez-vous ici</NuxtLink>
-			<div class="button" @click="signUp">Sign up</div>
-		</div>
+			<button class="button">Sign up</button>
+		</form>
 	</div>
 </template>
 
@@ -92,7 +94,7 @@ export default {
 	align-items: center;
 }
 
-.form
+form
 {
 	display: flex;
 	flex-direction: column;

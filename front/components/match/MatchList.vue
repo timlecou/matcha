@@ -7,6 +7,11 @@ export default {
 		{
 			type: Array,
 			required: true
+		},
+		show:
+		{
+			type: Boolean,
+			required: true
 		}
 	},
 	methods:
@@ -20,7 +25,7 @@ export default {
 </script>
 
 <template>
-	<div class="match_list">
+	<div class="match_list" :class="{show: show}">
 		<div class="header">
 			<h1>All Matches</h1>
 			<div class="search_button">
@@ -96,7 +101,8 @@ h1
 
 .match_item .photo
 {
-	width: 20%;
+	width: 3rem;
+	height: 3rem;
 	margin-right: 1rem;
 }
 
@@ -139,6 +145,22 @@ h1
 .match_item .date
 {
 	font-size: 0.9rem;
+}
+
+@media screen and (max-width: 550px)
+{
+	.match_list:not(.show)
+	{
+		display: none;
+		width: 0;
+		transition: all 0.25s;
+	}
+
+	.match_list
+	{
+		width: 100%;
+		flex: 0 0 auto;
+	}
 }
 
 </style>

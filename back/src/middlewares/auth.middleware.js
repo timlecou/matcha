@@ -19,6 +19,7 @@ module.exports = {
       if (req.body.id && req.body.id != userId) {
         throw 'Invalid user ID';
       } else {
+        req.user_id = userId;
         next();
       }
     } catch {

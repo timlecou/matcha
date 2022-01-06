@@ -47,9 +47,9 @@ body
 *::after {
   box-sizing: border-box;
   margin: 0;
-  -moz-user-select: none;
+  /* -moz-user-select: none;
   -webkit-user-select: none;
-  user-select: none;
+  user-select: none; */
 }
 
 .button--green {
@@ -80,4 +80,16 @@ body
   color: #fff;
   background-color: #35495e;
 }
+
+svg
+{
+  width: 100%;
+}
+
+a, a:visited
+{
+  color: inherit;
+  text-decoration: none;
+}
+
 </style>

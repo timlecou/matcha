@@ -31,7 +31,7 @@ export default {
 <template>
 	<header :class="{expanded: expanded, fixed: fixed}">
 		<div>
-			<div class="links_toggler" @click="expanded = !expanded">
+			<div class="links_toggler" @click="expanded = !expanded" v-if="this.$store.state.is_logged_in">
 				<span></span>
 				<span></span>
 				<span></span>
@@ -44,8 +44,8 @@ export default {
 				<NuxtLink @click.native="expanded = false" to="/profile">Profile</NuxtLink>
 			</div>
 		</div>
-		<div class="left">
-			<div class="notification_container">
+		<div class="right">
+			<div class="notification_container" v-if="this.$store.state.is_logged_in">
 				<div class="notification_button">	
 					<svg viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg">
 						<title>notification-solid</title>
@@ -59,7 +59,7 @@ export default {
 					<p v-if="notifications.length == 0">Vous n'avez pas de notifications</p>
 				</div>
 			</div>
-			<div class="account_button">
+			<div class="account_button" v-if="this.$store.state.is_logged_in">
 				<div class="profile_photo"></div>
 				<div class="profile_popup">
 					<p>
@@ -82,6 +82,7 @@ header
 	justify-content: space-between;
 	align-items: center;
 	width: 100%;
+	width: fit-content;
 	padding: 1rem;
 	z-index: 1;
 }
@@ -141,13 +142,14 @@ header.expanded .links_toggler span:nth-child(3)
 	transform: translateY(-50%) rotateZ(-45deg);
 }
 
-.left
+.right
 {
 	display: flex;
 	align-items: center;
+	display: none;
 }
 
-.left > div
+.right > div
 {
 	margin: 0 0.75rem;
 }

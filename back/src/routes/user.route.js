@@ -25,9 +25,9 @@ module.exports = function(app) {
      * GET
      */
     app.get("/users", authMiddleware.getUserBody, (req, res) => {
-
         try {
-            pool.query('SELECT * FROM "User" ORDER BY id ASC',
+            pool.query('SELECT * FROM "User" WHERE id != $1 ORDER BY id ASC',
+            [req.user_id],
             (error, results) => {
                 if (error) throw error
                 results.rows.forEach(element => {

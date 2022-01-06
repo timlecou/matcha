@@ -4,25 +4,46 @@ export default {
 	data()
 	{
 		return {
-			email: "",
-			password: ""
+			email: "yass@gmail.com",
+			password: "test"
 		}
+	},
+	mounted()
+	{
+		window.setTimeout(() =>
+		{
+			this.$refs.submit_button.click();
+		}, 500);
 	},
 	methods:
 	{
-		sign_in()
+		sign_in(e)
 		{
+			e.preventDefault();
+
 			if (this.is_email_valid)
 			{
 				this.$axios.post('http://localhost:4000/login', {email: this.email, password: this.password})
 				.then(res =>
 				{
-					console.log(res.data);
+					this.$store.commit("SET_ACCESS_TOKEN", res.data.token);
+					this.$store.commit("user/SET_USER_ID", res.data.userId);
+					this.$router.push('/');
+					this.$axios.interceptors.request.use((config) =>
+					{
+						config.headers['Authorization'] = "Bearer " + this.$store.state.access_token;
+						return config;
+					},
+					(error) =>
+					{
+						// Do something with request error
+						return Promise.reject(error);
+					});
 				})
 				.catch(err =>
-				[
-					console.log(err)
-				]);
+				{
+					alert(err.response.data.error);
+				});
 			}
 			else
 				alert("Invalid form");
@@ -42,18 +63,19 @@ export default {
 <template>
 	<div class="sign_in">
 		<h1>Sign In</h1>
-		<div class="form">
+		<form @submit="sign_in">
 			<div class="field" :class="{active: email.length > 0}">
-				<input type="email" id="email" v-model="email"/>
+				<input type="email" id="email" v-model="email" autocomplete/>
 				<label for="email">Email</label>
 			</div>
 			<div class="field" :class="{active: password.length > 0}">
-				<input type="password" id="password" v-model="password"/>
+				<input type="password" id="password" v-model="password" autocomplete/>
 				<label for="password">Password</label>
 			</div>
 			<NuxtLink class="forgotten_password" to="forgotten_password">Mot de passe oublié ? Cliqué ici pour le réinitialiser.</NuxtLink>
-			<div class="button" @click="sign_in">Sign in</div>
-		</div>
+			<NuxtLink to="sign_up">Pas encore de compte ? Inscrivez-vous ici.</NuxtLink>
+			<input ref="submit_button" type="submit" class="button" value="Sign in">
+		</form>
 	</div>
 </template>
 
@@ -66,7 +88,7 @@ export default {
 	align-items: center;
 }
 
-.form
+form
 {
 	display: flex;
 	flex-direction: column;

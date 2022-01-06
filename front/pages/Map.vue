@@ -31,6 +31,14 @@ export default {
 			]
 		}
 	},
+	beforeRouteEnter(to, from, next)
+	{
+		next(vm =>
+		{
+			if (!vm.$store.state.is_logged_in)
+				next('/sign_in')
+		})
+	},
 	mounted()
 	{
 		const map = new google.maps.Map(document.getElementById('map'),
