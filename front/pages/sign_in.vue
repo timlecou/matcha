@@ -23,27 +23,15 @@ export default {
 
 			if (this.is_email_valid)
 			{
-				this.$axios.post('http://localhost:4000/login', {email: this.email, password: this.password})
-				.then(res =>
+				this.$store.dispatch('login', {email: this.email, password: this.password})
+				.then(() =>
 				{
-					this.$store.commit("SET_ACCESS_TOKEN", res.data.token);
-					this.$store.commit("user/SET_USER_ID", res.data.userId);
-					this.$router.push('/');
-					this.$axios.interceptors.request.use((config) =>
-					{
-						config.headers['Authorization'] = "Bearer " + this.$store.state.access_token;
-						return config;
-					},
-					(error) =>
-					{
-						// Do something with request error
-						return Promise.reject(error);
-					});
+					this.$router.push('/')
 				})
 				.catch(err =>
 				{
-					alert(err.response.data.error);
-				});
+					console.log(err);
+				})
 			}
 			else
 				alert("Invalid form");

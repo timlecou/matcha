@@ -81,9 +81,16 @@ body
   background-color: #35495e;
 }
 
-svg
+.flex
+{
+  display: flex;
+}
+
+svg,
+img
 {
   width: 100%;
+  height: 100%;
 }
 
 a, a:visited

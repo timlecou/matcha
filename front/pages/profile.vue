@@ -29,6 +29,12 @@ export default {
 				liked: false,
 				gender: "Male",
 				sexual_orientation: "Female",
+				location:
+				{
+					place: "Dijon",
+					long: -1,
+					lat: -1
+				},
 
 				photos:
 				[
@@ -58,8 +64,19 @@ export default {
 
 			new_interest_value: "",
 
-			new_photos: []
+			new_photos: [],
+
+			autocomplete_service: null,
+			autocomplete_token: null,
+			autocomplete_suggestions: [],
+			geocoder: null,
 		}
+	},
+	created()
+	{
+		this.autocomplete_service = new google.maps.places.AutocompleteService();
+		this.autocomplete_token = new google.maps.places.AutocompleteSessionToken();
+		this.geocoder = new google.maps.Geocoder();
 	},
 	methods:
 	{
@@ -90,7 +107,35 @@ export default {
 		removeInterest(index)
 		{
 			this.user.interests.splice(index, 1);
-		}
+		},
+		async changeLocation()
+		{
+			if (this.$refs.location_input.value.length > 0)
+			{
+				this.autocomplete_suggestions = (await this.autocomplete_service.getPlacePredictions(
+				{
+					input: this.$refs.location_input.value,
+					sessionToken: this.autocomplete_token
+				})).predictions;
+				console.log(this.autocomplete_suggestions);
+			}
+		},
+		selectSuggestion(suggestion)
+		{
+			this.user.location.place = suggestion.description;
+			this.autocomplete_suggestions = [];
+			if (this.user.location.place.length > 0)
+			{
+				this.geocoder.geocode({ 'address': this.user.location.place}, (results, status) =>
+				{
+					if (status == google.maps.GeocoderStatus.OK)
+					{
+						this.user.location.latitude = results[0].geometry.location.lat();
+						this.user.location.longitude = results[0].geometry.location.lng();
+					}
+				});
+			}
+		},
 	},
 	computed:
 	{
@@ -174,6 +219,21 @@ export default {
 					</svg>
 					<input type="file" @change="uploadPhotos" multiple/>
 				</label>
+			</div>
+		</ExpandableSection>
+
+		<ExpandableSection title="Location">
+			<div class="field location" :class="{active: user.email.length > 0, valid: user.email.length > 0}">
+				<input type="text" id="location" ref="location_input" @input="changeLocation" autocomplete="on"/>
+				<label for="location">Location</label>
+			</div>
+			<div class="suggestions_container">
+				<div class="suggestion" @click="selectSuggestion(suggestion)" v-for="suggestion in autocomplete_suggestions">
+					<p>{{ suggestion.description }}</p>
+					<div class="location_icon">
+						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 264.018 264.018" style="enable-background:new 0 0 264.018 264.018;"><g><path fill="currentColor" d="M132.009,0c-42.66,0-77.366,34.706-77.366,77.366c0,11.634,2.52,22.815,7.488,33.24c0.1,0.223,0.205,0.442,0.317,0.661l58.454,113.179c2.146,4.154,6.431,6.764,11.106,6.764c4.676,0,8.961-2.609,11.106-6.764l58.438-113.148c0.101-0.195,0.195-0.392,0.285-0.591c5.001-10.455,7.536-21.67,7.536-33.341C209.375,34.706,174.669,0,132.009,0zM132.009,117.861c-22.329,0-40.495-18.166-40.495-40.495c0-22.328,18.166-40.494,40.495-40.494s40.495,18.166,40.495,40.494C172.504,99.695,154.338,117.861,132.009,117.861z"/><path fill="currentColor" d="M161.81,249.018h-59.602c-4.143,0-7.5,3.357-7.5,7.5c0,4.143,3.357,7.5,7.5,7.5h59.602c4.143,0,7.5-3.357,7.5-7.5C169.31,252.375,165.952,249.018,161.81,249.018z"/></g></svg>
+					</div>
+				</div>
 			</div>
 		</ExpandableSection>
 
@@ -437,6 +497,46 @@ select:focus ~ label,
 	width: 100%;
 	padding: 0.25rem 0.5rem;
 	color: black;
+}
+
+.suggestion
+{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 0 1rem;
+}
+
+.suggestion p
+{
+	padding: 0.5rem 0;
+}
+
+.location_icon
+{
+	display: none;
+	width: 1.5rem;
+	flex: 0 0 auto;
+}
+
+.suggestion:hover .location_icon
+{
+	display: block;
+}
+
+.location_icon svg
+{
+	width: 100%;
+}
+
+.suggestion:hover
+{
+	cursor: pointer;
+}
+
+.field.location
+{
+	width: 100%;
 }
 
 </style>

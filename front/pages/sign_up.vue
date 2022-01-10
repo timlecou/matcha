@@ -1,14 +1,23 @@
 <script>
+
+import GeoLocationService from '../services/geolocation.service';
+
 export default {
 	name: "SignUp",
 	data()
 	{
 		return {
-			email: "",
-			password: "",
-			username: "",
-			last_name: "",
-			first_name: "",
+			email: "rest@gmail.com",
+			password: "rest@gmail.com",
+			username: "rest@gmail.com",
+			last_name: "rest@gmail.com",
+			first_name: "rest@gmail.com",
+			location:
+			{
+				address: "",
+				long: null,
+				lat: null
+			}
 		}
 	},
 	methods:
@@ -17,15 +26,40 @@ export default {
 		{
 			return (this.email.length > 0 && this.password.length > 0 && this.username.length >= 4 && this.last_name.length > 0 && this.first_name.length > 0 && this.is_email_valid);
 		},
-		signUp(e)
+		async getGeoLocation()
+		{
+			return new Promise((resolve, reject) =>
+			{
+				navigator.geolocation.getCurrentPosition(position =>
+				{
+					let latlng = {long: position.coords.longitude, lat: position.coords.latitude};
+					GeoLocationService.getAddressFromCoord(latlng)
+					.then(address =>
+					{
+						this.location.long = position.coords.longitude
+						this.location.lat = position.coords.latitude;
+						this.location.address = address;
+						resolve();
+					});
+				}, err =>
+				{
+					console.log("Cannot get geolocation.")	
+					resolve();
+				});
+			})
+		},
+		async signUp(e)
 		{
 			e.preventDefault();
+
+			alert("We need your location to offer you the best suggestions");
+			await this.getGeoLocation();
 
 			if (!this.isFormValid())
 				alert("Form invalid");
 			else
 			{
-				this.$axios.post('http://localhost:4000/register', {username: this.username, email: this.email, password: this.password})
+				this.$axios.post('http://localhost:4000/register', {username: this.username, email: this.email, password: this.password, location: this.location})
 				.then (res =>
 				{
 					alert(res.data.message)

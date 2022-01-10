@@ -7,6 +7,11 @@ export default {
 		{
 			type: Object,
 			required: true
+		},
+		index:
+		{
+			type: Number,
+			required: true
 		}
 	},
 	data()
@@ -14,7 +19,20 @@ export default {
 		return {
 			photo_index: 0,
 			liked: false,
-			skiped: false
+			skiped: false,
+			show_more_popup: false,
+		}
+	},
+	computed:
+	{
+		transform_style()
+		{
+			if (this.skiped || this.liked)
+				return {};
+			else if (this.index == 0)
+				return {transform: 'translate(-50%, -50%) scale(0.75)'}
+			else
+				return {transform: 'translate(0, -50%) scale(0.5)'};
 		}
 	},
 	methods:
@@ -22,7 +40,7 @@ export default {
 		skip()
 		{
 			this.skiped = true;
-			window.setTimeout(() => this.$emit('skip'), 750);
+			this.next()
 		},
 		like()
 		{
@@ -30,12 +48,16 @@ export default {
 			.then(res =>
 			{
 				this.liked = true;
-				window.setTimeout(() => this.$emit('skip'), 750);
+				this.next();
 			})
 			.catch(err =>
 			{
 				alert(err.response.data.error);
 			})
+		},
+		next()
+		{
+			this.$emit('next')
 		},
 		nextPhoto()
 		{
@@ -54,7 +76,7 @@ export default {
 </script>
 
 <template>
-	<div class="swiper" :class="{liked: this.liked, skiped: this.skiped}">
+	<div class="swiper" :class="{liked: this.liked, skiped: this.skiped}" :style="transform_style">
 		<div class="image_container">
 			<img :src="require(`~/assets/${photo}`)" v-show="key == photo_index" v-for="(photo, key) in user.photos"/>
 			<div class="photos_indicator">
@@ -68,7 +90,13 @@ export default {
 			</div>
 		</div>
 		<div class="profile_info">
-			<h1>{{ user.first_name }} {{ user.last_name }}</h1>
+			<div class="name_status_container">
+				<h1>{{ user.first_name }} {{ user.last_name }}</h1>
+				<p class="status" :class="{offline: !user.online}">
+					<span v-if="user.online">Online</span>
+					<span v-else>Last seen at 23 Nov 2021 </span>
+				</p>
+			</div>
 			<p class='biography'>{{ user.biography }}</p>
 			<div class="general_informations">
 				<div class="item">
@@ -105,6 +133,16 @@ export default {
 					<svg role="img" fill="currentColor" viewBox="0 0 24 24" v-else><path d="M16.792 3.904A4.989 4.989 0 0121.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 014.708-5.218 4.21 4.21 0 013.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 013.679-1.938m0-2a6.04 6.04 0 00-4.797 2.127 6.052 6.052 0 00-4.787-2.127A6.985 6.985 0 00.5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 003.518 3.018 2 2 0 002.174 0 45.263 45.263 0 003.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 00-6.708-7.218z"></path></svg>
 				</div>
 			</div>
+			<p class="liked_indication">Already liked you</p>
+		</div>
+		<div class="more_button" @click="show_more_popup = true">
+			<svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM14 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM18 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg>
+		</div>
+		<div class="fade" v-if="show_more_popup"></div>
+		<div class="more_popup" v-if="show_more_popup">
+			<p>Bloquer</p>
+			<p>Report</p>
+			<p class="cancel_button" @click="show_more_popup = false">Cancel</p>
 		</div>
 	</div>
 </template>
@@ -116,25 +154,38 @@ export default {
 	display: flex;
 	align-items: center;
 	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: #ebebeb;
+	top: 50%;
+	left: 50%;
+	width: 80%;
+	height: 80%;
+	max-width: 50rem;
 	color: black;
-	transition: all 0.5s cubic-bezier(.32,.42,.93,.72);
+	/* transform: translate(-50%, -50%) scale(0.75); */
+	transition: all 0.5s;
 }
 
 .swiper.liked
 {
-	transform-origin: bottom left;
-	transform: scale(0.5) translate(100vw, 100vh);
+	top: 100vh;
+	left: 100vw;
+	transform: scale(0.5);
 }
 
 .swiper.skiped
 {
-	transform-origin: bottom right;
-	transform: scale(0.5) translate(-100vw, 100vh);
+	top: 100vh;
+	left: 0;
+	transform: scale(0.5);
+}
+
+.image_container:after
+{
+	position: absolute;
+	content: '';
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
 
 .image_container
@@ -143,8 +194,7 @@ export default {
 	width: 55%;
 	height: 100%;
 	background: white;
-	border-top-right-radius: 0.75rem;
-	border-bottom-right-radius: 0.75rem;
+	border-radius: 0.75rem;
 	overflow: hidden;
 }
 
@@ -187,6 +237,8 @@ export default {
 	width: 2rem;
 	height: 2rem;
 	color: white;
+	cursor: pointer;
+	z-index: 1;
 }
 
 .arrow.right
@@ -205,6 +257,7 @@ export default {
 	height: 97.5%;
 	background: white;
 	box-shadow: -5px 0px 16px 0px #42424269;
+	border-radius: 0.75rem;
 	padding: 1rem;
 	overflow: auto;
 }
@@ -289,6 +342,92 @@ h1
 	padding: 0.25rem 0.625rem;
 }
 
+.liked_indication
+{
+	text-align: center;
+	margin: 0;
+}
+
+.status
+{
+	position: relative;
+	width: fit-content;
+	margin: 0 auto;
+}
+
+.status:after
+{
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translate(calc(-100% - 0.25rem), -50%);
+	width: 0.75rem;
+	height: 0.75rem;
+	background: #11cd11;
+	border-radius: 100%;
+}
+
+.status.offline
+{
+	color: rgba(150, 150, 150);
+}
+
+.status.offline:after
+{
+	display: none;
+}
+
+.more_button
+{
+	position: absolute;
+	top: 0.5rem;
+	left: 0.5rem;
+	width: 1.5rem;
+	height: 1.5rem;
+	color: white;
+	cursor: pointer;
+}
+
+.fade
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #00000025;
+	border-radius: 0.75rem;
+}
+
+.more_popup
+{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 15rem;
+	font-size: 1.2rem;
+	background: white;
+	color: black;
+	z-index: 1;
+	text-align: center;
+	border-radius: 0.75rem;
+}
+
+.more_popup > *
+{
+	padding: 0.75rem 0;
+	border-bottom: solid 1px #00000033;
+	color: rgb(75 75 75);
+	cursor: pointer;
+}
+
+.more_popup .cancel_button
+{
+	color: red;
+}
+
 @media screen and (max-width: 600px)
 {
 	.swiper
@@ -296,6 +435,7 @@ h1
 		flex-direction: column;
 		background: white;
 		overflow: auto;
+		width: 100%;
 		height: 100%;
 	}
 

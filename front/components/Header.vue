@@ -41,6 +41,7 @@ export default {
 				<NuxtLink @click.native="expanded = false" to="/chat">Chat</NuxtLink>
 				<NuxtLink @click.native="expanded = false" to="/search">Search</NuxtLink>
 				<NuxtLink @click.native="expanded = false" to="/map">Map</NuxtLink>
+				<NuxtLink @click.native="expanded = false" to="/history/visits">History</NuxtLink>
 				<NuxtLink @click.native="expanded = false" to="/profile">Profile</NuxtLink>
 			</div>
 		</div>
