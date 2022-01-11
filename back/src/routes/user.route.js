@@ -1,5 +1,6 @@
 const express = require('express')();
 const cors = require('cors');
+const validator = require('../validator/validator');
 
 const { Pool, Client } = require('pg')
 const pool = new Pool()
@@ -150,6 +151,7 @@ module.exports = function(app) {
             res.status(400).send('you can\'t like yourself');
         } else {
             try {
+                //check si le liked user existe
                 pool.query('SELECT FROM "Liked_user" WHERE liker_id = $1 AND liked_id = $2',
                 [liker_id, liked_id],
                 (error, results) => {
@@ -201,9 +203,10 @@ module.exports = function(app) {
     app.put("/users/:user_id/interests", authMiddleware.getUserParams, (req, res) => {
 
         const user_id = parseInt(req.params.user_id);
-        const interests = req.body.names;
+        const interests = req.body.name;
 
         try {
+            //on recoit les names pas les id
 
 
             pool.query('SELECT * FROM "User" WHERE id = $1',
@@ -251,7 +254,8 @@ module.exports = function(app) {
     app.put("/users/:id", authMiddleware.getUserParams, (req, res) => {
         const user = new User({id: parseInt(req.params.id), ...req.body})
 
-        //validation
+        //validate
+        
 
         user.update();
         res.status(200).send('user modified');

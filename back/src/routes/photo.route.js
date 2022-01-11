@@ -54,11 +54,9 @@ module.exports = function(app){
      * POST
      */                 
 
-    app.post("/users/:id/photos"/*, authMiddleware.getUserParams*/, multerMiddleware, (req, res) => {
+    app.post("/users/:id/photos", authMiddleware.getUserParams, multerMiddleware, (req, res) => {
       const id = parseInt(req.params.id);
       const files = req.files;
-
-      console.log(files);
 
       try {
         pool.query('SELECT * FROM "Photo" WHERE user_id = $1',
@@ -97,7 +95,7 @@ module.exports = function(app){
     /**
      * Deletes a photo owned by the user(id)
      */
-    app.delete("/users/:id/photos/:photo_id"/*, authMiddleware.getUserParams*/, (req, res) => {
+    app.delete("/users/:id/photos/:photo_id", authMiddleware.getUserParams, (req, res) => {
 
       const user_id = parseInt(req.params.id);
       const photo_id = parseInt(req.params.photo_id);
@@ -110,7 +108,7 @@ module.exports = function(app){
           if (error) throw error;
           if (results.rowCount == 1) {
 
-            fs.unlink('/usr/src/app/src/' + results.rows[0].path, (err) => {    //deletes the file
+            fs.unlink('/usr/src/app/src/' + photo.path, (err) => {    //deletes the file
               if (err) throw err;
               pool.query('DELETE FROM "Photo" WHERE user_id = $1 AND id = $2',
               [user_id, photo_id],

@@ -24,8 +24,6 @@ class   Validator
     }
 }
 
-let vali  = new Validator;
-let variable;
-vali.setObject({variable});
-vali.setConstraints('variable', Constraints.IsNotNull);
-vali.validate();
+module.exports = {
+    Validator
+}
