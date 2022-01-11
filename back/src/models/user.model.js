@@ -65,20 +65,6 @@ class User {
             console.error(err)
         }
     }
-
-    delete () {
-        try {
-            pool.query('DELETE FROM "User" WHERE id = $1',
-            [this.id],
-            (error) => {
-                if (error) throw error
-            })
-        }
-        catch (err) {
-            console.error(err)
-        }
-    }
-
 }
 
 

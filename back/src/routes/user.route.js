@@ -24,16 +24,20 @@ module.exports = function(app) {
     /**
      * GET
      */
-    app.get("/users", authMiddleware.getUserBody, (req, res) => {
+    app.get("/users", (req, res) => {
         try {
             pool.query('SELECT * FROM "User" WHERE id != $1 ORDER BY id ASC',
             [req.user_id],
             (error, results) => {
                 if (error) throw error
-                results.rows.forEach(element => {
-                    delete element.password
-                });
-                res.status(200).json(results.rows)
+                if (results.rowCount == 0) {
+                    res.status(404).json({ message: "no user found" });
+                } else {
+                    results.rows.forEach(element => {
+                        delete element.password
+                    });
+                    res.status(200).json(results.rows);
+                }
             })
         }
         catch (err) {
@@ -241,6 +245,9 @@ module.exports = function(app) {
     });
 
 
+    /**
+     * Update a user
+     */
     app.put("/users/:id", authMiddleware.getUserParams, (req, res) => {
         const user = new User({id: parseInt(req.params.id), ...req.body})
 
@@ -256,12 +263,6 @@ module.exports = function(app) {
      * DELETE
      * 
      */
-    app.delete("/users/:id", authMiddleware.getUserParams, (req, res) => {
-        const user = new User({id: parseInt(req.params.id), ...req.body})
-
-        user.delete();
-        res.status(200).send('user deleted');
-    });
 
     /**
      * Unblock an other user
@@ -291,16 +292,29 @@ module.exports = function(app) {
         const   liked_id = parseInt(req.params.liked_id);
 
         try {
-            pool.query('DELETE FROM "Liked_user" WHERE liker_id = $1 AND liked_id = $2',
+            pool.query('SELECT * FROM "Liked_user" WHERE liker_id = $1 AND liked_id = $2'),
             [liker_id, liked_id],
-            (error) => {
+            (error, results) => {
                 if (error) throw error;
-            })
+
+                if (results.rowCount > 0) {
+                    try {
+                        pool.query('DELETE FROM "Liked_user" WHERE liker_id = $1 AND liked_id = $2',
+                        [liker_id, liked_id],
+                        (error) => {
+                            if (error) throw error;
+                            res.status(204).send('user unliked');
+                        })
+                    }
+                    catch (err) {
+                        console.error(err);
+                    }
+                }
+            };
         }
         catch (err) {
-            console.err(err);
+            console.error(err);
         }
-        res.status(200).send('user unliked')
     });
 
     /**
@@ -310,17 +324,47 @@ module.exports = function(app) {
         const   id = parseInt(req.params.id);
         const   user_id = parseInt(req.params.user_id);
 
-        //TODO check if the match exists
         try {
-            pool.query('DELETE FROM "Matched_user" WHERE (user1_id = $1 AND user2_id = $2) OR (user1_id = $2 AND user2_id = $1)',
+            pool.query('SELECT * FROM "Matched_user" WHERE (user1_id = $1 AND user2_id = $2) OR (user1_id = $2 AND user2_id = $1)'),
             [id, user_id],
-            (error) => {
+            (error, results) => {
                 if (error) throw error;
-                res.status(200).send('match deleted');
-            });
+                if (results.rowCount > 0) {
+                    try {
+                        pool.query('DELETE FROM "Matched_user" WHERE (user1_id = $1 AND user2_id = $2) OR (user1_id = $2 AND user2_id = $1)',
+                        [id, user_id],
+                        (error) => {
+                            if (error) throw error;
+                            res.status(204).json({ message: "match deleted" });
+                        });
+                    }
+                    catch (err) {
+                        console.error(err);
+                    }
+                }
+            };
         }
         catch (err) {
-            console.err(err);
+            console.error(err);
+        }
+    });
+
+    /**
+     * Delete a user
+     */
+    app.delete("/users/:id", authMiddleware.getUserParams, (req, res) => {
+        const id = parseInt(req.params.id);
+
+        try {
+            pool.query('DELETE FROM "User" WHERE id = $1'),
+            [id],
+            (error) => {
+                if (error) throw error;
+                res.status(204).json({ message: "user deleted" });
+            };
+        }
+        catch (err) {
+            console.error(err);
         }
     });
 }

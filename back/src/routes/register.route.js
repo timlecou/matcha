@@ -18,12 +18,12 @@ app.use(
     })
   )
 app.use(cors())
+
 //TODO faire en sorte de pas pouvoir avoir le meme mail ou le meme username qu'un autre utilisateur
 module.exports = function(app) {
 
     app.post("/register", (req, res) => {
 
-      //check if the username or email is already taken
       pool.query('SELECT * FROM "User" WHERE username = $1 OR email = $2',
       [req.body.username, req.body.email],
       (error, results) => {
@@ -36,13 +36,16 @@ module.exports = function(app) {
 
         } else {
 
+          if (req.body.password === undefined) {
+            res.status(500).json({ message: "no password" });
+          }
           bcrypt.hash(req.body.password, 10).then(hash => {
 
-            var lat = req.body.location.lat;
-            var long = req.body.location.long;
+            var lat = req.body.lat;
+            var long = req.body.long;
 
             if (lat == null || long == null) {
-              var geo = geoip.lookup('207.97.227.239');
+              var geo = geoip.lookup(req.ip);
 
               lat = geo.ll[0];
               long = geo.ll[1];
@@ -52,6 +55,8 @@ module.exports = function(app) {
               username: req.body.username,
               email: req.body.email,
               password: hash,
+              first_name: req.body.first_name,
+              last_name: req.body.last_name,
               activated: false,
               score: 0,
               latitude: lat,
