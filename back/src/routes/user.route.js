@@ -206,32 +206,52 @@ module.exports = function(app) {
         const interests = req.body.name;
 
         try {
-            //on recoit les names pas les id
 
+            for (let index = 0; index < interests.length; index++) {            //insere les interets qui n'existent pas encore dans la bdd
+                pool.query('SELECT * FROM "Interest" WHERE name = $1',
+                [interests[index]],
+                (error, results) => {
+                    if (error) throw error;
+                    if (results.rowCount == 0) {
+                        pool.query('INSERT INTO "Interest" (name) VALUES ($1)',
+                        [interests[index]],
+                        (error) => {
+                            if (error) throw error;
 
-            pool.query('SELECT * FROM "User" WHERE id = $1',
+                        });
+                    }
+                });
+            }
+
+            pool.query('SELECT * FROM "User" WHERE id = $1',        //verifie si l'utilisateur existe
             [user_id],
             (error, results) => {
                 if (error) throw error;
                 if (results.rowCount == 1) {
-                     //delete all interests owned by the user
-                pool.query('DELETE FROM "Interest_User" WHERE user_id = $1',
-                [user_id],
-                (error) => {
-                    if (error) throw error;
+                    //delete all interests owned by the user
+                    pool.query('DELETE FROM "Interest_User" WHERE user_id = $1',
+                    [user_id],
+                    (error) => {
+                        if (error) throw error;
 
-                    //add all the new interests
-                    for (let index = 0; index < interests.length; index++) {
-                        const element = interests[index];
-                        pool.query('INSERT INTO "Interest_User" (user_id, interest_id) VALUES ($1, $2)',
-                        [user_id, element],
-                        (error) => {
-                            if (error) throw error;
-                        });
-                    }
-                    res.status(200).json({ message: 'interests updated' });
-                
-                });
+                        //add all the new interests
+                        for (let index = 0; index < interests.length; index++) {
+                            const element = interests[index];
+                            pool.query('SELECT id FROM "Interest" WHERE name = $1'),
+                            [element],
+                            (error, results) => {
+                                if (error) throw error;
+                                const interest_id = results.rows.id;
+                                pool.query('INSERT INTO "Interest_User" (user_id, interest_id) VALUES ($1, $2)',
+                                [user_id, interest_id],
+                                (error) => {
+                                    if (error) throw error;
+                                });
+                            };
+                        }
+                        res.status(200).json({ message: 'interests updated' });
+                    
+                    });
                 } else {
                     res.status(404).json({ message: 'user not found' });
                 }
