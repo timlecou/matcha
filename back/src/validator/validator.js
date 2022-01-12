@@ -13,12 +13,12 @@ class   Validator
         this.constraints[name] = constraints;
     }
 
-    validate() {
+    async validate() {
         for (let key in this.object) {
             if (this.constraints[key] == undefined)
                 continue ;
             for (let constraint of this.constraints[key]) {
-                constraint(this.object[key], key);
+                await constraint(this.object[key], key);
             }
         }
     }

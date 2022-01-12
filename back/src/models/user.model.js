@@ -62,19 +62,45 @@ class User {
 
         //set the constraints to check
 
-        val.setConstraints('username', Constraints.IsNotEmpty, Constraints.IsAlphanumeric, Constraints.IsNotOnlyNumeric, Constraints.HasGoodPseudoSize);
+
+        val.setConstraints('username', Constraints.IsNotEmpty, Constraints.IsAlphanumeric, Constraints.IsNotOnlyNumeric, Constraints.HasGoodUsernameSize);
+        val.setConstraints('email', Constraints.IsAValidEmail);
         // val.setConstraints('password', Constraints.IsString, Constraints.IsNotOnlyNumeric, Constraints.HasGoodPasswordSize);
         val.setConstraints('first_name', Constraints.IsOnlyAlpha);
+        val.setConstraints('last_name', Constraints.IsOnlyAlpha);
+        val.setConstraints('gender', Constraints.IsAGender);
+        val.setConstraints('sexual_orientation', Constraints.IsASexualOrientation);
+        // val.setConstraints('online', Constraints.IsBoolean);
+        val.setConstraints('biography', Constraints.IsUnder400Characters);
         val.validate();
     }
 
-    update () {
+    update (res) {
         try {
-            pool.query('UPDATE "User" SET username = $1, email = $2, birth_date = $3, last_sign_in = $4, location = point($5, $6), gender = $7, sexual_orientation = $8, online = $9, biography = $10, score = $11, first_name = $12, last_name = $13, activated = $14 WHERE id = $15',
-            [this.username, this.email, this.birth_date, this.last_sign_in, this.latitude, this.longitude, this.gender, this.sexual_orientation, this.online, this.biography, this.score, this.first_name, this.last_name, this.activated, this.id],
-            (error) => {
-                if (error) throw error
-            })
+            pool.query('SELECT * FROM "User" WHERE username = $1 AND id != $2',
+            [this.username, this.id],
+            (error, results) => {
+                if (error) throw error;
+                if (results.rowCount == 0) {
+                    pool.query('SELECT * FROM "User" WHERE email = $1 AND id != $2',
+                    [this.email, this.id],
+                    (error, results) => {
+                        if (error) throw error;
+                        if (results.rowCount == 0) {
+                            pool.query('UPDATE "User" SET username = $1, email = $2, birth_date = $3, last_sign_in = $4, location = point($5, $6), gender = $7, sexual_orientation = $8, online = $9, biography = $10, score = $11, first_name = $12, last_name = $13, activated = $14 WHERE id = $15',
+                            [this.username, this.email, this.birth_date, this.last_sign_in, this.latitude, this.longitude, this.gender, this.sexual_orientation, this.online, this.biography, this.score, this.first_name, this.last_name, this.activated, this.id],
+                            (error) => {
+                                if (error) throw error;
+                                res.status(200).json({ message: "user updated" });
+                            });
+                        } else {
+                            res.status(403).json({ message: "email already taken" });
+                        }
+                    });
+                } else {
+                    res.status(403).json({ message: "username already taken" });
+                }
+            });
         }
         catch (err) {
             console.error(err)

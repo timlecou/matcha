@@ -1,5 +1,6 @@
 const email_existence = require('email-existence');
-
+const { Pool, Client } = require('pg');
+const pool = new Pool();
 
 function IsDefined (value, name) {
     if (value === undefined) {
@@ -55,7 +56,7 @@ function IsAlphanumeric (value, name) {
     }
 }
 
-function HasGoodPseudoSize (value, name) {
+function HasGoodUsernameSize (value, name) {
     if (value.length >= 17) {
         throw new Error(`${name} is too long ( > 16 characters)`);
     } else if (value.length <= 3) {
@@ -75,23 +76,39 @@ function IsOnlyAlpha (value, name) {
     }
 }
 
-
-
-
-
-
-
-function IsAValidEmail(value, name) {       //takes too much time, need to find a way to wait the function to finish
-    try {
-        email_existence.check(value, (error, res) => {
-            if (error) throw error;
-            if (res == false) {
-                throw new Error(`${name} is not a valid email`);
-            }
-        });
+function IsAGender (value, name) {
+    if (value.length != 1) {
+        throw new Error(`${name} is not a gender (M or F expected)`);
+    } else if (value != 'M' && value != 'F') {
+        throw new Error(`${name} is not a gender (M or F expected)`);
     }
-    catch (err) {
-        console.error(err);
+}
+
+function IsASexualOrientation (value, name) {
+    if (value.length == 0) {
+        throw new Error(`${name} is too short (M, F or A expected)`);
+    } else if (value.length != 1) {
+        throw new Error(`${name}: ${value} is not a sexual orientation (M, F or A expected)`);
+    } else if (value != 'M' && value != 'F' && value != 'A') {
+        throw new Error(`${name}: ${value} is not a sexual orientation (M, F or A expected)`);
+    }
+}
+
+function IsAValidEmail (value, name) {       //takes too much time, need to find a way to wait the function to finish
+    var email_exists = true;
+    email_existence.check(value, (error, res) => {
+        if (res == false) {
+            email_exists = false;
+        }
+    });
+    if (email_exists == false) {
+        throw new Error(`${name} is not a valid email`);
+    }
+}
+
+function IsUnder400Characters (value, name) {
+    if (value.length > 400) {
+        throw new Error(`${name} is too long ( > 400 characters)`);
     }
 }
 
@@ -106,7 +123,10 @@ module.exports = {
     IsAlphanumeric,
     IsNotOnlyNumeric,
     IsAValidEmail,
-    HasGoodPseudoSize,
+    HasGoodUsernameSize,
     HasGoodPasswordSize,
-    IsOnlyAlpha
+    IsOnlyAlpha,
+    IsAGender,
+    IsASexualOrientation,
+    IsUnder400Characters,
 }

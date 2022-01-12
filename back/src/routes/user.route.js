@@ -256,8 +256,7 @@ module.exports = function(app) {
         const user = new User.User({id: user_id, ...req.body});
         
         user.validate();
-        user.update();
-        res.status(200).send('user modified');
+        user.update(res);
     });
 
 
