@@ -13,6 +13,7 @@
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
+    "email-existence": "^0.1.6",
     "express": "^4.17.1",
     "file": "^0.2.2",
     "geoip-lite": "^1.4.2",

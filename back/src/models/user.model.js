@@ -1,4 +1,6 @@
-const { Pool, Client } = require('pg')
+const { Pool, Client } = require('pg');
+const Validator = require('../validator/validator');
+const Constraints = require('../constraints/constraints');
 
 const pool = new Pool()
 
@@ -53,6 +55,19 @@ class User {
     //     }
     // }
 
+    validate () {
+        const val = new Validator.Validator();
+
+        val.setObject(this);
+
+        //set the constraints to check
+
+        val.setConstraints('username', Constraints.IsNotEmpty, Constraints.IsAlphanumeric, Constraints.IsNotOnlyNumeric, Constraints.HasGoodPseudoSize);
+        // val.setConstraints('password', Constraints.IsString, Constraints.IsNotOnlyNumeric, Constraints.HasGoodPasswordSize);
+        val.setConstraints('first_name', Constraints.IsOnlyAlpha);
+        val.validate();
+    }
+
     update () {
         try {
             pool.query('UPDATE "User" SET username = $1, email = $2, birth_date = $3, last_sign_in = $4, location = point($5, $6), gender = $7, sexual_orientation = $8, online = $9, biography = $10, score = $11, first_name = $12, last_name = $13, activated = $14 WHERE id = $15',
@@ -63,14 +78,6 @@ class User {
         }
         catch (err) {
             console.error(err)
-        }
-    }
-
-    compare (user) {
-        for (var k in user) {
-            if (user[k] !== undefined) {
-                this[k] = user[k];
-            }
         }
     }
 }
