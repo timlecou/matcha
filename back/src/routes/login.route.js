@@ -1,6 +1,7 @@
 const express = require('express')();
 const cors = require('cors');
 const bcrypt = require('bcrypt')
+const geoip = require('geoip-lite');
 
 const { Pool, Client } = require('pg')
 const pool = new Pool()
@@ -21,10 +22,10 @@ app.use(cors())
 
 module.exports = function(app) {
 
-    //look to https://openclassrooms.com/fr/courses/6390246-passez-au-full-stack-avec-node-js-express-et-mongodb/6466506-creez-des-utilisateurs
-
     app.post("/login", (req, res) => {
       var user;
+      var latitude = parseFloat(req.body.lat);
+      var longitude = parseFloat(req.body.long);
 
       try {
         pool.query('SELECT * FROM "User" WHERE username = $1 OR email = $2',
@@ -41,6 +42,22 @@ module.exports = function(app) {
                   if (!valid) {
                     return res.status(401).json({ error: 'incorrect password' });
                   }
+
+                  //locate the user
+
+                  if (latitude == 0 || longitude == 0) {
+                    var geo = geoip.lookup(req.ip);
+      
+                    latitude = geo.ll[0];
+                    longitude = geo.ll[1];
+                  }
+
+                  pool.query('UPDATE "User" SET location = point($1, $2)',
+                  [latitude, longitude],
+                  (error) => {
+                      if (error) throw error;
+                  });
+
                   res.status(200).json({
                     userId: user.id,
                     token: jwt.sign(

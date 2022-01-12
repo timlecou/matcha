@@ -252,13 +252,27 @@ module.exports = function(app) {
      * Update a user
      */
     app.put("/users/:id", authMiddleware.getUserParams, (req, res) => {
-        const user = new User({id: parseInt(req.params.id), ...req.body})
+        const user_id = parseInt(req.params.id);
+        const user = new User.User({id: user_id, ...req.body});
+        
+        try {
+            pool.query('SELECT * FROM "User" WHERE id = $1',
+            [user_id],
+            (error, results) => {
+                if (error) throw error;
+
+                const old_user = new User.User(results.rows[0]);
+                old_user.compare(user);
+                old_user.update();
+                res.status(200).send('user modified');
+            });
+        }
+        catch (err) {
+            console.error(err);
+        }
 
         //validate
         
-
-        user.update();
-        res.status(200).send('user modified');
     });
 
 
