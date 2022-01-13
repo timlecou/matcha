@@ -213,11 +213,12 @@ module.exports = function(app) {
                 (error, results) => {
                     if (error) throw error;
                     if (results.rowCount == 0) {
-                        pool.query('INSERT INTO "Interest" (name) VALUES ($1)',
+                        pool.query('INSERT INTO "Interest" (name) OUTPUT INSERTED.[id] VALUES ($1)',
                         [interests[index]],
-                        (error) => {
+                        (error, results) => {
                             if (error) throw error;
 
+                            console.log(results.rows);
                         });
                     }
                 });

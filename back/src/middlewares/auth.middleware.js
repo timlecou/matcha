@@ -27,7 +27,7 @@ module.exports = {
         }
       } catch {
         res.status(401).json({
-          error: new Error('Invalid request!')
+          error: "no authorization token found"
         });
       }
     }
@@ -48,7 +48,7 @@ module.exports = {
         }
       } catch {
         res.status(401).json({
-          error: new Error('Invalid request!')
+          error: "no authorization token found"
         });
       }
     }
@@ -75,7 +75,7 @@ module.exports = {
       } catch (error) {
         console.error(error);
         res.status(401).json({
-          error: new Error('Invalid request!')
+          error: "no authorization token found"
         });
       }
     }
@@ -103,7 +103,7 @@ module.exports = {
       } catch (error) {
         console.error(error);
         res.status(401).json({
-          error: new Error('Invalid request!')
+          error: "no authorization token found"
         });
       }
     }
@@ -131,7 +131,7 @@ module.exports = {
       } catch (error) {
         console.error(error);
         res.status(401).json({
-          error: new Error('Invalid request!')
+          error: "no authorization token found"
         });
       }
     }
