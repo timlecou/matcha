@@ -192,6 +192,14 @@ module.exports = function(app) {
     });
 
     /**
+     * See an other user's profil
+     */
+    app.post("/users/:viewer_id/viewed/:viewed_id", authMiddleware.view, (req, res) => {
+        
+    });
+
+
+    /**
      * 
      * PUT
      * 
@@ -205,6 +213,10 @@ module.exports = function(app) {
         const user_id = parseInt(req.params.user_id);
         const interests = req.body.name;
 
+
+        console.log(typeof interests);
+
+
         try {
 
             for (let index = 0; index < interests.length; index++) {            //insere les interets qui n'existent pas encore dans la bdd
@@ -213,12 +225,10 @@ module.exports = function(app) {
                 (error, results) => {
                     if (error) throw error;
                     if (results.rowCount == 0) {
-                        pool.query('INSERT INTO "Interest" (name) OUTPUT INSERTED.[id] VALUES ($1)',
+                        pool.query('INSERT INTO "Interest" (name) VALUES ($1)',
                         [interests[index]],
                         (error, results) => {
                             if (error) throw error;
-
-                            console.log(results.rows);
                         });
                     }
                 });

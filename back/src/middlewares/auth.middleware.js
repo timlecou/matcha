@@ -82,6 +82,34 @@ module.exports = {
   },
 
   /**
+   * Check if the user can see a profil
+   */
+  view (req, res, next) {
+
+    if (req.headers.authorization === undefined) {
+      res.status(401).json({ message: "no authorization token found" });
+    } else {
+      try {
+        const token = req.headers.authorization.split(' ')[1];
+        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const userId = decodedToken.userId;
+  
+        if (req.params.id && req.params.id != userId && req.params.user_id && req.params.user_id != userId) {
+          throw 'Invalid user ID';
+        } else {
+          next();
+        }
+      }
+      catch (error) {
+        console.error(error);
+        res.status(401).json({
+          error: "no authorization token found"
+        });
+      }
+    }
+  },
+
+  /**
    * checks if the user can interact with the matches
    */
    match (req, res, next) {
