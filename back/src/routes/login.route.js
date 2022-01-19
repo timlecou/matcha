@@ -44,7 +44,6 @@ module.exports = function(app) {
                   }
 
                   //locate the user
-
                   if (latitude == 0 || longitude == 0) {
                     var geo = geoip.lookup(req.ip);
       
@@ -52,8 +51,11 @@ module.exports = function(app) {
                     longitude = geo.ll[1];
                   }
 
-                  pool.query('UPDATE "User" SET location = point($1, $2)',
-                  [latitude, longitude],
+                  var now = new Date();
+                  now.toUTCString();
+
+                  pool.query('UPDATE "User" SET location = point($1, $2), last_sign_in = $3',
+                  [latitude, longitude, now],
                   (error) => {
                       if (error) throw error;
                   });

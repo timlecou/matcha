@@ -21,6 +21,7 @@ class User {
     first_name;
     last_name;
     activated;
+    activation_token;
 
     constructor (param) {
         Object.assign(this, param)
@@ -30,8 +31,8 @@ class User {
 
     register () {
         try {
-            pool.query('INSERT INTO "User" (username, email, first_name, last_name, password, score, activated, location) VALUES ($1, $2, $3, $4, $5, $6, $7, point($8, $9))',
-            [this.username, this.email, this.first_name, this.last_name, this.password, this.score, this.activated, this.latitude, this.longitude],
+            pool.query('INSERT INTO "User" (username, email, first_name, last_name, password, score, activated, location, activation_token) VALUES ($1, $2, $3, $4, $5, $6, $7, point($8, $9), $10)',
+            [this.username, this.email, this.first_name, this.last_name, this.password, this.score, this.activated, this.latitude, this.longitude, this.activation_token],
             (err) => {
                 if (err) throw err;
             })

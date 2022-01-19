@@ -196,6 +196,36 @@ module.exports = function(app) {
      */
     app.post("/users/:viewer_id/viewed/:viewed_id", authMiddleware.view, (req, res) => {
         
+        const   viewer_id = parseInt(req.params.viewer_id);
+        const   viewed_id = parseInt(req.params.viewed_id);
+        var now = new Date();
+        now.toUTCString();
+
+        try {
+            pool.query('SELECT FROM "Viewed_user" WHERE viewer_id = $1 AND viewed_id = $2',
+                [viewer_id, viewed_id],
+                (error, results) => {
+                    if (error) throw error;
+                    if (results.rowCount == 0) {
+                        pool.query('INSERT INTO "Viewed_user" (viewer_id, viewed_id, date) VALUES ($1, $2, $3)',
+                        [viewer_id, viewed_id, now],
+                        (error) => {
+                            if (error) throw error;
+                            res.status(201).json({ message: "user viewed" });
+                        })
+                    } else {
+                        pool.query('UPDATE "Viewed_user" SET date = $1 WHERE viewer_id = $2 AND viewed_id = $3'),
+                        [now, viewer_id, viewed_id],
+                        (error) => {
+                            if (error) throw error;
+                            res.status(201).json({ message: "user viewed" });
+                        };
+                    }
+                })
+        }
+        catch (err) {
+            console.error(err);
+        }
     });
 
 

@@ -16,7 +16,8 @@ CREATE TABLE "User" (
   score INT NOT NULL,
   first_name varchar(255),
   last_name varchar(255),
-  activated boolean NOT NULL
+  activated boolean NOT NULL,
+  activation_token varchar(255)
 );
 
 CREATE TABLE "Interest" (

@@ -2,6 +2,21 @@ const express = require('express')();
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const geoip = require('geoip-lite');
+const TokenGenerator = require('uuid-token-generator');
+
+//-------------------MAILER---------------
+
+const nodemailer = require('nodemailer');
+
+let mailTransporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+      user: 'noreply42matcha@gmail.com',
+      pass: 'Mot.2paSse'
+  }
+});
+
+//---------------------------------------
 
 const { Pool, Client } = require('pg')
 const pool = new Pool()
@@ -63,10 +78,59 @@ module.exports = function(app) {
               longitude: long
 
             });
+
+              let token = new TokenGenerator(256, TokenGenerator.BASE62);
+              user.activation_token = token.generate();
+              
+              // Set expiration time is 24 hours.
+              // user.activeExpires = Date.now() + 24 * 3600 * 1000;
+              var link = 'http://localhost:3000/active/' + user.activation_token;
+
+
+                let mailDetails = {
+                  from: 'noreply42matcha@gmail.com',
+                  to: user.email,
+                  subject: 'Account confirmation',
+                  text: `Hello ${user.first_name} ! You can confirm your subscription by clicking the following link : ${link}`
+                };
+                
+                mailTransporter.sendMail(mailDetails, function(err, data) {
+                  if(err) {
+                    console.error(err);
+                      console.log('Error Occurs');
+                  } else {
+                      console.log('Email sent successfully');
+                  }
+                });
+
             user.register();
               res.status(201).json({ message: 'user registered' });
-          });
+            });
         }
       });
+    });
+
+    app.get("/active/:token", (req, res) => {
+      const token = req.params.token;
+
+      console.log(`user token = ${token}`);
+      try {
+        pool.query('SELECT * FROM "User" WHERE activation_token = $1',
+        [token],
+        (err, results) => {
+          if (err) throw err;
+          if (results.rowCount > 0) {
+            pool.query('UPDATE "User" SET activated = true WHERE activation_token = $1',
+            [token],
+            (err) => {
+              if (err) throw err;
+              res.status(200).json({ message: `${results.rows[0].username} has confirmed its subscription` });
+            });
+          }
+        });
+      }
+      catch (err) {
+        console.error(err);
+      }
     });
 }
