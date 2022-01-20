@@ -34,7 +34,7 @@ module.exports = function(app) {
             if (error) throw error;
             if (results.rowCount == 0) {
                 res.status(404).json({ error: 'user not found' });
-            } else {
+            } else if (results.rows[0].activated == true) {
                 user = results.rows[0];
 
                 bcrypt.compare(req.body.password, user.password)
@@ -69,6 +69,8 @@ module.exports = function(app) {
                     )
                   });
                 })
+            } else {
+              res.status(200).json({ message: "user not activated" });
             }
         })
       }
