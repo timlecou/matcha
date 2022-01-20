@@ -31,6 +31,7 @@ app.use(cors())
  const  loginRoute = require('./routes/login.route')(app);
  const  registerRoute = require('./routes/register.route')(app);
  const  interestRoute = require('./routes/interest.route')(app);
+ const  resetPasswordRoute = require('./routes/reset_password.route')(app);
 
  
 app.get('/', async (request, response) => {
