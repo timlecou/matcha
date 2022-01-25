@@ -42,13 +42,13 @@ module.exports = {
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         const userId = decodedToken.userId;
         if (req.params.id && req.params.id != userId) {
-          throw 'Invalid user ID';
+          throw 'Invalid user ID ' + userId;
         } else {
           next();
         }
-      } catch {
+      } catch (e){
         res.status(401).json({
-          error: "no authorization token found"
+          error: "no authorization token found : " + e
         });
       }
     }

@@ -14,24 +14,22 @@ export default {
 	{
 		return {
 			expanded: false,
-			notifications:
-			[
-				{
-					text: "Nao vous a envoyé un message."
-				},
-				{
-					text: "Truc a liké votre photo."
-				}
-			]
+		}
+	},
+	computed:
+	{
+		notifications()
+		{
+			return this.$store.state.notifications;
 		}
 	}
 }
 </script>
 
 <template>
-	<header :class="{expanded: expanded, fixed: fixed}">
+	<header :class="{expanded: expanded, fixed: fixed}" v-if="this.$store.state.is_logged_in">
 		<div>
-			<div class="links_toggler" @click="expanded = !expanded" v-if="this.$store.state.is_logged_in">
+			<div class="links_toggler" @click="expanded = !expanded">
 				<span></span>
 				<span></span>
 				<span></span>
@@ -46,7 +44,7 @@ export default {
 			</div>
 		</div>
 		<div class="right">
-			<div class="notification_container" v-if="this.$store.state.is_logged_in">
+			<div class="notification_container">
 				<div class="notification_button">	
 					<svg viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg">
 						<title>notification-solid</title>
@@ -60,7 +58,7 @@ export default {
 					<p v-if="notifications.length == 0">Vous n'avez pas de notifications</p>
 				</div>
 			</div>
-			<div class="account_button" v-if="this.$store.state.is_logged_in">
+			<div class="account_button">
 				<div class="profile_photo"></div>
 				<div class="profile_popup">
 					<p>
@@ -83,7 +81,7 @@ header
 	justify-content: space-between;
 	align-items: center;
 	width: 100%;
-	width: fit-content;
+	/* width: fit-content; */
 	padding: 1rem;
 	z-index: 1;
 }
@@ -147,7 +145,6 @@ header.expanded .links_toggler span:nth-child(3)
 {
 	display: flex;
 	align-items: center;
-	display: none;
 }
 
 .right > div
@@ -189,7 +186,7 @@ header.expanded .links_toggler span:nth-child(3)
 	width: 100vw;
 	height: 100vh;
 	background: rgba(0, 0, 0, 0.2);
-	z-index: 0;
+	z-index: 1;
 }
 
 .links_container
@@ -239,6 +236,7 @@ a
 .notification_container
 {
 	position: relative;
+	text-align: center;
 }
 
 .notification_popup,

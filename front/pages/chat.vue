@@ -7,72 +7,6 @@ export default {
 	data()
 	{
 		return {
-			matches:
-			[
-				{
-					id: 1,
-					user:
-					{
-						id: 1,
-						name: "Yass",
-						photo: "/images/photo-1.jpeg"
-					},
-					last_update_time: "10:03",
-					messages:
-					[
-						{
-							id: 1,
-							author:
-							{
-								id: 1,
-								name: "Yass"
-							},
-							text: "Salam Aleykoum bg ca va ?"
-						},
-						{
-							id: 2,
-							author:
-							{
-								id: 2,
-								name: "Me"
-							},
-							text: "Aleykoum salam ca va et toi ?"
-						},
-					]
-				},
-				{
-					id: 2,
-					user:
-					{
-						id: 1,
-						name: "Nao",
-						photo: "/images/photo-2.png"
-					},
-					last_update_time: "10:03",
-					messages:
-					[
-						{
-							id: 1,
-							author:
-							{
-								id: 1,
-								name: "Yass"
-							},
-							text: "Salam Aleykoum bg ca va ?"
-						},
-						{
-							id: 2,
-							author:
-							{
-								id: 2,
-								name: "Me"
-							},
-							text: "Aleykoum salam ca va et toi ?"
-						},
-					]
-				},
-			],
-			// Object are copied by reference with '=' operator
 			selected_match: null,
 
 			// For little screen
@@ -86,6 +20,13 @@ export default {
 			if (!vm.$store.state.is_logged_in)
 				next('/sign_in')
 		})
+	},
+	computed:
+	{
+		matches()
+		{
+			return this.$store.state.matches;
+		}
 	},
 	methods:
 	{

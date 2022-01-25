@@ -5,7 +5,7 @@ export default {
 	{
 		return {
 			email: "yass@gmail.com",
-			password: "test"
+			password: "yass@gmail.com"
 		}
 	},
 	mounted()

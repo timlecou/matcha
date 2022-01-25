@@ -6,7 +6,91 @@ export const state = () =>
 	{
 		id: -1
 	},
-	users: []
+	users: [],
+	notifications:
+	[
+		{
+			type: "new_message",
+			text: "Nao vous a envoyé un message.",
+			meta_data:
+			{
+				user_id: 1,
+			}
+		},
+		{
+			type: "new_like",
+			text: "Test vous a liké.",
+			meta_data:
+			{
+				user_id: 1,
+			}
+		},
+	],
+	matches:
+	[
+		{
+			id: 1,
+			user:
+			{
+				id: 1,
+				name: "Yass",
+				photo: "/images/photo-1.jpeg"
+			},
+			last_update_time: "10:03",
+			messages:
+			[
+				{
+					id: 1,
+					author:
+					{
+						id: 1,
+						name: "Yass"
+					},
+					text: "Salam Aleykoum bg ca va ?"
+				},
+				{
+					id: 2,
+					author:
+					{
+						id: 2,
+						name: "Me"
+					},
+					text: "Aleykoum salam ca va et toi ?"
+				},
+			]
+		},
+		{
+			id: 2,
+			user:
+			{
+				id: 1,
+				name: "Nao",
+				photo: "/images/photo-2.png"
+			},
+			last_update_time: "10:03",
+			messages:
+			[
+				{
+					id: 1,
+					author:
+					{
+						id: 1,
+						name: "Yass"
+					},
+					text: "Salam Aleykoum bg ca va ?"
+				},
+				{
+					id: 2,
+					author:
+					{
+						id: 2,
+						name: "Me"
+					},
+					text: "Aleykoum salam ca va et toi ?"
+				},
+			]
+		},
+	],
 })
   
 export const mutations =

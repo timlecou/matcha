@@ -62,8 +62,10 @@ module.exports = function(app) {
             if (lat == null || long == null) {
               var geo = geoip.lookup(req.ip);
 
-              lat = geo.ll[0];
-              long = geo.ll[1];
+              lat = 212;
+              long = 212;
+              //lat = geo.ll[0];
+              //long = geo.ll[1];
             }
 
             const user = new User.User({

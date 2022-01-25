@@ -14,6 +14,7 @@
     "axios": "^0.24.0",
     "core-js": "^3.9.1",
     "nuxt": "^2.15.3",
+    "socket.io-client": "^4.4.1",
     "vue-input-autosize": "^0.2.2",
     "vuejs-google-maps": "^0.2.0"
   },

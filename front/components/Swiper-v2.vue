@@ -44,16 +44,18 @@ export default {
 		},
 		like()
 		{
-			this.$axios.post(`http://localhost:4000/users/${this.$store.state.user.id}/liked/${this.user.id}`)
-			.then(res =>
-			{
-				this.liked = true;
-				this.next();
-			})
-			.catch(err =>
-			{
-				alert(err.response.data.error);
-			})
+			this.liked = true;
+			this.next();
+			// this.$axios.post(`http://localhost:4000/users/${this.$store.state.user.id}/liked/${this.user.id}`)
+			// .then(res =>
+			// {
+			// 	this.liked = true;
+			// 	this.next();
+			// })
+			// .catch(err =>
+			// {
+			// 	alert(err.response.data.error);
+			// })
 		},
 		next()
 		{
@@ -87,6 +89,15 @@ export default {
 			</div>
 			<div class="arrow right" @click="nextPhoto">
 				<svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8.293 4.293a1 1 0 0 0 0 1.414L14.586 12l-6.293 6.293a1 1 0 1 0 1.414 1.414l7-7a1 1 0 0 0 0-1.414l-7-7a1 1 0 0 0-1.414 0Z"/></svg>
+			</div>
+			<div class="more_button" @click="show_more_popup = true">
+				<svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM14 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM18 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg>
+			</div>
+			<div class="fade" v-if="show_more_popup"></div>
+			<div class="more_popup" v-if="show_more_popup">
+				<p>Bloquer</p>
+				<p>Report</p>
+				<p class="cancel_button" @click="show_more_popup = false">Cancel</p>
 			</div>
 		</div>
 		<div class="profile_info">
@@ -134,15 +145,6 @@ export default {
 				</div>
 			</div>
 			<p class="liked_indication">Already liked you</p>
-		</div>
-		<div class="more_button" @click="show_more_popup = true">
-			<svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM14 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM18 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg>
-		</div>
-		<div class="fade" v-if="show_more_popup"></div>
-		<div class="more_popup" v-if="show_more_popup">
-			<p>Bloquer</p>
-			<p>Report</p>
-			<p class="cancel_button" @click="show_more_popup = false">Cancel</p>
 		</div>
 	</div>
 </template>
@@ -387,22 +389,23 @@ h1
 	height: 1.5rem;
 	color: white;
 	cursor: pointer;
+	z-index: 1;
 }
 
 .fade
 {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
 	background: #00000025;
-	border-radius: 0.75rem;
+	z-index: 1;
 }
 
 .more_popup
 {
-	position: absolute;
+	position: fixed;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
@@ -433,7 +436,6 @@ h1
 	.swiper
 	{
 		flex-direction: column;
-		background: white;
 		overflow: auto;
 		width: 100%;
 		height: 100%;

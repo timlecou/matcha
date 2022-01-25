@@ -53,9 +53,9 @@ export default {
 				],
 				interests:
 				[
-					"bio",
-					"geek",
-					"Islam"
+					"3",
+					"petits",
+					"interets"
 				]
 			},
 			current_password: "",
@@ -157,9 +157,11 @@ export default {
 				<input type="text" v-model="user.username"/>
 			</div>
 			<div class="biography input_container">
-				<textarea rows="5" type="text" v-model="user.biography"></textarea>
+				<textarea rows="3" type="text" v-model="user.biography"></textarea>
 			</div>
 		</div>
+		
+		<p class="score">250</p>
 
 		<ExpandableSection title="Personal informations" :default_expanded="true">
 			<div class="field_containers">
@@ -260,7 +262,8 @@ export default {
 		<ExpandableSection title="Security">
 			<div class="field_containers">
 				<div class="line">
-					<div class="field" :class="{active: current_password.length > 0, valid: current_password.length >= 7}">
+					<p>Send a mail to change your password</p>
+					<!-- <div class="field" :class="{active: current_password.length > 0, valid: current_password.length >= 7}">
 						<input type="password" id="current_password" v-model="current_password" autocomplete="password"/>
 						<label for="current_password">Current password</label>
 					</div>
@@ -271,10 +274,14 @@ export default {
 					<div class="field" :class="{active: confirm_new_password.length > 0, valid: confirm_new_password.length >= 7}">
 						<input type="password" id="confirm_new_password" v-model="confirm_new_password" autocomplete="new-password"/>
 						<label for="confirm_new_password">Confirm new password</label>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</ExpandableSection>
+		<div class="buttons_container">
+			<div class="delete_button">Delete</div>
+			<div class="save_button">Save</div>
+		</div>
 	</form>
 </template>
 
@@ -288,6 +295,7 @@ export default {
 	max-width: 100%;
 	margin: 0 auto;
 	padding: 1rem;
+	position: relative;
 }
 
 img
@@ -537,6 +545,53 @@ select:focus ~ label,
 .field.location
 {
 	width: 100%;
+}
+
+.buttons_container
+{
+	display: flex;
+	justify-content: space-around;
+	margin: 1rem 0;
+	width: 100%;
+}
+
+.buttons_container > *
+{
+	padding: 0.5rem 2rem;
+	background: transparent;
+	color: inherit;
+	border: solid 1px white;
+	border-radius: 0.25rem;
+	margin: 0 auto;
+	cursor: pointer;
+}
+
+.buttons_container .delete_button
+{
+	background: rgba(255, 15, 15, 0.5);
+}
+
+.buttons_container .delete_button:hover
+{
+	background: rgba(255, 15, 15, 1);
+}
+
+.score
+{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	top: 0;
+	right: 0;
+	transform: translate(calc(50% - 1rem), calc(-50% + 1rem));
+	width: 5rem;
+	height: 5rem;
+	background: white;
+	border-radius: 100%;
+	color: #fb53a3;
+	font-size: 1.25rem;
+	font-weight: 600;
 }
 
 </style>

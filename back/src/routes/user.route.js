@@ -26,13 +26,14 @@ module.exports = function(app) {
      * GET
      */
     app.get("/users", (req, res) => {
+        console.log(req.user_id);
         try {
-            pool.query('SELECT * FROM "User" WHERE id != $1 ORDER BY id ASC',
-            [req.user_id],
+            pool.query('SELECT * FROM "User" ',//WHERE id != $1 ORDER BY id ASC',
+            // [req.userId],
             (error, results) => {
                 if (error) throw error
                 if (results.rowCount == 0) {
-                    res.status(404).json({ message: "no user found" });
+                    res.status(404).json({ message: "no users found" });
                 } else {
                     results.rows.forEach(element => {
                         delete element.password
