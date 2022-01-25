@@ -34,9 +34,11 @@ app.use(
   )
 app.use(cors())
 
-//TODO faire en sorte de pas pouvoir avoir le meme mail ou le meme username qu'un autre utilisateur
 module.exports = function(app) {
 
+    /**
+     * Register a new user and send a confirmation email with a link
+     */
     app.post("/register", (req, res) => {
 
       pool.query('SELECT * FROM "User" WHERE username = $1 OR email = $2',
@@ -52,7 +54,7 @@ module.exports = function(app) {
         } else {
 
           if (req.body.password === undefined) {
-            res.status(500).json({ message: "no password" });
+            res.status(500).json({ message: "no password specified" });
           }
           bcrypt.hash(req.body.password, 10).then(hash => {
 
@@ -93,7 +95,7 @@ module.exports = function(app) {
                   from: 'noreply42matcha@gmail.com',
                   to: user.email,
                   subject: 'Account confirmation',
-                  text: `Hello ${user.first_name} ! You can confirm your subscription by clicking the following link : ${link}`
+                  text: `Hi ${user.first_name} ! You can confirm your subscription by clicking the following link : ${link}`
                 };
                 
                 mailTransporter.sendMail(mailDetails, function(err, data) {
@@ -112,7 +114,10 @@ module.exports = function(app) {
       });
     });
 
-    app.get("/active/:token", (req, res) => {
+    /**
+     * Activate the user using its unique token
+     */
+    app.post("/active/:token", (req, res) => {
       const token = req.params.token;
 
       console.log(`user token = ${token}`);
@@ -121,9 +126,9 @@ module.exports = function(app) {
         [token],
         (err, results) => {
           if (err) throw err;
-          if (results.rowCount > 0) {
-            pool.query('UPDATE "User" SET activated = true WHERE activation_token = $1',
-            [token],
+          if (results.rowCount == 1) {
+            pool.query('UPDATE "User" SET activated = true, activation_token = $1 WHERE activation_token = $2',
+            [null, token],
             (err) => {
               if (err) throw err;
               res.status(200).json({ message: `${results.rows[0].username} has confirmed its subscription` });

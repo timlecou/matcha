@@ -17,7 +17,8 @@ CREATE TABLE "User" (
   first_name varchar(255),
   last_name varchar(255),
   activated boolean NOT NULL,
-  activation_token varchar(255)
+  activation_token varchar(255),
+  reset_password_token varchar(255)
 );
 
 CREATE TABLE "Interest" (
