@@ -4,8 +4,8 @@ export default {
 	data()
 	{
 		return {
-			email: "yass@gmail.com",
-			password: "yass@gmail.com"
+			email: "",
+			password: ""
 		}
 	},
 	mounted()
@@ -60,8 +60,8 @@ export default {
 				<input type="password" id="password" v-model="password" autocomplete/>
 				<label for="password">Password</label>
 			</div>
-			<NuxtLink class="forgotten_password" to="forgotten_password">Mot de passe oublié ? Cliqué ici pour le réinitialiser.</NuxtLink>
-			<NuxtLink to="sign_up">Pas encore de compte ? Inscrivez-vous ici.</NuxtLink>
+			<NuxtLink class="forgotten_password links" to="forgotten_password">Forgot your password ? Click here to reset it.</NuxtLink>
+			<NuxtLink class="links" to="sign_up">Haven't subscribe yet ? Subscribe here</NuxtLink>
 			<input ref="submit_button" type="submit" class="button" value="Sign in">
 		</form>
 	</div>
@@ -74,6 +74,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	margin-top: 10%;
 }
 
 form
@@ -82,7 +83,7 @@ form
 	flex-direction: column;
 	margin: 1rem 0;
 	padding: 1rem;
-	width: 20rem;
+	width: 30rem;
 }
 
 .field
@@ -90,7 +91,7 @@ form
 	position: relative;
 	width: 100%;
 	margin: 1rem 0;
-	border-bottom: solid 1px white;
+	border-bottom: solid 1px #9c0f48;
 }
 
 input
@@ -101,16 +102,17 @@ input
 	border: none;
 	font-size: 1rem;
 	padding: 0.5rem 0.25rem;
-	color: white;
+	color: #9c0f48;
 }
 
 .field label
 {
 	position: absolute;
-	top: 0.5rem;
+	top: 0.1rem;
 	left: 0.25rem;
 	cursor: text;
 	transition: all 0.125s;
+	font-size: 28px;
 }
 
 input:focus ~ label,
@@ -123,20 +125,23 @@ input:focus ~ label,
 {
 	width: 50%;
 	margin: 0 auto;
+	margin-top: 48px;
 	text-align: center;
-	border: solid 1px white;
+	border: solid 1px #f9e4d4;
 	padding: 0.5rem;
+	font-size: 18px;
 	border-radius: 0.75rem;
 	cursor: pointer;
-	background-color: white;
-	color: #fb53a3;
+	background-color: #9c0f48;
+	color: #f9e4d4;
 	transition: all 0.25s;
 }
 
 .button:hover
 {
-	color: white;
+	color: #9c0f48;
 	background: transparent;
+	border: solid 1px #9c0f48;
 }
 
 .forgotten_password
@@ -144,5 +149,12 @@ input:focus ~ label,
 	margin-top: 0.5rem;
 	margin-bottom: 1rem;
 }
+
+.links
+{
+	text-decoration: underline;
+	text-align: center;
+}
+
 
 </style>

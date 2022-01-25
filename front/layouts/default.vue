@@ -38,8 +38,8 @@ html {
 body
 {
   min-height: 100vh;
-  background: #FB53A3;
-  color: white;
+  background: #f9e4d4;
+  color: #9c0f48;
 }
 
 *,

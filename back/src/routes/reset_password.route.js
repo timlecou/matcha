@@ -52,7 +52,7 @@ module.exports = function(app) {
                     let mailDetails = {         //format the password reinitialization email
                         from: 'noreply42matcha@gmail.com',
                         to: results.rows[0].email,
-                        subject: 'Account confirmation',
+                        subject: `Reset password for ${results.rows[0].username}`,
                         text: `Hi ${results.rows[0].first_name}, you seem to have forgotten your password.
                         You can reinitialize it by clicking the following link : ${link}`
                     };

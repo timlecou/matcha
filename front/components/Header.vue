@@ -109,7 +109,7 @@ header.fixed
 {
 	width: 100%;
 	height: 0.125rem;
-	background: white;
+	background: #9c0f48;
 	margin: 0.15rem 0;
 	transform-origin: center center;
 	transition: all 0.25s;
@@ -117,7 +117,7 @@ header.fixed
 
 header.expanded .links_toggler span
 {
-	background: #FB53A3;
+	background: #f9e4d4;
 }
 
 header.expanded .links_toggler span
@@ -156,7 +156,7 @@ header.expanded .links_toggler span:nth-child(3)
 {
 	width: 2rem;
 	cursor: pointer;
-	color: white;
+	color: #470d21;
 }
 
 .notification_button svg
@@ -175,7 +175,7 @@ header.expanded .links_toggler span:nth-child(3)
 	width: 2.25rem;
 	height: 2.25rem;
 	border-radius: 100%;
-	background: #C4C4C4;
+	background: #9c0f48;
 }
 
 .fade
@@ -200,8 +200,8 @@ header.expanded .links_toggler span:nth-child(3)
 	width: 20rem;
 	height: 100vh;
 	padding-top: 3rem;
-	background: white;
-	color: #FB53A3;
+	background: #9c0f48;
+	color: #f9e4d4;
 	z-index: 2;
 	transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
 	transform: translateX(-100%);
@@ -247,9 +247,9 @@ a
 	right: 0;
 	width: 20rem;
 	max-width: 100vw;
-	border: solid 1px white;
+	border: solid 1px #9c0f48;
 	padding: 1rem 2rem;
-	background: #FB53A3;
+	background: #f9e4d4;
 	box-shadow: 0px 0px 9px 0px rgba(200, 200, 200,0.7);
 	z-index: 2;
 }

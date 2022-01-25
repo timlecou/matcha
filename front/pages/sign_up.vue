@@ -7,11 +7,11 @@ export default {
 	data()
 	{
 		return {
-			email: "rest@gmail.com",
-			password: "rest@gmail.com",
-			username: "rest@gmail.com",
-			last_name: "rest@gmail.com",
-			first_name: "rest@gmail.com",
+			email: "",
+			password: "",
+			username: "",
+			last_name: "",
+			first_name: "",
 			location:
 			{
 				address: "",
@@ -84,7 +84,7 @@ export default {
 
 <template>
 	<div class="sign_in">
-		<h1>Sign In</h1>
+		<h1>Sign Up</h1>
 		<form @submit="signUp">
 			<div class="field" :class="{active: email.length > 0, valid: is_email_valid}">
 				<input type="email" id="email" v-model="email"/>
@@ -113,7 +113,7 @@ export default {
 				<label for="password">Password</label>
 				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 405.272 405.272" style="enable-background:new 0 0 405.272 405.272;"> <path fill="currentColor" d="M393.401,124.425L179.603,338.208c-15.832,15.835-41.514,15.835-57.361,0L11.878,227.836 c-15.838-15.835-15.838-41.52,0-57.358c15.841-15.841,41.521-15.841,57.355-0.006l81.698,81.699L336.037,67.064 c15.841-15.841,41.523-15.829,57.358,0C409.23,82.902,409.23,108.578,393.401,124.425z"/> </svg>
 			</div>
-			<NuxtLink class="sign_in_link" to="sign_in">Déjà un compte ? Connectez-vous ici</NuxtLink>
+			<NuxtLink class="sign_in_link" to="sign_in">Already have an account ? Sign in here</NuxtLink>
 			<button class="button">Sign up</button>
 		</form>
 	</div>
@@ -126,6 +126,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	margin-top: 10%;
 }
 
 form
@@ -134,15 +135,16 @@ form
 	flex-direction: column;
 	margin: 1rem 0;
 	padding: 1rem;
-	width: 20rem;
+	width: 30rem;
 }
 
 .field
 {
 	position: relative;
 	width: 100%;
-	margin: 1rem 0.5rem;
-	border-bottom: solid 1px white;
+	margin: 2rem 0.5rem;
+	border-bottom: solid 1px #9c0f48;
+	font-size: 28px;
 }
 
 input
@@ -153,7 +155,7 @@ input
 	border: none;
 	font-size: 1rem;
 	padding: 0.5rem 0.25rem;
-	color: white;
+	color: #9c0f48;
 }
 
 .field label
@@ -161,7 +163,7 @@ input
 	display: flex;
 	align-items: center;
 	position: absolute;
-	top: 0.5rem;
+	top: 0.2rem;
 	left: 0.25rem;
 	cursor: text;
 	transition: all 0.125s;
@@ -181,7 +183,7 @@ input:focus ~ label,
     position: absolute;
     bottom: 0.5rem;
     right: 0;
-	color: #28ff30;
+	color: #34be82;
 	transition: 0.25s;
 }
 
@@ -195,18 +197,20 @@ input:focus ~ label,
 	width: 50%;
 	margin: 0 auto;
 	text-align: center;
-	border: solid 1px white;
+	border: solid 1px #f9e4d4;
 	padding: 0.5rem;
+	font-size: 18px;
 	border-radius: 0.75rem;
 	cursor: pointer;
-	background-color: white;
-	color: #fb53a3;
+	background-color: #9c0f48;
+	color: #f9e4d4;
 	transition: all 0.25s;
 }
 
 .button:hover
 {
-	color: white;
+	color: #9c0f48;
+	border: solid 1px #9c0f48;
 	background: transparent;
 }
 
@@ -219,6 +223,8 @@ input:focus ~ label,
 {
 	margin: 0.5rem 0.5rem;
 	margin-bottom: 1rem;
+	text-decoration: underline;
+	text-align: center;
 }
 
 </style>
