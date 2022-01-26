@@ -43,8 +43,9 @@ module.exports = function(app) {
                  res.status(200).send(results.rows);
              })
          }
-         catch (error) {
-             console.error(error);
+         catch (err) {
+             console.error(err);
+             res.status(400).json({ message: err.message });
          }
      });
 
@@ -74,8 +75,9 @@ module.exports = function(app) {
                   }
               })
           }
-          catch (error) {
-            console.log("ERROR POST INTEREST")
+          catch (err) {
+            console.error(err);
+            res.status(400).json({ message: err.message });
           }
 
       });
@@ -105,8 +107,9 @@ module.exports = function(app) {
                     }
                 });
             }
-            catch (error) {
-                console.error(error);
+            catch (err) {
+                console.error(err);
+                res.status(400).json({ message: err.message });
             }
         });
 }

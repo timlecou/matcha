@@ -62,6 +62,7 @@ CREATE TABLE "Viewed_user" (
 );
 
 CREATE TABLE "Matched_user" (
+  id SERIAL PRIMARY KEY NOT NULL,
   user1_id INT NOT NULL,
   user2_id INT NOT NULL,
   FOREIGN KEY (user1_id) REFERENCES "User"(id),
@@ -79,6 +80,7 @@ CREATE TABLE "Message" (
   from_id INT NOT NULL,
   to_id INT NOT NULL,
   "date" date NOT NULL,
+  message text NOT NULL,
   FOREIGN KEY (from_id) REFERENCES "User"(id),
   FOREIGN KEY (to_id) REFERENCES "User"(id)
 );

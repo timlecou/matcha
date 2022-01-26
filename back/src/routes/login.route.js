@@ -3,8 +3,8 @@ const cors = require('cors');
 const bcrypt = require('bcrypt')
 const geoip = require('geoip-lite');
 
-const { Pool, Client } = require('pg')
-const pool = new Pool()
+const { Pool, Client } = require('pg');
+const pool = new Pool();
 
 const User = require('../models/user.model.js');
 
@@ -18,7 +18,7 @@ app.use(
       extended: true,
     })
   )
-app.use(cors())
+app.use(cors());
 
 module.exports = function(app) {
 
@@ -75,9 +75,8 @@ module.exports = function(app) {
         })
       }
       catch (err) {
-          console.log(err);
+          console.error(err);
+          res.status(400).json({ message: err.message });
       }
     });
-
-
-}
+};

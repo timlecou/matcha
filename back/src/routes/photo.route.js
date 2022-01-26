@@ -35,19 +35,26 @@ module.exports = function(app){
     app.get("/users/:id/photos", (req, res) => {
         const id = parseInt(req.params.id);
 
-        pool.query('SELECT * FROM "Photo" WHERE user_id = $1',
-        [id],
-        (error, results) => {
-          if (error) throw error;
-          var photos = {};
-          var paths = [];
+        try {
+          pool.query('SELECT * FROM "Photo" WHERE user_id = $1',
+          [id],
+          (error, results) => {
+            if (error) throw error;
+            var photos = {};
+            var paths = [];
 
-          photos.paths = paths;
-          results.rows.forEach(element => {
-            photos.paths.push(element.path);
+            photos.paths = paths;
+            results.rows.forEach(element => {
+              photos.paths.push(element.path);
+            });
+            res.status(200).send(photos.paths);
           });
-          res.status(200).send(photos.paths);
-        })
+        }
+        catch (err) {
+          console.error(err);
+          res.status(400).json({ message: err.message });
+        }
+        
     });
 
     /**
@@ -81,6 +88,7 @@ module.exports = function(app){
       }
       catch (err) {
         console.error(err);
+        res.status(400).json({ message: err.message });
       }  
     });
 
@@ -127,6 +135,7 @@ module.exports = function(app){
       }
       catch (err) {
         console.error(err);
+        res.status(400).json({ message: err.message });
       }
     });
 }

@@ -43,7 +43,8 @@ module.exports = function(app) {
             })
         }
         catch (err) {
-            console.err(err);
+            console.error(err);
+            res.status(400).json({ message: err.message });
         }
     });
 
@@ -66,7 +67,8 @@ module.exports = function(app) {
             })
         }
         catch (err) {
-            console.err(err);
+            console.error(err);
+            res.status(400).json({ message: err.message });
         }
     });
 
@@ -98,7 +100,8 @@ module.exports = function(app) {
             })
         }
         catch (err) {
-            console.err(err);
+            console.error(err);
+            res.status(400).json({ message: err.message });
         }
     });
 
@@ -136,7 +139,8 @@ module.exports = function(app) {
                 })
             }
             catch (err) {
-                console.err(err);
+                console.error(err);
+                res.status(400).json({ message: err.message });
             }
         }
     });
@@ -187,7 +191,8 @@ module.exports = function(app) {
                 })
             }
             catch (err) {
-                console.err(err);
+                console.error(err);
+                res.status(400).json({ message: err.message });
             }
         }
     });
@@ -226,6 +231,7 @@ module.exports = function(app) {
         }
         catch (err) {
             console.error(err);
+            res.status(400).json({ message: err.message });
         }
     });
 
@@ -298,13 +304,11 @@ module.exports = function(app) {
                     res.status(404).json({ message: 'user not found' });
                 }
             });
-
-
-
            
         }
         catch (error) {
             console.error(error);
+            res.status(400).json({ message: err.message });
         }
 
     });
@@ -343,7 +347,8 @@ module.exports = function(app) {
             })
         }
         catch (err) {
-            console.err(err);
+            console.error(err);
+            res.status(400).json({ message: err.message });
         }
         res.status(200).send('user unblocked');
     });
@@ -362,22 +367,18 @@ module.exports = function(app) {
                 if (error) throw error;
 
                 if (results.rowCount > 0) {
-                    try {
-                        pool.query('DELETE FROM "Liked_user" WHERE liker_id = $1 AND liked_id = $2',
-                        [liker_id, liked_id],
-                        (error) => {
-                            if (error) throw error;
-                            res.status(204).send('user unliked');
-                        })
-                    }
-                    catch (err) {
-                        console.error(err);
-                    }
+                    pool.query('DELETE FROM "Liked_user" WHERE liker_id = $1 AND liked_id = $2',
+                    [liker_id, liked_id],
+                    (error) => {
+                        if (error) throw error;
+                        res.status(204).send('user unliked');
+                    });
                 }
             };
         }
         catch (err) {
             console.error(err);
+            res.status(400).json({ message: err.message });
         }
     });
 
@@ -394,22 +395,18 @@ module.exports = function(app) {
             (error, results) => {
                 if (error) throw error;
                 if (results.rowCount > 0) {
-                    try {
-                        pool.query('DELETE FROM "Matched_user" WHERE (user1_id = $1 AND user2_id = $2) OR (user1_id = $2 AND user2_id = $1)',
-                        [id, user_id],
-                        (error) => {
-                            if (error) throw error;
-                            res.status(204).json({ message: "match deleted" });
-                        });
-                    }
-                    catch (err) {
-                        console.error(err);
-                    }
+                    pool.query('DELETE FROM "Matched_user" WHERE (user1_id = $1 AND user2_id = $2) OR (user1_id = $2 AND user2_id = $1)',
+                    [id, user_id],
+                    (error) => {
+                        if (error) throw error;
+                        res.status(204).json({ message: "match deleted" });
+                    });
                 }
             };
         }
         catch (err) {
             console.error(err);
+            res.status(400).json({ message: err.message });
         }
     });
 
@@ -429,6 +426,7 @@ module.exports = function(app) {
         }
         catch (err) {
             console.error(err);
+            res.status(400).json({ message: err.message });
         }
     });
 }

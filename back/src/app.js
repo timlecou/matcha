@@ -40,6 +40,7 @@ const io = new Server(server, {
  const  registerRoute = require('./routes/register.route')(app);
  const  interestRoute = require('./routes/interest.route')(app);
  const  resetPasswordRoute = require('./routes/reset_password.route')(app);
+ const  messageRoute = require('./routes/message.route')(app);
 
  
 app.get('/', async (request, response) => {
@@ -54,6 +55,10 @@ io.on('connection', (socket) =>
   {
     console.log("I have received", data);
   })
+});
+
+io.on('disconnection', (socket) => {
+  console.log('a user diconected');
 });
 
 
