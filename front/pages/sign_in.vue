@@ -1,4 +1,7 @@
 <script>
+
+import io from 'socket.io-client'
+
 export default {
 	name: "SignIn",
 	data()
@@ -10,10 +13,11 @@ export default {
 	},
 	mounted()
 	{
-		window.setTimeout(() =>
-		{
-			this.$refs.submit_button.click();
-		}, 500);
+		io('http://localhost:4000');
+		// window.setTimeout(() =>
+		// {
+		// 	this.$refs.submit_button.click();
+		// }, 500);
 	},
 	methods:
 	{
@@ -84,6 +88,7 @@ form
 	margin: 1rem 0;
 	padding: 1rem;
 	width: 30rem;
+	max-width: 100%;
 }
 
 .field

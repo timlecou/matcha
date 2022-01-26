@@ -58,16 +58,17 @@ module.exports = function(app) {
           }
           bcrypt.hash(req.body.password, 10).then(hash => {
 
-            var lat = req.body.lat;
-            var long = req.body.long;
+            var lat = req.body.location.lat;
+            var long = req.body.location.long;
 
             if (lat == null || long == null) {
               var geo = geoip.lookup(req.ip);
 
-              lat = 212;
-              long = 212;
-              //lat = geo.ll[0];
-              //long = geo.ll[1];
+              // lat = 212;
+              // long = 212;
+              console.log(req.ip, geo);
+              lat = geo.ll[0];
+              long = geo.ll[1];
             }
 
             const user = new User.User({

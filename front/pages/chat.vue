@@ -1,6 +1,14 @@
 <script>
 import MatchList from '../components/match/MatchList.vue'
 import MatchView from '../components/match/MatchView.vue'
+
+/**
+ * {
+ * 		to_id: number,
+ * 		content: string
+ * }
+ */
+
 export default {
 	components: { MatchList, MatchView },
 	name: "Chat",

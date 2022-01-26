@@ -23,11 +23,13 @@ const multer = require('multer');
 const exp = require('constants');
 const upload = multer({dest: 'uploads/'});
 const server = require('http').createServer(app);
-const ws = require('ws');
-const { WebSocketServer } = require('ws');
-const wss = new ws.Server({ server:server });
 
-
+const { Server } = require("socket.io");
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+  }
+});
 
 /**
  * routes
@@ -45,14 +47,15 @@ app.get('/', async (request, response) => {
     response.send('salut gros')
 });
 
-wss.on('connection', function connection(ws) {
-  console.log('WS: new client connected');
-  ws.send('welcome');
-  ws.on('message', function incoming(message) {
-    console.log(`message recieved: ${message}`);
-    ws.send('something');
-  });
+io.on('connection', (socket) =>
+{
+  console.log('a user connected');
+  socket.on('test_notif', data =>
+  {
+    console.log("I have received", data);
+  })
 });
+
 
 
 server.listen(4000, () => console.log('Server started on http://localhost:4000'))
