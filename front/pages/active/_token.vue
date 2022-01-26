@@ -1,13 +1,26 @@
 <script>
-export default {
 
+export default {
+    mounted() {
+        var user_token = this.$route.params.token;
+        this.$axios.post('http://localhost:4000/active', {token: user_token})
+        .then (res =>
+		{
+			alert(res.data.message)
+		})
+		.catch(err =>
+		{
+			alert(err.response.data.error);
+		});
+    }
 }
+
 </script>
 
 <template>
-	<div class="active_account">
+	<div class="active_account" @>
 		<h1>
-			Hello XXX !<br/>
+			Hello !<br/>
 			Your account is activated.<br/>
 			You can now sign in <NuxtLink to="/sign_in">here</NuxtLink>!
 		</h1>

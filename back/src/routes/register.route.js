@@ -108,7 +108,7 @@ module.exports = function(app) {
                 });
 
             user.register();
-              res.status(201).json({ message: 'user registered' });
+              res.status(201).json({ message: 'you re registered, you will receive an email with a link to activate your account' });
             });
         }
       });
@@ -117,8 +117,9 @@ module.exports = function(app) {
     /**
      * Activate the user using its unique token
      */
-    app.post("/active/:token", (req, res) => {
-      const token = req.params.token;
+    app.post("/active", (req, res) => {
+      const token = req.body.token;
+      console.log(token);
 
       console.log(`user token = ${token}`);
       try {
@@ -133,6 +134,8 @@ module.exports = function(app) {
               if (err) throw err;
               res.status(200).json({ message: `${results.rows[0].username} has confirmed its subscription` });
             });
+          } else {
+            res.status(404).json({ message: 'user not found' });
           }
         });
       }

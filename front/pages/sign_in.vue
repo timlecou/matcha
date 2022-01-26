@@ -33,7 +33,7 @@ export default {
 					console.log(err);
 				})
 			}
-			else
+			else if (this.email.length > 0 && this.password.length > 0)
 				alert("Invalid form");
 		}
 	},

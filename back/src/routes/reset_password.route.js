@@ -84,6 +84,7 @@ module.exports = function(app) {
      * change the password of a user, using its reset_password_token to authenticate the user
      */
     app.post("/reset_password/:token", (req, res) => {
+        console.log('reset password');
         const token = req.params.token;
         const new_password = req.body.new_password;
 
