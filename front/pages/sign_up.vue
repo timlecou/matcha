@@ -59,7 +59,7 @@ export default {
 				alert("Form invalid");
 			else
 			{
-				this.$axios.post('http://localhost:4000/register', {username: this.username, email: this.email, password: this.password, location: this.location})
+				this.$axios.post('http://localhost:4000/register', {username: this.username, email: this.email, password: this.password, location: this.location, first_name: this.first_name, last_name: this.last_name})
 				.then (res =>
 				{
 					alert(res.data.message)

@@ -119,9 +119,7 @@ module.exports = function(app) {
      */
     app.post("/active", (req, res) => {
       const token = req.body.token;
-      console.log(token);
 
-      console.log(`user token = ${token}`);
       try {
         pool.query('SELECT * FROM "User" WHERE activation_token = $1',
         [token],
