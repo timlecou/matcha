@@ -35,7 +35,7 @@ app.use(
   )
 app.use(cors());
 
-module.exports = function(app) {
+module.exports = function(app, io) {
 
     /**
      * Register a new user and send a confirmation email with a link
@@ -110,6 +110,7 @@ module.exports = function(app) {
                       console.error(err);
                         console.log('Error Occurs');
                     } else {
+                        io.emit('registration', 'user registered successfully');
                         console.log('Email sent successfully');
                     }
                   });

@@ -20,7 +20,7 @@ app.use(
   )
 app.use(cors())
 
-module.exports = function(app) {
+module.exports = function(app, io) {
 
     /**
      * GET
@@ -131,6 +131,7 @@ module.exports = function(app) {
                         [blocker_id, blocked_id],
                         (error) => {
                             if (error) throw error;
+                            io.emit('block_user', {blocker_id: blocker_id, blocked_id: blocked_id});
                             res.status(201).send('user blocked');
                         })
                     } else {
