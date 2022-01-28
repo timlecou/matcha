@@ -16,6 +16,39 @@ app.use(cors())
 
 module.exports = function(app) {
 
+    /**
+     * 
+     * GET
+     * 
+     */
+
+    /**
+     * get all the messages fron a user to an other
+     */
+    app.get('/matches/:match_id/messages', (req, res) => {
+        const   match_id = req.params.match_id;
+
+        try {
+            pool.query('SELECT * FROM "Message" WHERE id = $1',
+            [match_id],
+            (err, results) => {
+                if (err) throw err;
+                res.status(200).json(results.rows);
+            });   
+        }
+        catch (err) {
+            console.error(err);
+            res.status(400).json({ message: err.message });
+        }
+    });
+
+
+    /**
+     * 
+     * POST
+     * 
+     */
+
 
     /**
      * Input messages in the DB
@@ -47,8 +80,8 @@ module.exports = function(app) {
                         } else if (user2_id == from_id) {
                             to_id = user1_id;
                         }
-                        pool.query('INSERT INTO "Message" (from_id, to_id, "date", message) VALUES ($1, $2, $3, $4)',
-                        [from_id, to_id, date, message],
+                        pool.query('INSERT INTO "Message" (match_id, from_id, to_id, "date", message) VALUES ($1, $2, $3, $4, $5)',
+                        [match_id, from_id, to_id, date, message],
                         (err) => {
                             if (err) throw err;
                             //websocket here

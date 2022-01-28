@@ -25,11 +25,11 @@ const upload = multer({dest: 'uploads/'});
 const server = require('http').createServer(app);
 
 const { Server } = require("socket.io");
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3000",
-  }
-});
+const io = new Server(server);//, {
+//   cors: {
+//     origin: "http://localhost:3000",
+//   }
+// });
 
 /**
  * routes
@@ -51,10 +51,9 @@ app.get('/', async (request, response) => {
 io.on('connection', (socket) =>
 {
   console.log('a user connected');
-  socket.on('test_notif', data =>
-  {
-    console.log("I have received", data);
-  })
+  socket.on('message', (message) => {
+    console.log(message);
+  });
 });
 
 io.on('disconnection', (socket) => {

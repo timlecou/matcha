@@ -77,10 +77,12 @@ CREATE TABLE "Reported_user" (
 );
 
 CREATE TABLE "Message" (
+  match_id INT NOT NULL,
   from_id INT NOT NULL,
   to_id INT NOT NULL,
   "date" date NOT NULL,
   message text NOT NULL,
   FOREIGN KEY (from_id) REFERENCES "User"(id),
-  FOREIGN KEY (to_id) REFERENCES "User"(id)
+  FOREIGN KEY (to_id) REFERENCES "User"(id),
+  FOREIGN KEY (match_id) REFERENCES "User"(id)
 );
