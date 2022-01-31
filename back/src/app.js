@@ -24,6 +24,10 @@ const exp = require('constants');
 const upload = multer({dest: 'uploads/'});
 const server = require('http').createServer(app);
 
+
+/**
+ * Socket.io setup
+ */
 const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: {
@@ -31,32 +35,29 @@ const io = new Server(server, {
   }
 });
 
-/**
- * routes
- */
- const  photoRoute = require('./routes/photo.route')(app);
- const  userRoute = require('./routes/user.route')(app);
- const  loginRoute = require('./routes/login.route')(app);
- const  registerRoute = require('./routes/register.route')(app);
- const  interestRoute = require('./routes/interest.route')(app);
- const  resetPasswordRoute = require('./routes/reset_password.route')(app);
-
- 
-app.get('/', async (request, response) => {
-    console.log('request recieved')
-    response.send('salut gros')
-});
 
 io.on('connection', (socket) =>
 {
   console.log('a user connected');
-  socket.emit('test_notif', {abc: "Salut"});
-  socket.on('test_notif', data =>
-  {
-    console.log("I have received", data);
-  })
+  socket.on('message', (message) => {
+    console.log(message);
+  });
+});
+
+io.on('disconnection', (socket) => {
+  console.log('a user diconected');
 });
 
 
+/**
+ * routes
+ */
+ const  photoRoute = require('./routes/photo.route')(app);
+ const  userRoute = require('./routes/user.route')(app, io);
+ const  loginRoute = require('./routes/login.route')(app);
+ const  registerRoute = require('./routes/register.route')(app, io);
+ const  interestRoute = require('./routes/interest.route')(app);
+ const  resetPasswordRoute = require('./routes/reset_password.route')(app);
+ const  messageRoute = require('./routes/message.route')(app);
 
 server.listen(4000, () => console.log('Server started on http://localhost:4000'))

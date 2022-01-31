@@ -77,6 +77,7 @@ module.exports = function(app) {
         }
         catch (err) {
             console.error(err);
+            res.status(400).json({ message: err.message });
         }
     });
 
@@ -112,6 +113,7 @@ module.exports = function(app) {
         }
         catch (err) {
             console.error(err);
+            res.status(400).json({ message: err.message });
         }
     });
 
