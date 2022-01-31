@@ -137,7 +137,17 @@ export const actions =
 
 	initWebsockets(store)
 	{
-		const socket = io('http://localhost:4000');
+		console.log(store.state.access_token);
+		const socket = io('http://localhost:4000', {
+			query: {
+				access_token: store.state.access_token
+			}
+		});
+
+		socket.on('new_connection', data =>
+		{
+			alert(data.user_id);
+		});
 
 		socket.on('test_notif', data =>
 		{

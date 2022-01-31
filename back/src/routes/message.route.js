@@ -14,7 +14,7 @@ app.use(
   )
 app.use(cors())
 
-module.exports = function(app) {
+module.exports = function(app, io) {
 
     /**
      * 
@@ -84,7 +84,7 @@ module.exports = function(app) {
                         [match_id, from_id, to_id, date, message],
                         (err) => {
                             if (err) throw err;
-                            //websocket here
+                            // websocket here
                             res.status(201).json({ message: 'message uploaded' });
                         });
                     } else {

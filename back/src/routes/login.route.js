@@ -20,7 +20,7 @@ app.use(
   )
 app.use(cors());
 
-module.exports = function(app) {
+module.exports = function(app, io) {
 
     app.post("/login", (req, res) => {
       var user;
@@ -54,11 +54,20 @@ module.exports = function(app) {
                   var now = new Date();
                   now.toUTCString();
 
-                  pool.query('UPDATE "User" SET location = point($1, $2), last_sign_in = $3',
-                  [latitude, longitude, now],
+                  pool.query('UPDATE "User" SET location = point($1, $2), last_sign_in = $3 WHERE id = $4',
+                  [latitude, longitude, now, user.id],
                   (error) => {
                       if (error) throw error;
                   });
+
+                  io.emit('new_connection', {user_id: user.id});
+
+                  /**
+                   * Tout est ok, recuperer les match, 
+                   * Recuperer tous les matches
+                   * Pour chaque match, creer la room `match_${id}`
+                   * socket.join(`match_${id}`)
+                   */
 
                   res.status(200).json({
                     userId: user.id,

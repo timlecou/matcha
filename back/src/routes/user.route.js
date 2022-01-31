@@ -26,7 +26,6 @@ module.exports = function(app, io) {
      * GET
      */
     app.get("/users", (req, res) => {
-        console.log(req.user_id);
         try {
             pool.query('SELECT * FROM "User" ',//WHERE id != $1 ORDER BY id ASC',
             // [req.userId],
@@ -250,10 +249,6 @@ module.exports = function(app, io) {
 
         const user_id = parseInt(req.params.user_id);
         const interests = req.body.name;
-
-
-        console.log(typeof interests);
-
 
         try {
 

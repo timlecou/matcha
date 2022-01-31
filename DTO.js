@@ -60,7 +60,7 @@ user:
 
 // • Un utilisateur se connecte:
 {
-	event_name = "new_like",
+	event_name = "new_connection",
 	data:
 	{
 		user_id: 0
