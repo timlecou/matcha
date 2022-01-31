@@ -1,3 +1,5 @@
+import io from 'socket.io-client';
+
 export const state = () =>
 ({
 	access_token: null,
@@ -107,11 +109,52 @@ export const mutations =
 	SET_USERS(state, users)
 	{
 		state.users = users;
-	}
+	},
+
+	ADD_MATCH_MESSAGE(state, {match_id, message})
+	{
+		state.matches.find(match => match.id == match_id)
+		.messages.push(message);
+	},
+
+	ADD_NOTIF(state, notification)
+	{
+		state.notifications.push(notification);
+	},
 };
 
 export const actions =
 {
+	addNotification(store, {event_type, text, metadata})
+	{
+		let notif = {
+			type: event_type,
+			text: text,
+			meta_data: metadata
+		};
+		store.commit('ADD_NOTIF', notif);
+	},
+
+	initWebsockets(store)
+	{
+		const socket = io('http://localhost:4000');
+
+		socket.on('test_notif', data =>
+		{
+			console.log("Receive ", data);
+		});
+
+		socket.on('new_message', data =>
+		{
+			store.commit('ADD_MATCH_MESSAGE', {match_id: data.match_id, message: data.message});
+			store.dispatch('addNotification', {
+				event_type: "new_message",
+				text: "Vous avez recu un nouveau message",
+				metadata: {}
+			});
+		});
+	},
+
 	login(store, {email, password})
 	{
 		return new Promise((resolve, reject) =>
@@ -130,6 +173,7 @@ export const actions =
 				{
 					return Promise.reject(error);
 				});
+				store.dispatch('initWebsockets');
 				store.dispatch('loadUsers');
 				resolve();
 			})

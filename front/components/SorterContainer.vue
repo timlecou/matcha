@@ -35,7 +35,7 @@ export default {
 	outline: none;
 	background: transparent;
 	border: none;
-	border-bottom: solid 1px white;
+	border-bottom: solid 1px #9c0f48;
 	color: inherit;
 	font-size: inherit;
 	font-family: inherit;

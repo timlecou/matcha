@@ -24,8 +24,15 @@ export default {
 	{
 		sendMessage()
 		{
-			console.log(this.message)
-			this.message = "";
+			this.$axios.post(`http://localhost:4000/matches/${this.match.id}/messages`, {message: this.message})
+			.then(res =>
+			{
+				this.message = "";
+			})
+			.catch(err =>
+			{
+				this.$toast.error("Cannot send message");
+			});
 		},
 		back()
 		{
@@ -115,6 +122,7 @@ export default {
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
+	color: white;
 }
 
 .message.me
@@ -131,6 +139,7 @@ export default {
 	align-items: center;
 	justify-content: center;
 	padding: 0.5rem 1rem;
+	color: white;
 }
 
 #message_input

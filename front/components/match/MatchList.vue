@@ -62,7 +62,7 @@ export default {
 	flex-direction: column;
 	width: 33%;
 	height: 100%;
-	border-right: solid 1px white;
+	border-right: solid 1px #9c0f48;
 }
 
 h1
@@ -95,7 +95,7 @@ h1
 	display: flex;
 	align-items: center;
 	padding: 1rem;
-	border-bottom: solid 1px rgba(255, 255, 255, 0.5);
+	border-bottom: solid 1px solid 1px rgb(156 15 72 / 12%);
 	cursor: pointer;
 }
 

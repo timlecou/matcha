@@ -32,7 +32,7 @@ export default {
 	<div class="visits">
 		<div class="item" v-for="user in users">
 			<div class="photo_container">
-				<img :src="require(`~/assets/${user.photos[0]}`)"/>
+				<img :src="require(`~/assets/${user.photos[0]}`)" v-if="user.photos.length > 0"/>
 			</div>
 			<p class="username">{{ user.username }}</p>
 			<p class="date">Aujourd'hui</p>

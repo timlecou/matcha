@@ -100,6 +100,7 @@ user:
 	event_name = "new_message",
 	data:
 	{
+		match_id: 0,
 		user_id: 0,
 		content: string
 	}

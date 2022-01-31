@@ -13,20 +13,21 @@ export default {
             e.preventDefault();
 
             var token = this.$route.params.token;
-            if (this.new_password === this.confirm_password) {
+			if (this.new_password === this.confirm_password)
+			{
                 this.$axios.post(`http://localhost:4000/reset_password/${token}`, {new_password: this.new_password})
                 .then (res =>
                 {
-                    alert(res.data.message);
+                    this.$toast.success(res.data.message);
                     this.$router.push('/sign_in');
                 })
                 .catch(err =>
                 {
-                    alert(err.response.data.error);
+                    this.$toast.error(err.response.data.error);
                 });
-            } else {
-                alert('please enter the same password in both forms');
-            }
+			}
+			else
+                this.$toast.error('Please enter the same password in both forms');
         }
     }
 }

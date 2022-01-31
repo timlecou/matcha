@@ -7,17 +7,16 @@ export default {
 	data()
 	{
 		return {
-			email: "",
-			password: ""
+			email: "yassou200121@gmail.com",
+			password: "yassou200121@gmail.com2"
 		}
 	},
 	mounted()
 	{
-		io('http://localhost:4000');
-		// window.setTimeout(() =>
-		// {
-		// 	this.$refs.submit_button.click();
-		// }, 500);
+		window.setTimeout(() =>
+		{
+			this.$refs.submit_button.click();
+		}, 500);
 	},
 	methods:
 	{
@@ -34,11 +33,11 @@ export default {
 				})
 				.catch(err =>
 				{
-					console.log(err);
+					this.$toast.error("Invalid credentials");
 				})
 			}
 			else if (this.email.length > 0 && this.password.length > 0)
-				alert("Invalid form");
+				this.$toast.error('Invalid form.')
 		}
 	},
 	computed:

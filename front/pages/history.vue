@@ -61,7 +61,7 @@ h1
 	height: 0.125rem;
 	transform: translateX(-50%);
 	transition: all 0.125s;
-	background: white;
+	background: #9c0f48;
 }
 
 .nav .nuxt-link-active:after

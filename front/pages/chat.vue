@@ -60,10 +60,10 @@ export default {
 .chat
 {
 	display: flex;
-	border-top: solid 1px white;
+	border-top: solid 1px #9c0f48;
 	width: 100%;
 	height: calc(100vh - 4.25rem);
-	color: white;
+	color: #9c0f48;
 }
 
 </style>

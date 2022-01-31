@@ -50,6 +50,7 @@ app.get('/', async (request, response) => {
 io.on('connection', (socket) =>
 {
   console.log('a user connected');
+  socket.emit('test_notif', {abc: "Salut"});
   socket.on('test_notif', data =>
   {
     console.log("I have received", data);

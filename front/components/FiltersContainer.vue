@@ -171,7 +171,11 @@ export default {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	border-bottom: solid 1px rgba(255, 255, 255, 0.2);
+}
+
+.filter:not(:last-child)
+{
+	border-bottom: solid 1px rgb(156 15 72 / 45%);
 }
 
 .filter .header

@@ -25,28 +25,38 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-  ],
+  css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-
-  ],
+  plugins: [],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-  ],
+  buildModules: [],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/toast',
     // ['vuejs-google-maps/nuxt', {apiKey: 'AIzaSyB4Io5BFJ2alGrKIY6n5WHAXjpcGfQl13E', libraries: [/* rest of libraries */]}]
   ],
 
+  toast:
+  {
+      position: 'top-center',
+      action :
+      {
+        text : 'Close',
+        onClick : (e, toastObject) =>
+        {
+          toastObject.goAway(0);
+        }
+      },
+      register: []
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  }
+  build: {}
 }

@@ -6,11 +6,11 @@ export default {
         this.$axios.post('http://localhost:4000/active', {token: user_token})
         .then (res =>
 		{
-			alert(res.data.message)
+			this.$toast.success(res.data.message);
 		})
 		.catch(err =>
 		{
-			alert(err.response.data.error);
+			this.$toast.error(err.response.data.error);
 		});
     }
 }

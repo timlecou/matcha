@@ -52,21 +52,21 @@ export default {
 		{
 			e.preventDefault();
 
-			alert("We need your location to offer you the best suggestions");
+			this.$toast.show("We need your location to offer you the best suggestions");
 			await this.getGeoLocation();
 
 			if (!this.isFormValid())
-				alert("Form invalid");
+				this.$toast.error('Invalid form');
 			else
 			{
 				this.$axios.post('http://localhost:4000/register', {username: this.username, email: this.email, password: this.password, location: this.location, first_name: this.first_name, last_name: this.last_name})
 				.then (res =>
 				{
-					alert(res.data.message)
+					this.$toast.success(res.data.message);
 				})
 				.catch(err =>
 				{
-					alert(err.response.data.error);
+					this.$toast.error(err.response.data.error);
 				})
 			}
 		}

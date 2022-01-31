@@ -92,7 +92,7 @@ export default {
 				console.log(this.new_photos)
 			}
 			else
-				alert("Error: you can have only 5 photos");
+				this.$toast.error("Error: you can have only 5 photos");
 		},
 		addInterest()
 		{
@@ -136,6 +136,10 @@ export default {
 				});
 			}
 		},
+		restorePassword()
+		{
+			alert("COMPLETER");
+		}
 	},
 	computed:
 	{
@@ -151,6 +155,7 @@ export default {
 	<form class="profile">
 		<label class="profile_photo">
 			<img :src="require(`~/assets${profile_photo.path}`)"/>
+			<p class="score">250</p>
 		</label>
 		<div class="description_container">
 			<div class="username input_container">
@@ -160,8 +165,6 @@ export default {
 				<textarea rows="3" type="text" v-model="user.biography"></textarea>
 			</div>
 		</div>
-		
-		<p class="score">250</p>
 
 		<ExpandableSection title="Personal informations" :default_expanded="true">
 			<div class="field_containers">
@@ -262,19 +265,7 @@ export default {
 		<ExpandableSection title="Security">
 			<div class="field_containers">
 				<div class="line">
-					<p>Send a mail to change your password</p>
-					<!-- <div class="field" :class="{active: current_password.length > 0, valid: current_password.length >= 7}">
-						<input type="password" id="current_password" v-model="current_password" autocomplete="password"/>
-						<label for="current_password">Current password</label>
-					</div>
-					<div class="field" :class="{active: new_password.length > 0, valid: new_password.length >= 7}">
-						<input type="password" id="new_password" v-model="new_password" autocomplete="new-password"/>
-						<label for="new_password">New password</label>
-					</div>
-					<div class="field" :class="{active: confirm_new_password.length > 0, valid: confirm_new_password.length >= 7}">
-						<input type="password" id="confirm_new_password" v-model="confirm_new_password" autocomplete="new-password"/>
-						<label for="confirm_new_password">Confirm new password</label>
-					</div> -->
+					<div class="restore_password_button" @click="restorePassword">Send an email to change your password</div>
 				</div>
 			</div>
 		</ExpandableSection>
@@ -308,7 +299,7 @@ input,
 textarea
 {
 	background: transparent;
-	color: white;
+	color: rgb(156 15 72 / 75%);
 	border: none;
 	outline: none;
 	font-size: 1rem;
@@ -323,6 +314,7 @@ input[type="file"]
 
 .profile_photo
 {
+	position: relative;
 	width: 7.5rem;
 	height: 7.5rem;
 	cursor: pointer;
@@ -374,7 +366,7 @@ input[type="file"]
 	width: 9rem;
 	padding: 3rem;
 	margin: 0.25rem 0.5rem;
-	border: dashed 1px white;
+	border: dashed 1px #b4466b;
 	cursor: pointer;
 }
 
@@ -421,7 +413,7 @@ section .content
 	position: relative;
 	width: 15rem;
 	margin: 1rem 1rem;
-	border-bottom: solid 1px white;
+	border-bottom: solid 1px #b4466b;
 }
 
 .field input,
@@ -433,7 +425,7 @@ section .content
 	border: none;
 	font-size: 1rem;
 	padding: 0.5rem 0.25rem;
-	color: white;
+	color: rgb(156 15 72 / 90%);
 }
 
 .field label
@@ -481,7 +473,8 @@ select:focus ~ label,
 	align-items: center;
 	padding: 0.5rem 0.5rem;
 	margin: 0.25rem 0.125rem;
-	background: #ff33cc;
+	background: #d5236b;
+	color: white;
 	height: 2rem;
 }
 
@@ -503,7 +496,8 @@ select:focus ~ label,
 {
 	font-size: 1rem;
 	width: 100%;
-	padding: 0.25rem 0.5rem;
+	padding: 0.5rem 0.5rem;
+	margin: 0.25rem 0.125rem;
 	color: black;
 }
 
@@ -560,20 +554,34 @@ select:focus ~ label,
 	padding: 0.5rem 2rem;
 	background: transparent;
 	color: inherit;
-	border: solid 1px white;
+	border: solid 1px;
 	border-radius: 0.25rem;
 	margin: 0 auto;
 	cursor: pointer;
+	transition: all 0.25s;
+}
+
+.buttons_container .save_button
+{
+	border-color: #b4466b;
+}
+
+.buttons_container .save_button:hover
+{
+	color: white;
+    background: #b4466b;
 }
 
 .buttons_container .delete_button
 {
-	background: rgba(255, 15, 15, 0.5);
+	border-color: red;
+	color: red;
 }
 
 .buttons_container .delete_button:hover
 {
 	background: rgba(255, 15, 15, 1);
+	color: white;
 }
 
 .score
@@ -585,13 +593,23 @@ select:focus ~ label,
 	top: 0;
 	right: 0;
 	transform: translate(calc(50% - 1rem), calc(-50% + 1rem));
-	width: 5rem;
-	height: 5rem;
+	width: 3.5rem;
+	height: 3.5rem;
 	background: white;
 	border-radius: 100%;
-	color: #fb53a3;
-	font-size: 1.25rem;
+	color: #d5236b;
+	font-size: 1rem;
 	font-weight: 600;
+}
+
+.restore_password_button
+{
+	padding: 0.5rem 1rem;
+    border: solid 1px;
+    margin: 0 auto;
+    background: #9c0f48;
+    color: #f9e4d4;
+	cursor: pointer;
 }
 
 </style>

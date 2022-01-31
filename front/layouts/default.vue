@@ -3,15 +3,19 @@
 import Header from '../components/Header.vue';
 
 export default {
-  components: { Header }
+	components: { Header },
+	mounted()
+	{
+		console.log(this);
+	}
 }
 </script>
 
 <template>
-  <div>
-    <Header/>
-    <Nuxt />
-  </div>
+	<div>
+		<Header/>
+		<Nuxt />
+	</div>
 </template>
 
 <style>

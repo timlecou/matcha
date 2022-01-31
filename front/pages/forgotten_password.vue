@@ -15,17 +15,18 @@ export default {
 		async reset_password(e) {
 			e.preventDefault();
 
-			if (!this.is_form_valid()) {
-				alert('invalid form');
-			} else {
+			if (!this.is_form_valid())
+				this.$toast.error('Invalid form.');
+			else
+			{
 				this.$axios.post('http://localhost:4000/reset_password', {username: this.username})
 				.then (res =>
 				{
-					alert(res.data.message)
+					this.$toast.success('An e-mail has been sent to restore your password. Check your mail.');
 				})
 				.catch(err =>
 				{
-					alert(err.response.data.error);
+					this.$toast.error(err.response.data.error);
 				})
 			}
 		}

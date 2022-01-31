@@ -36,7 +36,7 @@ export default {
 					{
 						location.latitude = results[0].geometry.location.lat();
 						location.longitude = results[0].geometry.location.lng();
-						alert(location.latitude + "  ; " + location.longitude);
+						// alert(location.latitude + "  ; " + location.longitude);
 					}
 				});
 			}
@@ -126,7 +126,7 @@ input[type="text"]
 	padding: 0.5rem 1rem;
 	font-size: 1.25rem;
 	border-radius: 2rem;
-	border: solid 1px white;
+	border: solid 1px;
 	cursor: pointer;
 }
 
