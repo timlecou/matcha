@@ -84,6 +84,8 @@ module.exports = function(app, io) {
                   });
 
                   delete user.password;
+                  delete user.reset_password_token;
+                  delete user.activation_token;
 
                   res.status(200).json({
                     user: user,
