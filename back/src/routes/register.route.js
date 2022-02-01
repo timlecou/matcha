@@ -92,11 +92,7 @@ module.exports = function(app, io) {
 
                 let token = new TokenGenerator(256, TokenGenerator.BASE62);
                 user.activation_token = token.generate();
-                
-                // Set expiration time is 24 hours.
-                // user.activeExpires = Date.now() + 24 * 3600 * 1000;
                 var link = 'http://localhost:3000/active/' + user.activation_token;
-
 
                   let mailDetails = {
                     from: 'noreply42matcha@gmail.com',

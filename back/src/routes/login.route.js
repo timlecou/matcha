@@ -43,7 +43,6 @@ module.exports = function(app, io) {
                     return res.status(403).json({ error: 'incorrect password' });
                   }
 
-                  //locate the user
                   if (latitude == 0 || longitude == 0) {
                     var geo = geoip.lookup(req.ip);
       
@@ -69,8 +68,23 @@ module.exports = function(app, io) {
                    * socket.join(`match_${id}`)
                    */
 
+                  pool.query('SELECT * FROM "Matched_user" WHERE user1_id = $1 OR user2_id = $1',
+                  [user.id],
+                  (error, results) => {
+                    if (error) throw error;
+                    io.on("connection", (socket) => {
+                      if (results.rowCount > 0) {
+                        const matchs = results.rows;
+                        matchs.forEach(element => {
+                          socket.join(`match_${element.id}`);
+                          console.log(`socket has joined room match_${element.id}`);
+                        });
+                      }
+                    });
+                  });
+
                   res.status(200).json({
-                    userId: user.id,
+                    user: user,
                     token: jwt.sign(
                       { userId: user.id },
                       process.env.ACCESS_TOKEN_SECRET,

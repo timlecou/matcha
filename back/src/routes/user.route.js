@@ -177,9 +177,11 @@ module.exports = function(app, io) {
                                     [liker_id, liked_id],
                                     (error) => {
                                         if (error) throw error;
+                                        io.emit('match_user', {user1: liker_id, user2: liked_id});
                                         res.status(200).send('users just matched !');
                                     })
                                 } else {
+                                    io.emit('like_user', {liker_id: liker_id, liked_id: liked_id});
                                     res.status(201).send('user liked');
                                 }
                             })
@@ -224,6 +226,7 @@ module.exports = function(app, io) {
                         [now, viewer_id, viewed_id],
                         (error) => {
                             if (error) throw error;
+                            io.emit('view_user', {viewer_id: viewer_id, viewed_id: viewed_id});
                             res.status(201).json({ message: "user viewed" });
                         };
                     }

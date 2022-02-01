@@ -10,6 +10,7 @@
 /**
  * Requires
  */
+const jwt = require('jsonwebtoken');
 const express = require('express')();
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -51,9 +52,11 @@ io.on('connection', (socket) =>
   // io.to("some room").emit("some event", {qdd: 333});
 
   // Get jwt
-  console.log("token =>", socket.handshake.query.access_token);
+  const decodedToken = jwt.verify(socket.handshake.query.access_token, process.env.ACCESS_TOKEN_SECRET);
+  const userId = decodedToken.userId;
+  // console.log("token =>", userId);
 
-  console.log('a user connected');
+  // console.log('a user connected');
   socket.on('message', (message) =>
   {
     console.log(message);
