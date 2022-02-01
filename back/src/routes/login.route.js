@@ -83,6 +83,8 @@ module.exports = function(app, io) {
                     });
                   });
 
+                  delete user.password;
+
                   res.status(200).json({
                     user: user,
                     token: jwt.sign(
