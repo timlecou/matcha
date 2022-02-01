@@ -64,11 +64,11 @@ class User {
         //set the constraints to check
 
 
-        val.setConstraints('username', Constraints.IsNotEmpty, Constraints.IsAlphanumeric, Constraints.IsNotOnlyNumeric, Constraints.HasGoodUsernameSize);
-        val.setConstraints('email', Constraints.IsAValidEmail);
+        val.setConstraints('username', Constraints.IsDefined, Constraints.IsNotEmpty, Constraints.IsAlphanumeric, Constraints.IsNotOnlyNumeric, Constraints.HasGoodUsernameSize);
+        val.setConstraints('email', Constraints.IsDefined, Constraints.IsAValidEmail);
         // val.setConstraints('password', Constraints.IsString, Constraints.IsNotOnlyNumeric, Constraints.HasGoodPasswordSize);
-        val.setConstraints('first_name', Constraints.IsOnlyAlpha);
-        val.setConstraints('last_name', Constraints.IsOnlyAlpha);
+        val.setConstraints('first_name', Constraints.IsDefined, Constraints.IsOnlyAlpha);
+        val.setConstraints('last_name', Constraints.IsDefined, Constraints.IsOnlyAlpha);
         val.setConstraints('gender', Constraints.IsAGender);
         val.setConstraints('sexual_orientation', Constraints.IsASexualOrientation);
         // val.setConstraints('online', Constraints.IsBoolean);

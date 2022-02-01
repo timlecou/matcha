@@ -84,10 +84,7 @@ module.exports = function(app, io) {
                         [match_id, from_id, to_id, date, message],
                         (err) => {
                             if (err) throw err;
-                            io.on('connection', (socket) => {
-                                //socket
-                                console.log('message connection');
-                            });
+                            io.to(`match_${match_id}`).emit('new_message', {message: message});
                             res.status(201).json({ message: 'message uploaded' });
                         });
                     } else {
