@@ -134,6 +134,11 @@ export const mutations =
 		if (index != -1)
 			state.online_users.splice(index, 1);
 	},
+
+	SET_MATCHES(state, matches)
+	{
+		state.matches = matches;
+	}
 };
 
 export const actions =
@@ -277,7 +282,21 @@ export const actions =
 			})
 			.catch(err => reject(err));
 		});
-	}
+	},
+
+	loadMatches(store)
+	{
+		return new Promise((resolve, reject) =>
+		{
+			this.$axios.get(`http://localhost:4000/users/${store.state.user.id}/matches`)
+			.then (res =>
+			{
+				store.commit('SET_MATCHES', res.data);
+				resolve(res);
+			})
+			.catch(err => reject(err));
+		});
+	},
 };
 
 export const getters = {};

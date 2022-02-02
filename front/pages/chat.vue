@@ -36,6 +36,10 @@ export default {
 			return this.$store.state.matches;
 		}
 	},
+	created()
+	{
+		this.$store.dispatch('loadMatches');
+	},
 	methods:
 	{
 		selectMatch(match)
