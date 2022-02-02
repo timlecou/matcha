@@ -61,7 +61,7 @@ module.exports = function(app, io) {
                     delete results.rows[0].password;
                     res.status(200).json(results.rows);
                 } else {
-                    res.status(404).send('user doesn\'t exist');
+                    res.status(404).json({ message: 'user doesn\'t exist'});
                 }
             })
         }
@@ -76,28 +76,43 @@ module.exports = function(app, io) {
      */
     app.get("/users/:id/matches", authMiddleware.getUserParams, (req, res) => {
         const   id = parseInt(req.params.id);
-
         try {
             pool.query('SELECT FROM "User" WHERE id = $1',
             [id],
             (error, results) => {
                 if (error) throw error;
-                if (results.rowCount == 1) {        //check if the user exists
-                    pool.query('SELECT u.* FROM "User" u INNER JOIN "Matched_user" m ON (u.id = m.user1_id OR u.id = user2_id) AND u.id != $1 WHERE m.user1_id = $1 OR user2_id = $1',
+                if (results.rowCount == 1) {
+                    pool.query('SELECT u.* FROM "User" u LEFT JOIN "Matched_user" m ON (u.id = m.user1_id OR u.id = user2_id) AND u.id != $1 WHERE m.user1_id = $1 OR user2_id = $1',
                     [id],
-                    (error, results) => {
+                    async (error, results) => {
                         if (error) throw error;
                         if (results.rowCount > 0) {
-                            console.log(results.rows);
-                            //send all messages here
-                            //send users info too
+                            let matchs = [...results.rows];
+                            for (var i = 0; i < matchs.length; i++) {
+                                delete matchs[i].password;
+                                delete matchs[i].email;
+                                delete matchs[i].activation_token;
+                                delete matchs[i].reset_password_token;
+                                delete matchs[i].location;
+                                let resu = await pool.query('SELECT * FROM "Photo" WHERE user_id = $1', [matchs[i].id]);
+                                let messages = await pool.query('SELECT * FROM "Message" WHERE from_id = $1 OR to_id = $1', [matchs[i].id]);
+                                var photos = {};
+                                var paths = [];
+                                
+                                photos.paths = paths;
+                                resu.rows.forEach(ele => {
+                                    photos.paths.push(ele.path);
+                                });
+                                matchs[i]['messages'] = messages.rows;
+                                matchs[i]['photos'] = photos;
+                            }
                             res.status(200).json(results.rows);
                         } else {
-                            res.status(404).send('user has no matches');
+                            res.status(200).json([]);
                         }
                     })
                 } else {
-                    res.status(404).send('user doesn\'t exist');
+                    res.status(404).json({ message: 'user doesn\'t exist'});
                 }
             })
         }
@@ -134,10 +149,10 @@ module.exports = function(app, io) {
                         (error) => {
                             if (error) throw error;
                             io.emit('block_user', {blocker_id: blocker_id, blocked_id: blocked_id});
-                            res.status(201).send('user blocked');
+                            res.status(201).json({ message: 'user blocked'});
                         })
                     } else {
-                        res.send('user already blocked');
+                        res.json({ message: 'user already blocked'});
                     }
                 })
             }
@@ -156,7 +171,7 @@ module.exports = function(app, io) {
         const liked_id = parseInt(req.params.liked_id);
 
         if (liker_id == liked_id) {
-            res.status(400).send('you can\'t like yourself');
+            res.status(400).json({ message: 'you can\'t like yourself'});
         } else {
             try {
                 //check si le liked user existe
@@ -181,17 +196,17 @@ module.exports = function(app, io) {
                                     (error) => {
                                         if (error) throw error;
                                         io.emit('match_user', {user1: liker_id, user2: liked_id});
-                                        res.status(200).send('users just matched !');
+                                        res.status(200).json({ message: 'users just matched !'});
                                     })
                                 } else {
                                     io.emit('like_user', {liker_id: liker_id, liked_id: liked_id});
-                                    res.status(201).send('user liked');
+                                    res.status(201).json({ message: 'user liked'});
                                 }
                             })
 
                         })
                     } else {
-                        res.send('user already liked');
+                        res.json({ message: 'user already liked'});
                     }
                 })
             }
@@ -352,7 +367,7 @@ module.exports = function(app, io) {
             console.error(err);
             res.status(400).json({ message: err.message });
         }
-        res.status(200).send('user unblocked');
+        res.status(200).json({ message: 'user unblocked'});
     });
 
     /**
@@ -373,7 +388,7 @@ module.exports = function(app, io) {
                     [liker_id, liked_id],
                     (error) => {
                         if (error) throw error;
-                        res.status(204).send('user unliked');
+                        res.status(204).json({ message: 'user unliked'});
                     });
                 }
             };

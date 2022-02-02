@@ -65,6 +65,8 @@ module.exports = function(app){
       const id = parseInt(req.params.id);
       const files = req.files;
 
+      console.log(req);
+
       try {
         pool.query('SELECT * FROM "Photo" WHERE user_id = $1',
         [id],
@@ -74,15 +76,15 @@ module.exports = function(app){
           if (results.rowCount + files.length <= 5) {
             files.forEach(element => {
               const photo = new Photo.Photo( {
-              user_id: id,
-              path: `uploads/users/${element.filename}`
+                user_id: id,
+                path: `uploads/users/${element.filename}`
               });    
               photo.insert();
             });
             
             res.status(201).json({ message: 'photo uploaded' })
           } else {
-            res.status(400).send('user can\'t have more than 5 photos');
+            res.status(400).json({ message: 'user can\'t have more than 5 photos'});
           }
         })
       }
@@ -125,11 +127,11 @@ module.exports = function(app){
               
               });
 
-              res.status(200).send('photo deleted');
+              res.status(200).json({ message: 'photo deleted'});
             });
             
           } else {
-            res.status(404).send('photo not found');
+            res.status(404).json({ message: 'photo not found'});
           }
         });
       }
