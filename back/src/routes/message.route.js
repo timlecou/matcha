@@ -18,33 +18,6 @@ module.exports = function(app, io) {
 
     /**
      * 
-     * GET
-     * 
-     */
-
-    /**
-     * get all the messages fron a user to an other
-     */
-    app.get('/matches/:match_id/messages', (req, res) => {
-        const   match_id = req.params.match_id;
-
-        try {
-            pool.query('SELECT * FROM "Message" WHERE id = $1',
-            [match_id],
-            (err, results) => {
-                if (err) throw err;
-                res.status(200).json(results.rows);
-            });   
-        }
-        catch (err) {
-            console.error(err);
-            res.status(400).json({ message: err.message });
-        }
-    });
-
-
-    /**
-     * 
      * POST
      * 
      */
@@ -84,7 +57,7 @@ module.exports = function(app, io) {
                         [match_id, from_id, to_id, date, message],
                         (err) => {
                             if (err) throw err;
-                            // websocket here
+                            io.to(`match_${match_id}`).emit('new_message', {message: message, from_id: from_id, to_id: to_id});
                             res.status(201).json({ message: 'message uploaded' });
                         });
                     } else {

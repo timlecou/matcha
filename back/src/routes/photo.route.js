@@ -71,7 +71,7 @@ module.exports = function(app){
         (error, results) => {
           if (error) throw error;
 
-          if (results.rowCount + files.length < 5) {
+          if (results.rowCount + files.length <= 5) {
             files.forEach(element => {
               const photo = new Photo.Photo( {
               user_id: id,
