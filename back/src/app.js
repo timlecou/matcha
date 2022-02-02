@@ -14,6 +14,7 @@ const jwt = require('jsonwebtoken');
 const express = require('express')();
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const { Pool } = require('pg');
 
 let app = express;
 app.use(bodyParser.json())
@@ -54,7 +55,15 @@ io.on('connection', (socket) =>
   // Get jwt
   const decodedToken = jwt.verify(socket.handshake.query.access_token, process.env.ACCESS_TOKEN_SECRET);
   const userId = decodedToken.userId;
-  // console.log("token =>", userId);
+
+  const pool = new Pool();
+  pool.query('SELECT id FROM "Matched_user" WHERE user1_id = $1 OR user2_id = $1',
+  [userId],
+  (error, results) =>
+  {
+    for (match of results.rows)
+      socket.join(`match_${match.id}`);
+  });
 
   // console.log('a user connected');
   socket.on('message', (message) =>

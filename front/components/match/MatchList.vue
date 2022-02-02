@@ -40,14 +40,14 @@ export default {
 		<div class="list">
 			<div class="match_item" @click="selectMatch(match)" v-for="match in matches">
 				<div class="photo">
-					<img :src="require(`~/assets${match.user.photo}`)"/>
+					<img :src="require(`~/assets/${match.photos.paths[0]}`)" v-if="match.photos.paths.length > 0"/>
 				</div>
 				<div class="text_container">
 					<p class="name_time">
-						<span class="name">{{ match.user.name }}</span>
+						<span class="name">{{ match.first_name }}</span>
 						<span class="date">{{ match.last_update_time }}</span>
 					</p>
-					<p class="message">{{ match.messages[match.messages.length - 1].text }}</p>
+					<p class="message" v-if="match.messages.length > 0">{{ match.messages[match.messages.length - 1].text }}</p>
 				</div>
 			</div>
 		</div>
@@ -101,15 +101,18 @@ h1
 
 .match_item .photo
 {
+	flex: 0 0 auto;
 	width: 3rem;
 	height: 3rem;
 	margin-right: 1rem;
+	background: white;
+    border-radius: 100%;
+	overflow: hidden;
 }
 
 .match_item img
 {
 	width: 100%;
-	border-radius: 100%;
 }
 
 .match_item .text_container

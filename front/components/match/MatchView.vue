@@ -24,7 +24,7 @@ export default {
 	{
 		sendMessage()
 		{
-			this.$axios.post(`http://localhost:4000/matches/${this.match.id}/messages`, {match_id: this.match.id, content: this.message})
+			this.$axios.post(`http://localhost:4000/matches/${this.match.match_id}/messages`, {content: this.message})
 			.then(res =>
 			{
 				this.message = "";
@@ -49,17 +49,17 @@ export default {
 				<svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10.295 19.716a1 1 0 0 0 1.404-1.425l-5.37-5.29h13.67a1 1 0 1 0 0-2H6.336L11.7 5.714a1 1 0 0 0-1.404-1.424l-6.924 6.822a1.25 1.25 0 0 0 0 1.78l6.924 6.823Z"/></svg>
 			</div>
 			<div class="photo">
-				<img :src="require(`~/assets${match.user.photo}`)"/>
+				<img :src="require(`~/assets/${match.photos.paths[0]}`)" v-if="match.photos.paths.length > 0"/>
 			</div>
-			<p class="name">{{ match.user.name }}</p>
+			<p class="name">{{ match.first_name }}</p>
 		</div>
 		<div class="message_list" v-if="match">
-			<div class="message" :class="{me: message.author.id == 2}" v-for="message in match.messages">
-				<p>{{ message.text }}</p>
+			<div class="message" :class="{me: message == 2}" v-for="message in match.messages">
+				<p>{{ message.message }}</p>
 			</div>
 		</div>
 		<div class="input_bar" v-if="match">
-			<input id="message_input" type="text" v-model="message" :placeholder="'Dites salam à ' + match.user.name" @keypress.enter="sendMessage"/>
+			<input id="message_input" type="text" v-model="message" :placeholder="'Dites salam à ' + match.first_name" @keypress.enter="sendMessage"/>
 			<div class="send_button" @click="sendMessage">Envoyer</div>
 		</div>
 	</div>
@@ -85,13 +85,16 @@ export default {
 {
 	width: 2.5rem;
 	height: 2.5rem;
+	background: white;
+	border-radius: 100%;
+	overflow: hidden;
+	flex: 0 0 auto;
 }
 
 .photo img
 {
 	width: 100%;
 	height: 100%;
-	border-radius: 100%;
 }
 
 .header .name

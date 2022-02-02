@@ -29,71 +29,7 @@ export const state = () =>
 			}
 		},
 	],
-	matches:
-	[
-		{
-			id: 1,
-			user:
-			{
-				id: 1,
-				name: "Yass",
-				photo: "/images/photo-1.jpeg"
-			},
-			last_update_time: "10:03",
-			messages:
-			[
-				{
-					id: 1,
-					author:
-					{
-						id: 1,
-						name: "Yass"
-					},
-					text: "Salam Aleykoum bg ca va ?"
-				},
-				{
-					id: 2,
-					author:
-					{
-						id: 2,
-						name: "Me"
-					},
-					text: "Aleykoum salam ca va et toi ?"
-				},
-			]
-		},
-		{
-			id: 2,
-			user:
-			{
-				id: 1,
-				name: "Nao",
-				photo: "/images/photo-2.png"
-			},
-			last_update_time: "10:03",
-			messages:
-			[
-				{
-					id: 1,
-					author:
-					{
-						id: 1,
-						name: "Yass"
-					},
-					text: "Salam Aleykoum bg ca va ?"
-				},
-				{
-					id: 2,
-					author:
-					{
-						id: 2,
-						name: "Me"
-					},
-					text: "Aleykoum salam ca va et toi ?"
-				},
-			]
-		},
-	],
+	matches: [],
 })
   
 export const mutations =
@@ -114,8 +50,9 @@ export const mutations =
 
 	ADD_MATCH_MESSAGE(state, {match_id, message})
 	{
-		state.matches.find(match => match.id == match_id)
-		.messages.push(message);
+		let match = state.matches.find(match => match.match_id == match_id);
+		if (match)
+			match.messages.push(message);
 	},
 
 	ADD_NOTIF(state, notification)
@@ -197,7 +134,8 @@ export const actions =
 
 		socket.on('new_message', data =>
 		{
-			store.commit('ADD_MATCH_MESSAGE', {match_id: data.match_id, message: data.message});
+			console.log("NEW MESSAGE", data);
+			store.commit('ADD_MATCH_MESSAGE', {match_id: data.match_id, message: data});
 			store.dispatch('addNotification', {
 				event_type: "new_message",
 				text: "Vous avez recu un nouveau message",

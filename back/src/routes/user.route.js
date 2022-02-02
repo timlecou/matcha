@@ -82,7 +82,7 @@ module.exports = function(app, io) {
             (error, results) => {
                 if (error) throw error;
                 if (results.rowCount == 1) {
-                    pool.query('SELECT u.* FROM "User" u LEFT JOIN "Matched_user" m ON (u.id = m.user1_id OR u.id = user2_id) AND u.id != $1 WHERE m.user1_id = $1 OR user2_id = $1',
+                    pool.query('SELECT u.*, m.id AS match_id FROM "User" u LEFT JOIN "Matched_user" m ON (u.id = m.user1_id OR u.id = user2_id) AND u.id != $1 WHERE m.user1_id = $1 OR user2_id = $1',
                     [id],
                     async (error, results) => {
                         if (error) throw error;

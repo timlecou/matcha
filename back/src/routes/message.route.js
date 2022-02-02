@@ -57,11 +57,11 @@ module.exports = function(app, io) {
                         [match_id, from_id, to_id, date, message],
                         (err) => {
                             if (err) throw err;
-                            io.to(`match_${match_id}`).emit('new_message', {message: message, from_id: from_id, to_id: to_id});
+                            io.to(`match_${match_id}`).emit('new_message', {match_id, message: message, from_id: from_id, to_id: to_id});
                             res.status(201).json({ message: 'message uploaded' });
                         });
                     } else {
-                        res.status(400).json({ message: 'error when tring to find match' });
+                        res.status(404).json({ message: 'Error: match not found' });
                     }
                 });
                     
