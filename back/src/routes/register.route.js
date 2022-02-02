@@ -51,7 +51,7 @@ module.exports = function(app, io) {
 
           if (results.rowCount != 0) {
 
-            res.status(400).send('email or username already taken');
+            res.status(409).send('email or username already taken');
 
           } else {
 
@@ -63,7 +63,7 @@ module.exports = function(app, io) {
               var lat = req.body.location.lat;
               var long = req.body.location.long;
 
-              if (lat == null || long == null) {
+              if (lat == -1 || long == -1) {
                 var geo;
                 if (req.headers.host == 'localhost:4000') {
                   //have to get the external ip here

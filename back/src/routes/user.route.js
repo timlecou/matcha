@@ -88,6 +88,9 @@ module.exports = function(app, io) {
                     (error, results) => {
                         if (error) throw error;
                         if (results.rowCount > 0) {
+                            console.log(results.rows);
+                            //send all messages here
+                            //send users info too
                             res.status(200).json(results.rows);
                         } else {
                             res.status(404).send('user has no matches');

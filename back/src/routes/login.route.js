@@ -40,7 +40,7 @@ module.exports = function(app, io) {
                 bcrypt.compare(req.body.password, user.password)
                 .then(valid => {
                   if (!valid) {
-                    return res.status(403).json({ error: 'incorrect password' });
+                    return res.status(401).json({ error: 'incorrect password' });
                   }
 
                   if (latitude == 0 || longitude == 0) {
@@ -68,20 +68,20 @@ module.exports = function(app, io) {
                    * socket.join(`match_${id}`)
                    */
 
-                  pool.query('SELECT * FROM "Matched_user" WHERE user1_id = $1 OR user2_id = $1',
-                  [user.id],
-                  (error, results) => {
-                    if (error) throw error;
-                    io.on("connection", (socket) => {
-                      if (results.rowCount > 0) {
-                        const matchs = results.rows;
-                        matchs.forEach(element => {
-                          socket.join(`match_${element.id}`);
-                          console.log(`socket has joined room match_${element.id}`);
-                        });
-                      }
-                    });
-                  });
+                  // pool.query('SELECT * FROM "Matched_user" WHERE user1_id = $1 OR user2_id = $1',
+                  // [user.id],
+                  // (error, results) => {
+                  //   if (error) throw error;
+                  //   io.on("connection", (socket) => {
+                  //     if (results.rowCount > 0) {
+                  //       const matchs = results.rows;
+                  //       matchs.forEach(element => {
+                  //         socket.join(`match_${element.id}`);
+                  //         console.log(`socket has joined room match_${element.id}`);
+                  //       });
+                  //     }
+                  //   });
+                  // });
 
                   delete user.password;
                   delete user.reset_password_token;
@@ -97,7 +97,7 @@ module.exports = function(app, io) {
                   });
                 })
             } else {
-              res.status(403).json({ message: "user not activated" });
+              res.status(401).json({ message: "user not activated" });
             }
         })
       }
