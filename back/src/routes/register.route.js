@@ -51,7 +51,7 @@ module.exports = function(app, io) {
 
           if (results.rowCount != 0) {
 
-            res.status(409).send('email or username already taken');
+            res.status(409).json({ message: 'email or username already taken'});
 
           } else {
 
