@@ -15,7 +15,7 @@ export default {
 	{
 		window.setTimeout(() =>
 		{
-			this.$refs.submit_button.click();
+			// this.$refs.submit_button.click();
 		}, 500);
 	},
 	methods:

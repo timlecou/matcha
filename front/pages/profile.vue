@@ -156,7 +156,11 @@ export default {
 				biography: this.user.biography,
 				gender: this.user.gender,
 				sexual_orientation: this.user.sexual_orientation,
-				location: this.user.location,
+				location:
+				{
+					lat: this.user.location.latitude,
+					long: this.user.location.longitude,
+				},
 				interests: this.user.interests
 			})
 			.then(() => this.$toast.success('Profile successfully updated.'))

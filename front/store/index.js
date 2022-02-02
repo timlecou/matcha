@@ -103,9 +103,9 @@ export const mutations =
 		state.access_token = token;
 		state.is_logged_in = true;
 	},
-	SET_USER_ID(state, id)
+	SET_USER(state, user)
 	{
-		state.user.id = id;
+		state.user = user;
 	},
 	SET_USERS(state, users)
 	{
@@ -211,7 +211,7 @@ export const actions =
 			.then(res =>
 			{
 				store.commit("SET_ACCESS_TOKEN", res.data.token);
-				store.commit("SET_USER_ID", res.data.userId);
+				store.commit("SET_USER", res.data.user);
 				this.$axios.interceptors.request.use((config) =>
 				{
 					config.headers['Authorization'] = "Bearer " + store.state.access_token;

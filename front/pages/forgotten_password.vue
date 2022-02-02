@@ -12,7 +12,8 @@ export default {
 		is_form_valid() {
 			return (this.username.length > 0);
 		},
-		async reset_password(e) {
+		async reset_password(e)
+		{
 			e.preventDefault();
 
 			if (!this.is_form_valid())
