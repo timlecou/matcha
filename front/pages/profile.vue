@@ -27,8 +27,8 @@ export default {
 				online: true,
 				score: 97.5,
 				liked: false,
-				gender: "Male",
-				sexual_orientation: "Female",
+				gender: "M",
+				sexual_orientation: "F",
 				location:
 				{
 					place: "Dijon",
@@ -89,7 +89,10 @@ export default {
 					photo["url"] = URL.createObjectURL(photo);
 					this.new_photos.push(photo);
 				}
-				console.log(this.new_photos)
+				console.log("new photos :", this.new_photos);
+				this.$store.dispatch('uploadPhotos', this.new_photos)
+				.then(() => this.$toast.success(`${this.new_photos.length} added to your profile.`))
+				.catch(err => this.$toast.error(`Cannot add photos. ${err.response.data}`));
 			}
 			else
 				this.$toast.error("Error: you can have only 5 photos");
@@ -98,9 +101,10 @@ export default {
 		{
 			if (this.new_interest_value.length == 0)
 				return ;
-			// If interest is already in new interests or old
+
 			if (this.user.interests.includes(this.new_interest_value))
 				return ;
+
 			this.user.interests.push(this.new_interest_value);
 			this.new_interest_value = "";
 		},
@@ -139,6 +143,24 @@ export default {
 		restorePassword()
 		{
 			alert("COMPLETER");
+		},
+
+		save()
+		{
+			this.$store.dispatch("updateProfile",
+			{
+				username: this.user.username,
+				email: this.user.email,
+				last_name: this.user.last_name,
+				first_name: this.user.first_name,
+				biography: this.user.biography,
+				gender: this.user.gender,
+				sexual_orientation: this.user.sexual_orientation,
+				location: this.user.location,
+				interests: this.user.interests
+			})
+			.then(() => this.$toast.success('Profile successfully updated.'))
+			.catch(err => this.$toast.error(`Cannot update profile. ${err.response?.data}`));
 		}
 	},
 	computed:
@@ -185,15 +207,16 @@ export default {
 				<div class="line">
 					<div class="field" :class="{active: user.gender.length > 0, valid: user.gender.length > 0}">
 						<select v-model="user.gender">
-							<option>Male</option>
-							<option>Female</option>
+							<option value="M">Male</option>
+							<option value="F">Female</option>
 						</select>
 						<label for="last_name">Gender</label>
 					</div>
 					<div class="field" :class="{active: user.sexual_orientation.length > 0, valid: user.sexual_orientation.length > 0}">
 						<select v-model="user.sexual_orientation">
-							<option>Male</option>
-							<option>Female</option>
+							<option value="M">Male</option>
+							<option value="F">Female</option>
+							<option value="A">Other</option>
 						</select>
 						<label for="last_name">Sexual orientation</label>
 					</div>
@@ -247,12 +270,7 @@ export default {
 				<div class="tags_container">
 					<div class="tag" v-for="(tag, index) in user.interests">
 						<span>#{{ tag }}</span>
-						<svg viewBox="0 0 72 72" id="emoji" xmlns="http://www.w3.org/2000/svg" @click="removeInterest(index)">
-							<g>
-								<line x1="17.5" x2="54.5" y1="17.5" y2="54.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
-								<line x1="54.5" x2="17.5" y1="17.5" y2="54.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
-							</g>
-						</svg>
+						<svg viewBox="0 0 72 72" id="emoji" xmlns="http://www.w3.org/2000/svg" @click="removeInterest(index)"> <g> <line x1="17.5" x2="54.5" y1="17.5" y2="54.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/> <line x1="54.5" x2="17.5" y1="17.5" y2="54.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/> </g> </svg>
 					</div>
 				</div>
 				<div class="input_container">
@@ -271,7 +289,7 @@ export default {
 		</ExpandableSection>
 		<div class="buttons_container">
 			<div class="delete_button">Delete</div>
-			<div class="save_button">Save</div>
+			<div class="save_button" @click="save">Save</div>
 		</div>
 	</form>
 </template>

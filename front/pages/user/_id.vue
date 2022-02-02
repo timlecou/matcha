@@ -33,18 +33,7 @@ export default {
 				],
 				interests:
 				[
-					{
-						id: 0,
-						name: "bio",
-					},
-					{
-						id: 1,
-						name: "geek",
-					},
-					{
-						id: 2,
-						name: "Islam",
-					},
+					
 				]
 			}
 		}

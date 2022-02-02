@@ -9,6 +9,7 @@ export const state = () =>
 		id: -1
 	},
 	users: [],
+	online_users: [],
 	notifications:
 	[
 		{
@@ -121,6 +122,18 @@ export const mutations =
 	{
 		state.notifications.push(notification);
 	},
+
+	ADD_ONLINE_USER(state, user_id)
+	{
+		state.online_users.push(user_id);
+	},
+
+	REMOVE_ONLINE_USER(state, user_id)
+	{
+		let index = state.online_users.findIndex(u => u.id == user_id);
+		if (index != -1)
+			state.online_users.splice(index, 1);
+	},
 };
 
 export const actions =
@@ -146,12 +159,35 @@ export const actions =
 
 		socket.on('new_connection', data =>
 		{
-			alert(data.user_id);
+			store.commit('ADD_ONLINE_USER', data.user_id);
+		});
+
+		socket.on('disonnect', data =>
+		{
+			store.commit('REMOVE_ONLINE_USER', data.user_id);
+		});
+
+		socket.on('new_like', data =>
+		{
+			store.dispatch('addNotification', {
+				event_type: "new_like",
+				text: "X vous a liké",
+				metadata: {}
+			});
+		});
+
+		socket.on('new_visit', data =>
+		{
+			store.commit('REMOVE_ONLINE_USER', data.user_id);
 		});
 
 		socket.on('test_notif', data =>
 		{
-			console.log("Receive ", data);
+			store.dispatch('addNotification', {
+				event_type: "new_visit",
+				text: "X a regardé votre profile",
+				metadata: {}
+			});
 		});
 
 		socket.on('new_message', data =>
@@ -163,6 +199,8 @@ export const actions =
 				metadata: {}
 			});
 		});
+
+		// Unlike ?
 	},
 
 	login(store, {email, password})
@@ -203,6 +241,42 @@ export const actions =
 			})
 			.catch(err => reject(err));
 		})
+	},
+
+	uploadPhotos(store, photos)
+	{
+		return new Promise((resolve, reject) =>
+		{
+			let formData = new FormData();
+			for (let photo of photos)
+				formData.append("files[]", photo);
+			this.$axios.post(`http://localhost:4000/users/${store.state.user.id}/photos`, formData,
+			{
+				headers:
+				{
+					'Content-Type': 'multipart/form-data'
+				}
+			})
+			.then(res =>
+			{
+				resolve();
+			})
+			.catch(err => reject(err));
+		})
+	},
+
+	updateProfile(store, user_datas)
+	{
+		return new Promise((resolve, reject) =>
+		{
+			console.log(user_datas);
+			this.$axios.put(`http://localhost:4000/users/${store.state.user.id}`, user_datas)
+			.then (res =>
+			{
+				resolve(res);
+			})
+			.catch(err => reject(err));
+		});
 	}
 };
 

@@ -12,6 +12,7 @@ export default {
 		return {
 			users: [],
 			modal: null,
+			show_swiper_info: false
 		}
 	},
 	mounted()
@@ -45,10 +46,20 @@ export default {
 		next()
 		{
 			this.users.shift();
+			this.show_swiper_info = false;
 		},
 		like()
 		{
-			this.next();
+			this.$axios.post(`http://localhost:4000/users/${this.$store.state.user.id}/liked/${this.users[0].id}`)
+			.then(res =>
+			{
+				this.liked = true;
+				this.next();
+			})
+			.catch(err =>
+			{
+				this.$toast.error(err.response.data.error);
+			})
 		},
 		skip()
 		{
@@ -67,8 +78,10 @@ export default {
 </script>
 
 <template>
-	<div class="container">
-		<Swiper :user="user" :index="users.length - 1 - index" v-for="(user, index) in reverse_users" :key="'swiper_' + index" @next="next"/>
+	<div class="home">
+		<div class="swipers_container">
+			<Swiper :user="user" :index="users.length - 1 - index" :show_info="show_swiper_info && users.length - 1 - index == 0" v-for="(user, index) in reverse_users" :key="'swiper_' + index" @next="next"/>
+		</div>
 		<div class="buttons_container">
 			<div class="left">
 				<div class="filters_button button" @click="modal = 'filters'">
@@ -84,6 +97,9 @@ export default {
 				</div>
 				<div class="like_button button" @click="like">
 					<svg role="img" fill="currentColor" viewBox="0 0 24 24"><path d="M16.792 3.904A4.989 4.989 0 0121.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 014.708-5.218 4.21 4.21 0 013.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 013.679-1.938m0-2a6.04 6.04 0 00-4.797 2.127 6.052 6.052 0 00-4.787-2.127A6.985 6.985 0 00.5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 003.518 3.018 2 2 0 002.174 0 45.263 45.263 0 003.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 00-6.708-7.218z"></path></svg>
+				</div>
+				<div class="info_button button" @click="show_swiper_info = !show_swiper_info">
+					<svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1.999c5.524 0 10.002 4.478 10.002 10.002 0 5.523-4.478 10.001-10.002 10.001-5.524 0-10.002-4.478-10.002-10.001C1.998 6.477 6.476 1.999 12 1.999Zm-.004 8.25a1 1 0 0 0-.992.885l-.007.116.003 5.502.007.117a1 1 0 0 0 1.987-.002L13 16.75l-.003-5.501-.007-.117a1 1 0 0 0-.994-.882ZM12 6.5a1.251 1.251 0 1 0 0 2.503A1.251 1.251 0 0 0 12 6.5Z"/></svg>
 				</div>
 			</div>
 		</div>
@@ -106,9 +122,11 @@ export default {
 
 <style scoped>
 
-.container
+.swipers_container
 {
 	margin: 0 auto;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .buttons_container
@@ -117,7 +135,7 @@ export default {
 	justify-content: space-between;
 	align-items: center;
 	width: 100%;
-	position: absolute;
+	position: fixed;
 	bottom: 10%;
 	left: 0;
 	padding: 0 1rem;
@@ -215,16 +233,24 @@ export default {
 	.buttons_container
 	{
 		bottom: 0;
+		padding: 0;
 	}
 
 	.buttons_container > *
 	{
 		flex-direction: row;
 		justify-content: space-around;
-		top: unset;
-		bottom: 0.5rem;
-		left: 50%;
 		width: 50%;
+	}
+
+	.buttons_container .left
+	{
+		width: 40%;
+	}
+
+	.buttons_container .right
+	{
+		width: 60%;
 	}
 }
 

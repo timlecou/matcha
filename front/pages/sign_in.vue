@@ -94,7 +94,7 @@ form
 {
 	position: relative;
 	width: 100%;
-	margin: 1rem 0;
+	margin: 1.5rem 0;
 	border-bottom: solid 1px #9c0f48;
 }
 
@@ -116,7 +116,7 @@ input
 	left: 0.25rem;
 	cursor: text;
 	transition: all 0.125s;
-	font-size: 28px;
+	font-size: 1.5rem;
 }
 
 input:focus ~ label,
