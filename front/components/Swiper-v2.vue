@@ -12,6 +12,11 @@ export default {
 		{
 			type: Number,
 			required: true
+		},
+		show_info:
+		{
+			type: Boolean,
+			required: true
 		}
 	},
 	data()
@@ -46,16 +51,6 @@ export default {
 		{
 			this.liked = true;
 			this.next();
-			// this.$axios.post(`http://localhost:4000/users/${this.$store.state.user.id}/liked/${this.user.id}`)
-			// .then(res =>
-			// {
-			// 	this.liked = true;
-			// 	this.next();
-			// })
-			// .catch(err =>
-			// {
-			// 	alert(err.response.data.error);
-			// })
 		},
 		next()
 		{
@@ -78,7 +73,7 @@ export default {
 </script>
 
 <template>
-	<div class="swiper" :class="{liked: this.liked, skiped: this.skiped}" :style="transform_style">
+	<div class="swiper" :class="{liked: this.liked, skiped: this.skiped, full: show_info}" :style="transform_style">
 		<div class="image_container">
 			<img :src="require(`~/assets/${photo}`)" v-show="key == photo_index" v-for="(photo, key) in user.photos"/>
 			<div class="photos_indicator">
@@ -125,9 +120,6 @@ export default {
 			</div>
 
 			<div class="interests">
-				<div class="interest">Islam</div>
-				<div class="interest">Handball</div>
-				<div class="interest">Sport</div>
 				<div class="interest">Informatique</div>
 			</div>
 			<p class="liked_indication">Already liked you</p>
@@ -144,15 +136,21 @@ export default {
 .swiper
 {
 	display: flex;
-	align-items: center;
-	position: fixed;
+	flex-direction: column;
+	justify-content: center;
+	position: absolute;
 	top: 50%;
 	left: 50%;
-	width: 80%;
-	height: 80%;
+	/* width: 80%; */
+	min-height: 80%;
 	max-width: 80%;
 	color: black;
 	transition: all 0.5s;
+}
+
+.swiper.full
+{
+	margin: 10% 0;
 }
 
 .swiper.liked
@@ -169,6 +167,16 @@ export default {
 	transform: scale(0.5);
 }
 
+.image_container
+{
+	position: relative;
+	width: 100%;
+	height: 100%;
+	background: white;
+	border-radius: 0.75rem;
+	overflow: hidden;
+}
+
 .image_container:after
 {
 	position: absolute;
@@ -177,16 +185,6 @@ export default {
 	left: 0;
 	width: 100%;
 	height: 100%;
-}
-
-.image_container
-{
-	position: relative;
-	width: 55%;
-	height: 100%;
-	background: white;
-	border-radius: 0.75rem;
-	overflow: hidden;
 }
 
 .image_container img
@@ -244,19 +242,29 @@ export default {
 	flex-direction: column;
 	justify-content: space-between;
 	position: relative;
-	width: 45%;
-	height: 97.5%;
+	width: 100%;
+	height: 80%;
 	background: white;
 	box-shadow: -5px 0px 16px 0px #42424269;
 	border-radius: 0.75rem;
-	padding: 1rem;
 	overflow: auto;
-}
-
-.profile_info
-{
 	text-overflow: ellipsis;
 	word-break: break-all;
+    max-height: 0;
+    padding: 0 1rem;
+	transition: all 0.25s;
+}
+
+.swiper.full .profile_info
+{
+	max-height: 100%;
+	padding: 1rem;
+	margin-bottom: 10%;
+}
+
+.profile_info *
+{
+	margin: 0.25rem 0;
 }
 
 h1
@@ -342,14 +350,14 @@ h1
 .liked_indication
 {
 	text-align: center;
-	margin: 0;
 }
 
 .status
 {
 	position: relative;
 	width: fit-content;
-	margin: 0 auto;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .status:after
@@ -432,7 +440,7 @@ h1
 	{
 		flex-direction: column;
 		overflow: auto;
-		width: 100%;
+		max-width: 90%;
 		height: 75%;
 	}
 

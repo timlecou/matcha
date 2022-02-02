@@ -71,7 +71,7 @@ function HasGoodPasswordSize (value, name) {
 }
 
 function IsOnlyAlpha (value, name) {
-    if (/^[a-zA-Z]+$/.test(value) == false) {
+    if (/^[a-zA-Z- ]+$/.test(value) == false) {
         throw new Error(`${name} is not only alpha`);
     }
 }
