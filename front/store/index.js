@@ -10,25 +10,7 @@ export const state = () =>
 	},
 	users: [],
 	online_users: [],
-	notifications:
-	[
-		{
-			type: "new_message",
-			text: "Nao vous a envoyé un message.",
-			meta_data:
-			{
-				user_id: 1,
-			}
-		},
-		{
-			type: "new_like",
-			text: "Test vous a liké.",
-			meta_data:
-			{
-				user_id: 1,
-			}
-		},
-	],
+	notifications: [],
 	matches: [],
 })
   
@@ -134,13 +116,16 @@ export const actions =
 
 		socket.on('new_message', data =>
 		{
-			console.log("NEW MESSAGE", data);
+			console.log(this.$router);
 			store.commit('ADD_MATCH_MESSAGE', {match_id: data.match_id, message: data});
-			store.dispatch('addNotification', {
-				event_type: "new_message",
-				text: "Vous avez recu un nouveau message",
-				metadata: {}
-			});
+			if (data.from_id != store.state.user.id)
+			{
+				store.dispatch('addNotification', {
+					event_type: "new_message",
+					text: "Vous avez recu un nouveau message.",
+					metadata: {}
+				});
+			}
 		});
 
 		// Unlike ?
