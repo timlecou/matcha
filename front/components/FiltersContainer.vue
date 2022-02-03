@@ -1,6 +1,27 @@
 <script>
 export default {
 	name: "FiltersContainer",
+	props:
+	{
+		show_distance:
+		{
+			type: Boolean,
+			required: false,
+			default: true
+		},
+		show_location:
+		{
+			type: Boolean,
+			required: false,
+			default: true
+		},
+		text:
+		{
+			type: String,
+			required: false,
+			default: "Apply"
+		}
+	},
 	data()
 	{
 		return {
@@ -10,7 +31,12 @@ export default {
 			max_age: 100,
 			min_score: 0,
 			max_score: 100,
-			location: null,
+			location:
+			{
+				lat: -1,
+				long: -1
+			},
+			max_distance: 100,
 			tags: [],
 
 			new_tag_value: "",
@@ -62,6 +88,18 @@ export default {
 				})).predictions;
 			}
 		},
+		search()
+		{
+			this.$emit('search', {
+				min_age: this.min_age,
+				max_age: this.max_age,
+				min_score: this.min_score,
+				max_score: this.max_score,
+				location: this.location,
+				max_distance: this.max_distance,
+				tags: this.tags,
+			});
+		}
 	}
 }
 </script>
@@ -71,10 +109,7 @@ export default {
 		<div class="filter" :class="{active: active_section == 'age_min'}">
 			<div class="header" @click="activeSection('age_min')">
 				<p class="name">Age min</p>
-				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 32 32" xml:space="preserve">
-					<polygon fill="currentColor" points="16,22 6,12 7.4,10.6 16,19.2 24.6,10.6 26,12 "/>
-					<rect fill="none" width="32" height="32"/>
-				</svg>
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 32 32" xml:space="preserve"><polygon fill="currentColor" points="16,22 6,12 7.4,10.6 16,19.2 24.6,10.6 26,12 "/><rect fill="none" width="32" height="32"/></svg>
 			</div>
 			<div class="content">
 				<input type="range" v-model="min_age" min="0" max="100"/>
@@ -120,7 +155,7 @@ export default {
 				<p class="value">{{ max_score }}</p>
 			</div>
 		</div>
-		<div class="filter location_filter" :class="{active: active_section == 'location'}">
+		<div class="filter location_filter" :class="{active: active_section == 'location'}" v-if="show_location">
 			<div class="header" @click="activeSection('location')">
 				<p class="name">Location</p>
 				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 32 32" xml:space="preserve">
@@ -138,6 +173,19 @@ export default {
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="filter" :class="{active: active_section == 'distance'}" v-if="show_distance">
+			<div class="header" @click="activeSection('distance')">
+				<p class="name">Max Distance</p>
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 32 32" xml:space="preserve">
+					<polygon fill="currentColor" points="16,22 6,12 7.4,10.6 16,19.2 24.6,10.6 26,12 "/>
+					<rect fill="none" width="32" height="32"/>
+				</svg>
+			</div>
+			<div class="content">
+				<input type="range" v-model="max_distance" min="10" max="100"/>
+				<p class="value">{{ max_distance }}</p>
 			</div>
 		</div>
 		<div class="filter tags_filter" :class="{active: active_section == 'tags'}">
@@ -160,6 +208,7 @@ export default {
 				</div>
 			</div>
 		</div>
+		<div class="search_button" @click="search">{{ text }}</div>
 	</div>
 </template>
 
@@ -307,7 +356,8 @@ export default {
 	align-items: center;
 	padding: 0.5rem 0.5rem;
 	margin: 0.25rem 0.125rem;
-	background: #ff33cc;
+	background: #f9e4d4;
+	color: #9c0f48;
 	height: 2rem;
 }
 
@@ -331,6 +381,28 @@ input[type="text"]
 	border-radius: 1.25rem;
 	outline: none;
 	border: none;
+}
+
+.search_button
+{
+	width: 15rem;
+	max-width: 100%;
+	text-align: center;
+	margin: 1rem auto;
+	padding: 0.5rem 1rem;
+	font-size: 1.25rem;
+	border-radius: 2rem;
+	border: solid 1px;
+	cursor: pointer;
+	color: #f9e4d4;
+    background: #9c0f48;
+	transition: all 0.25s;
+}
+
+.search_button:hover
+{
+	background: #f9e4d4;
+    color: #9c0f48;
 }
 
 </style>

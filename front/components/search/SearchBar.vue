@@ -21,7 +21,7 @@ export default {
 	},
 	methods:
 	{
-		search()
+		search(filters_data)
 		{
 			let location = {
 				longitude: null,
@@ -34,22 +34,16 @@ export default {
 				{
 					if (status == google.maps.GeocoderStatus.OK)
 					{
-						location.latitude = results[0].geometry.location.lat();
-						location.longitude = results[0].geometry.location.lng();
+						filters_data.location.lat = results[0].geometry.location.lat();
+						filters_data.location.long = results[0].geometry.location.lng();
+						this.$emit('search', {
+							...filters_data,
+						});
+						this.show_filters = false;
 						// alert(location.latitude + "  ; " + location.longitude);
 					}
 				});
 			}
-
-			this.$emit('search', {
-				search: this.search_username,
-				min_age: this.min_age,
-				max_age: this.max_age,
-				min_score: this.min_score,
-				max_score: this.max_score,
-				location: location
-			});
-			this.show_filters = false;
 		},
 	}
 }
@@ -66,11 +60,8 @@ export default {
 				<svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m6.288 4.293-3.995 4-.084.095a1 1 0 0 0 .084 1.32l.095.083a1 1 0 0 0 1.32-.084L6 7.41V19l.007.117a1 1 0 0 0 .993.884l.117-.007A1 1 0 0 0 8 19V7.417l2.293 2.29.095.084a1 1 0 0 0 1.319-1.499l-4.006-4-.094-.083a1 1 0 0 0-1.32.084ZM17 4.003l-.117.007a1 1 0 0 0-.883.993v11.58l-2.293-2.29-.095-.084a1 1 0 0 0-1.319 1.498l4.004 4 .094.084a1 1 0 0 0 1.32-.084l3.996-4 .084-.095a1 1 0 0 0-.084-1.32l-.095-.083a1 1 0 0 0-1.32.084L18 16.587V5.003l-.007-.116A1 1 0 0 0 17 4.003Z"/></svg>
 			</div>
 		</div>
-		<FiltersContainer v-if="show_filters"/>
+		<FiltersContainer v-if="show_filters" @search="search"/>
 		<SorterContainer v-if="show_sorter"/>
-		<div class="search_button" @click="search">
-			Search
-		</div>
 	</div>
 </template>
 
@@ -115,19 +106,6 @@ input[type="text"]
 	border-radius: 1.25rem;
 	outline: none;
 	border: none;
-}
-
-.search_button
-{
-	width: 15rem;
-	max-width: 100%;
-	text-align: center;
-	margin: 1rem auto;
-	padding: 0.5rem 1rem;
-	font-size: 1.25rem;
-	border-radius: 2rem;
-	border: solid 1px;
-	cursor: pointer;
 }
 
 </style>

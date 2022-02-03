@@ -16,7 +16,7 @@ export default {
 	{
 		search(search_data)
 		{
-			console.log(search_data);
+			console.log("=>", search_data);
 		},
 	},
 }
@@ -24,7 +24,7 @@ export default {
 
 <template>
 	<div class="search">
-		<SearchBar @search="search"/>
+		<SearchBar @search="search" text="Search"/>
 		<!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4Io5BFJ2alGrKIY6n5WHAXjpcGfQl13E&callback=initMap"></script> -->
 	</div>
 </template>

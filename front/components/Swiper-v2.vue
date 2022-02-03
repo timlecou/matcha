@@ -35,7 +35,7 @@ export default {
 			if (this.skiped || this.liked)
 				return {};
 			else if (this.index == 0)
-				return {transform: 'translate(-50%, -50%)'}
+				return {transform: 'translate(-50%, -50%)', 'z-index': 1}
 			else
 				return {transform: 'translate(0, -50%) scale(0.5)'};
 		}
