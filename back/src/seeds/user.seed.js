@@ -1,5 +1,7 @@
 const { faker } = require('@faker-js/faker');
 const UserModule = require('../models/user.model');
+const PhotoModule = require('../models/photo.model');
+
 
 // class User {
 //     id;
@@ -28,7 +30,7 @@ function getRandomArbitrary(min, max)
 
 async function generateUsers()
 {
-	let users = new Array(1);
+	let users = new Array(50);
 	for (let i = 0; i < users.length; i++)
 	{
 		let user = new UserModule.User();
@@ -49,6 +51,11 @@ async function generateUsers()
 		user.activated = true;
 		user.activation_token = "";
 		await user.register();
+
+		let photo = new PhotoModule.Photo();
+		photo.user_id = user.id;
+		photo.path = faker.image.avatar();
+		photo.insert();
 	}
 	return users;
 }
