@@ -2,7 +2,7 @@ const express = require('express')();
 const cors = require('cors');
 const validator = require('../validator/validator');
 
-const { Pool, Client } = require('pg')
+const { Pool } = require('pg')
 const pool = new Pool()
 
 const User = require('../models/user.model.js');

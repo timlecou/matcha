@@ -17,18 +17,6 @@ export default {
 				},
 				user: null
 			},
-			users:
-			[
-				{
-					id: 0,
-					name: "Yass",
-					position:
-					{
-						lat: 48.856614,
-						lng: 2.3522219
-					}
-				}
-			]
 		}
 	},
 	beforeRouteEnter(to, from, next)
@@ -47,25 +35,45 @@ export default {
 			zoom: 8
 		});
 
-		const marker = new google.maps.Marker(
+		let markers = [];
+		for (let user of this.users)
 		{
-			position: {lat: 48.856610, lng: 2.3522218},
-			map: map,
-			icon: require("~/assets/images/output.png")
-		});
-		const marker2 = new google.maps.Marker(
+			if (user.location.x === null || user.location.y === null)
+				continue ;
+			markers.push(new google.maps.Marker(
+			{
+				position: {lat: user.location.x, lng: user.location.y},
+				map: map,
+				icon: require("~/assets/images/output.png")
+			}));
+		}
+
+		// const marker = new google.maps.Marker(
+		// {
+		// 	position: {lat: 48.856610, lng: 2.3522218},
+		// 	map: map,
+		// 	icon: require("~/assets/images/output.png")
+		// });
+		// const marker2 = new google.maps.Marker(
+		// {
+		// 	position: {lat: 48.790367, lng: 2.455572},
+		// 	map: map,
+		// 	icon: require("~/assets/images/output.png")
+		// });
+		// const marker3 = new google.maps.Marker(
+		// {
+		// 	position: {lat: 48.801408, lng: 2.130122},
+		// 	map: map,
+		// 	icon: require("~/assets/images/output.png")
+		// });
+		let cluster = new MarkerClusterer({markers, map})
+	},
+	computed:
+	{
+		users()
 		{
-			position: {lat: 48.790367, lng: 2.455572},
-			map: map,
-			icon: require("~/assets/images/output.png")
-		});
-		const marker3 = new google.maps.Marker(
-		{
-			position: {lat: 48.801408, lng: 2.130122},
-			map: map,
-			icon: require("~/assets/images/output.png")
-		});
-		let cluster = new MarkerClusterer({markers: [marker, marker2, marker3], map})
+			return this.$store.state.users;
+		}
 	},
 	methods:
 	{
