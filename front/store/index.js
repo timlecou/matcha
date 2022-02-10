@@ -74,11 +74,14 @@ export const actions =
 
 	initWebsockets(store)
 	{
-		console.log(store.state.access_token);
-		const socket = io('http://localhost:4000', {
+		const socket = io('/api', {
 			query: {
 				access_token: store.state.access_token
 			}
+		});
+
+		socket.on("connect", () => {
+			console.log("SOCKET CONNECTED !!!");
 		});
 
 		socket.on('new_connection', data =>
@@ -135,7 +138,7 @@ export const actions =
 	{
 		return new Promise((resolve, reject) =>
 		{
-			this.$axios.post('http://localhost:4000/login', {email, password})
+			this.$axios.post('/api/login', {email, password})
 			.then(res =>
 			{
 				store.commit("SET_ACCESS_TOKEN", res.data.token);
@@ -161,7 +164,7 @@ export const actions =
 	{
 		return new Promise((resolve, reject) =>
 		{
-			this.$axios.get('http://localhost:4000/users')
+			this.$axios.get('/api/users')
 			.then(res =>
 			{
 				store.commit('SET_USERS', res.data);
@@ -178,7 +181,7 @@ export const actions =
 			let formData = new FormData();
 			for (let photo of photos)
 				formData.append("files[]", photo);
-			this.$axios.post(`http://localhost:4000/users/${store.state.user.id}/photos`, formData,
+			this.$axios.post(`/api/users/${store.state.user.id}/photos`, formData,
 			{
 				headers:
 				{
@@ -198,7 +201,7 @@ export const actions =
 		return new Promise((resolve, reject) =>
 		{
 			console.log(user_datas);
-			this.$axios.put(`http://localhost:4000/users/${store.state.user.id}`, user_datas)
+			this.$axios.put(`/api/users/${store.state.user.id}`, user_datas)
 			.then (res =>
 			{
 				resolve(res);
@@ -211,7 +214,7 @@ export const actions =
 	{
 		return new Promise((resolve, reject) =>
 		{
-			this.$axios.get(`http://localhost:4000/users/${store.state.user.id}/matches`)
+			this.$axios.get(`/api/users/${store.state.user.id}/matches`)
 			.then (res =>
 			{
 				store.commit('SET_MATCHES', res.data);

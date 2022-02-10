@@ -44,6 +44,7 @@ module.exports = {
         if (req.params.id && req.params.id != userId) {
           throw 'Invalid user ID ' + userId;
         } else {
+          req.user_id = userId;
           next();
         }
       } catch (e){

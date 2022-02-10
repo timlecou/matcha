@@ -3,7 +3,7 @@
 export default {
     mounted() {
         var user_token = this.$route.params.token;
-        this.$axios.post('http://localhost:4000/active', {token: user_token})
+        this.$axios.post('/api/active', {token: user_token})
         .then (res =>
 		{
 			this.$toast.success(res.data.message);

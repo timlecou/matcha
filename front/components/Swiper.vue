@@ -60,7 +60,7 @@ export default {
 
 		like()
 		{
-			this.$axios.post(`http://localhost:4000/users/${this.$store.state.user.id}/liked/${this.user.id}`)
+			this.$axios.post(`/api/users/${this.$store.state.user.id}/liked/${this.user.id}`)
 			.then(res =>
 			{
 				this.liked = true;

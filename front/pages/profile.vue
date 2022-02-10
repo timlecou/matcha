@@ -29,6 +29,7 @@ export default {
 				liked: false,
 				gender: "M",
 				sexual_orientation: "F",
+				birth_date: new Date(),
 				location:
 				{
 					place: "Dijon",
@@ -158,8 +159,8 @@ export default {
 				sexual_orientation: this.user.sexual_orientation,
 				location:
 				{
-					lat: this.user.location.latitude,
-					long: this.user.location.longitude,
+					lat: this.user.location.lat,
+					long: this.user.location.long,
 				},
 				interests: this.user.interests
 			})
@@ -223,6 +224,12 @@ export default {
 							<option value="A">Other</option>
 						</select>
 						<label for="last_name">Sexual orientation</label>
+					</div>
+				</div>
+				<div class="line">
+					<div class="field active">
+						<input type="date" id="birth_date" v-model="user.birth_date"/>
+						<label for="birth_date">Birth Date</label>
 					</div>
 				</div>
 			</div>

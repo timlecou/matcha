@@ -97,7 +97,8 @@ class User {
                     [this.email, this.id],
                     (error, results) => {
                         if (error) throw error;
-                        if (results.rowCount == 0) {
+                        if (results.rowCount == 0)
+                        {
                             pool.query('UPDATE "User" SET username = $1, email = $2, birth_date = $3, last_sign_in = $4, location = point($5, $6), gender = $7, sexual_orientation = $8, online = $9, biography = $10, score = $11, first_name = $12, last_name = $13, activated = $14 WHERE id = $15',
                             [this.username, this.email, this.birth_date, this.last_sign_in, this.latitude, this.longitude, this.gender, this.sexual_orientation, this.online, this.biography, this.score, this.first_name, this.last_name, this.activated, this.id],
                             (error) => {
@@ -116,6 +117,27 @@ class User {
         catch (err) {
             console.error(err)
         }
+    }
+
+    getPhotos()
+    {
+        return new Promise((resolve, reject) =>
+        {
+            pool.query('SELECT * FROM "Photo" WHERE user_id = $1',
+            [this.id],
+            (error, results) =>
+            {
+                if (error)
+                    reject(error);
+                var photos = {};
+                var paths = [];
+    
+                photos.paths = paths;
+                for (let element of results.rows)
+                    photos.paths.push(element.path);
+                resolve(photos.paths);
+            });
+        });
     }
 }
 

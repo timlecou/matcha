@@ -20,7 +20,7 @@ export default {
 				this.$toast.error('Invalid form.');
 			else
 			{
-				this.$axios.post('http://localhost:4000/reset_password', {username: this.username})
+				this.$axios.post('/api/reset_password', {username: this.username})
 				.then (res =>
 				{
 					this.$toast.success('An e-mail has been sent to restore your password. Check your mail.');

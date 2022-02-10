@@ -42,7 +42,7 @@ const server = require('http').createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
   }
 });
 
@@ -87,4 +87,4 @@ io.on('disconnection', (socket) => {
  const  resetPasswordRoute = require('./routes/reset_password.route')(app);
  const  messageRoute = require('./routes/message.route')(app, io);
 
-server.listen(4000, () => console.log('Server started on http://localhost:4000'))
+server.listen(4000, () => console.log('Server started on port 4000'))

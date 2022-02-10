@@ -25,18 +25,34 @@ module.exports = function(app, io) {
     /**
      * GET
      */
-    app.get("/users", (req, res) => {
+    app.get("/users", authMiddleware.getUserParams, (req, res) => {
         try {
-            pool.query('SELECT * FROM "User" ',//WHERE id != $1 ORDER BY id ASC',
-            // [req.userId],
-            (error, results) => {
+            pool.query('SELECT * FROM "User" WHERE id != $1 ORDER BY id ASC',
+            [req.user_id],
+            async (error, results) => {
                 if (error) throw error
                 if (results.rowCount == 0) {
                     res.status(404).json({ message: "no users found" });
                 } else {
-                    results.rows.forEach(element => {
-                        delete element.password
-                    });
+                    for (let element of results.rows)
+                    {
+                        let tmp_user = new User.User();
+                        tmp_user.id = element.id;
+                        try
+                        {
+                            element["photos"] = await tmp_user.getPhotos();
+                        }
+                        catch (err)
+                        {
+                            // res.status(500).json("Error while loading photos of user " + tmp_user.id);
+                            console.log(err);
+                        }
+                        delete element.password;
+                        delete element.email;
+                        delete element.location;
+                        delete element.reset_password_token;
+                        delete element.activation_token;
+                    }
                     res.status(200).json(results.rows);
                 }
             })

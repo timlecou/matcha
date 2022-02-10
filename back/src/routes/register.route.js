@@ -111,7 +111,7 @@ module.exports = function(app, io) {
                     }
                   });
 
-              user.register();
+                user.register();
                 res.status(201).json({ message: 'you re registered, you will receive an email with a link to activate your account' });
               });
           }

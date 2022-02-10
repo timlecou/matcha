@@ -24,7 +24,7 @@ export default {
 	{
 		sendMessage()
 		{
-			this.$axios.post(`http://localhost:4000/matches/${this.match.match_id}/messages`, {content: this.message})
+			this.$axios.post(`/api/matches/${this.match.match_id}/messages`, {content: this.message})
 			.then(res =>
 			{
 				this.message = "";

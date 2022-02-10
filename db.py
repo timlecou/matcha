@@ -47,4 +47,4 @@ data1 ={
 json_object = json.dumps(data1, indent = 4)
 
 #sending the request to create a user
-requests.post('http://localhost:4000/users', data=json_object, headers=headers)
+requests.post('/api/users', data=json_object, headers=headers)

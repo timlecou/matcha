@@ -9,13 +9,13 @@ export default {
 	},
 	mounted()
 	{
-		this.$axios.get('http://localhost:4000/users')
+		this.$axios.get('/api/users')
 		.then(async res =>
 		{
 			let users = res.data;
 			for (let user of users)
 			{
-				let res = await this.$axios(`http://localhost:4000/users/${user.id}/photos`);
+				let res = await this.$axios(`/api/users/${user.id}/photos`);
 				user['photos'] = res.data;
 			}
 			this.users = users;

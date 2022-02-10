@@ -43,6 +43,10 @@ export default {
     // ['vuejs-google-maps/nuxt', {apiKey: 'AIzaSyB4Io5BFJ2alGrKIY6n5WHAXjpcGfQl13E', libraries: [/* rest of libraries */]}]
   ],
 
+  axios: {
+    baseURL: 'http://localhost', // Used as fallback if no runtime config is provided
+  },
+
   toast:
   {
       position: 'top-center',

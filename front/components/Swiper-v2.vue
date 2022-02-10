@@ -141,9 +141,6 @@ export default {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	/* width: 80%; */
-	/* min-height: 80%; */
-	max-height: 90%;
 	max-width: 80%;
 	color: black;
 	transition: all 0.5s;

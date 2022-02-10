@@ -15,7 +15,7 @@ export default {
             var token = this.$route.params.token;
 			if (this.new_password === this.confirm_password)
 			{
-                this.$axios.post(`http://localhost:4000/reset_password/${token}`, {new_password: this.new_password})
+                this.$axios.post(`/api/reset_password/${token}`, {new_password: this.new_password})
                 .then (res =>
                 {
                     this.$toast.success(res.data.message);

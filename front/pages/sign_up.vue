@@ -59,7 +59,7 @@ export default {
 				this.$toast.error('Invalid form');
 			else
 			{
-				this.$axios.post('http://localhost:4000/register', {username: this.username, email: this.email, password: this.password, location: this.location, first_name: this.first_name, last_name: this.last_name})
+				this.$axios.post('/api/register', {username: this.username, email: this.email, password: this.password, location: this.location, first_name: this.first_name, last_name: this.last_name})
 				.then (res =>
 				{
 					this.$toast.success(res.data.message);

@@ -17,17 +17,8 @@ export default {
 	},
 	mounted()
 	{
-		this.$axios.get('http://localhost:4000/users')
-		.then(async res =>
-		{
-			let users = res.data;
-			for (let user of users)
-			{
-				let res = await this.$axios(`http://localhost:4000/users/${user.id}/photos`);
-				user['photos'] = res.data;
-			}
-			this.users = users;
-		})
+		this.$axios.get('/api/users')
+		.then(async res => this.users = res.data)
 		.catch(err =>
 		{
 			console.error("Cannot load users");
@@ -50,7 +41,7 @@ export default {
 		},
 		like()
 		{
-			this.$axios.post(`http://localhost:4000/users/${this.$store.state.user.id}/liked/${this.users[0].id}`)
+			this.$axios.post(`/api/users/${this.$store.state.user.id}/liked/${this.users[0].id}`)
 			.then(res =>
 			{
 				this.liked = true;
