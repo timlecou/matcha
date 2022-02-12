@@ -84,5 +84,5 @@ CREATE TABLE "Message" (
   message text NOT NULL,
   FOREIGN KEY (from_id) REFERENCES "User"(id),
   FOREIGN KEY (to_id) REFERENCES "User"(id),
-  FOREIGN KEY (match_id) REFERENCES "User"(id)
+  FOREIGN KEY (match_id) REFERENCES "Matched_user"(id)
 );

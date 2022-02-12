@@ -43,7 +43,9 @@ export default {
 					});
 				}, err =>
 				{
-					console.log("Cannot get geolocation.")	
+					console.log("Cannot get geolocation.");
+					this.location.long = -1;
+					this.location.lat = -1;
 					resolve();
 				});
 			})

@@ -38,34 +38,16 @@ export default {
 		let markers = [];
 		for (let user of this.users)
 		{
+			console.log(user);
 			if (user.location.x === null || user.location.y === null)
 				continue ;
 			markers.push(new google.maps.Marker(
 			{
 				position: {lat: user.location.x, lng: user.location.y},
 				map: map,
-				icon: require("~/assets/images/output.png")
+				icon: user.photos[0]  | require("~/assets/images/output.png")
 			}));
 		}
-
-		// const marker = new google.maps.Marker(
-		// {
-		// 	position: {lat: 48.856610, lng: 2.3522218},
-		// 	map: map,
-		// 	icon: require("~/assets/images/output.png")
-		// });
-		// const marker2 = new google.maps.Marker(
-		// {
-		// 	position: {lat: 48.790367, lng: 2.455572},
-		// 	map: map,
-		// 	icon: require("~/assets/images/output.png")
-		// });
-		// const marker3 = new google.maps.Marker(
-		// {
-		// 	position: {lat: 48.801408, lng: 2.130122},
-		// 	map: map,
-		// 	icon: require("~/assets/images/output.png")
-		// });
 		let cluster = new MarkerClusterer({markers, map})
 	},
 	computed:

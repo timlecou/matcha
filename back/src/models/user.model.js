@@ -31,6 +31,7 @@ class User {
 
     register ()
     {
+        console.log(this.longitude, this.latitude);
         return new Promise((resolve, reject) =>
         {
             try
@@ -46,8 +47,8 @@ class User {
             }
             catch (err)
             {
-                console.err(err);
-                reject();
+                console.error(err);
+                reject(err);
             }
         })
     }

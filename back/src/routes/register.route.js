@@ -65,7 +65,7 @@ module.exports = function(app, io) {
 
               if (lat == -1 || long == -1) {
                 var geo;
-                if (req.headers.host == 'localhost:4000') {
+                if (req.headers.host == 'localhost') {
                   //have to get the external ip here
                   var external_ip = '66.249.70.37';
                   geo = geoip.lookup(external_ip);
@@ -92,7 +92,7 @@ module.exports = function(app, io) {
 
                 let token = new TokenGenerator(256, TokenGenerator.BASE62);
                 user.activation_token = token.generate();
-                var link = 'http://localhost:3000/active/' + user.activation_token;
+                var link = 'http://localhost/active/' + user.activation_token;
 
                   let mailDetails = {
                     from: 'noreply42matcha@gmail.com',

@@ -17,7 +17,7 @@ export default {
 		<div class="info">
 			<div class="photo_status">
 				<div class="profile_photo">
-					<img :src="require(`~/assets${user.profile_photo}`)"/>
+					<img :src="user.profile_photo"/>
 				</div>
 				<p class="status">
 					<span v-if="user.online">online</span>
@@ -37,7 +37,7 @@ export default {
 		</div>
 		<div class="photos_container">
 			<div class="photo" v-for="photo in user.photos">
-				<img :src="require(`~/assets${user.profile_photo}`)"/>
+				<img :src="user.profile_photo"/>
 			</div>
 		</div>
 		<div class="interests_div">

@@ -77,7 +77,7 @@ module.exports = function(app){
             files.forEach(element => {
               const photo = new Photo.Photo( {
                 user_id: id,
-                path: `uploads/users/${element.filename}`
+                path: `assets/users/${element.filename}`    // Assets for nginx route
               });    
               photo.insert();
             });

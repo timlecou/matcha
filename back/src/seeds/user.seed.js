@@ -52,10 +52,13 @@ async function generateUsers()
 		user.activation_token = "";
 		await user.register();
 
-		let photo = new PhotoModule.Photo();
-		photo.user_id = user.id;
-		photo.path = faker.image.avatar();
-		photo.insert();
+		for (let i = 0; i < 3; i++)
+		{
+			let photo = new PhotoModule.Photo();
+			photo.user_id = user.id;
+			photo.path = faker.image.avatar();
+			photo.insert();
+		}
 	}
 	return users;
 }

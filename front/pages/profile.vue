@@ -181,7 +181,7 @@ export default {
 <template>
 	<form class="profile">
 		<label class="profile_photo">
-			<img :src="require(`~/assets${profile_photo.path}`)"/>
+			<img :src="profile_photo.path"/>
 			<p class="score">250</p>
 		</label>
 		<div class="description_container">
@@ -238,7 +238,7 @@ export default {
 		<ExpandableSection title="Photos">
 			<div class="photos_container">
 				<div class="photo" v-for="photo in user.photos">
-					<img :src="require(`~/assets${photo.path}`)"/>
+					<img :src="photo.path"/>
 				</div>
 				<div class="photo new" v-for="photo in new_photos">
 					<img :src="photo.url"/>

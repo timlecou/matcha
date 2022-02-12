@@ -85,7 +85,7 @@ export default {
 <template>
 	<div class="swiper" :style="{transform: transform_rotation}">
 		<div class="photo_container" @mousedown="startMove">
-			<img :src="require(`~/assets/${photo}`)" v-show="key == photo_index" v-for="(photo, key) in user.photos"/>
+			<img :src="photo" v-show="key == photo_index" v-for="(photo, key) in user.photos"/>
 		</div>
 
 		<div class="header">

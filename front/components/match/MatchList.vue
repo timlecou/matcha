@@ -40,7 +40,7 @@ export default {
 		<div class="list">
 			<div class="match_item" @click="selectMatch(match)" v-for="match in matches">
 				<div class="photo">
-					<img :src="require(`~/assets/${match.photos.paths[0]}`)" v-if="match.photos.paths.length > 0"/>
+					<img :src="match.photos.paths[0]" v-if="match.photos.paths.length > 0"/>
 				</div>
 				<div class="text_container">
 					<p class="name_time">

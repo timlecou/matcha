@@ -77,7 +77,8 @@ export const actions =
 		const socket = io('/api', {
 			query: {
 				access_token: store.state.access_token
-			}
+			},
+			path: '/api/socket.io/'
 		});
 
 		socket.on("connect", () => {

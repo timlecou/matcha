@@ -75,7 +75,7 @@ export default {
 <template>
 	<div class="swiper" :class="{liked: this.liked, skiped: this.skiped, full: show_info}" :style="transform_style">
 		<div class="image_container">
-			<img :src="require(`~/assets/${photo}`)" v-show="key == photo_index" v-for="(photo, key) in user.photos"/>
+			<img :src="photo" v-show="key == photo_index" v-for="(photo, key) in user.photos"/>
 			<div class="photos_indicator">
 				<div class="indicator" @click="photo_index = key" :class="{selected: key == photo_index}" v-for="(photo, key) in user.photos"></div>
 			</div>

@@ -49,7 +49,7 @@ module.exports = function(app, io) {
                         }
                         delete element.password;
                         delete element.email;
-                        delete element.location;
+                        // delete element.location;
                         delete element.reset_password_token;
                         delete element.activation_token;
                     }
