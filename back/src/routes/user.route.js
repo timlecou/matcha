@@ -1,6 +1,7 @@
 const express = require('express')();
 const cors = require('cors');
 const validator = require('../validator/validator');
+const jwt = require('jsonwebtoken');
 
 const { Pool } = require('pg')
 const pool = new Pool()
@@ -10,6 +11,7 @@ const User = require('../models/user.model.js');
 
 const bodyParser = require('body-parser');
 const authMiddleware = require('../middlewares/auth.middleware.js');
+const { resourceLimits } = require('worker_threads');
 
 let app = express;
 app.use(bodyParser.json())
@@ -25,10 +27,15 @@ module.exports = function(app, io) {
     /**
      * GET
      */
-    app.get("/api/users", authMiddleware.getUserParams, (req, res) => {
+    app.get("/api/users", (req, res) => {
+
+        const token = req.headers.authorization.split(' ')[1];
+        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const user_id = decodedToken.userId;
+
         try {
             pool.query('SELECT * FROM "User" WHERE id != $1 ORDER BY id ASC',
-            [req.user_id],
+            [user_id],
             async (error, results) => {
                 if (error) throw error
                 if (results.rowCount == 0) {
@@ -36,20 +43,26 @@ module.exports = function(app, io) {
                 } else {
                     for (let element of results.rows)
                     {
+                        //check if the user has already liked
+                        pool.query('SELECT * FROM "Liked_user" WHERE liker_id = $1 AND liked_id = $2',
+                        [element.id, user_id],
+                        (error, results) => {
+                            if (error) throw error;
+                            if (results.rowCount > 0) {
+                                element.has_already_liked = true;
+                            }
+                        });
                         let tmp_user = new User.User();
                         tmp_user.id = element.id;
-                        try
-                        {
+                        try {
                             element["photos"] = await tmp_user.getPhotos();
                         }
-                        catch (err)
-                        {
-                            // res.status(500).json("Error while loading photos of user " + tmp_user.id);
-                            console.log(err);
+                        catch (err) {
+                            console.error(err);
+                            res.status(500).json("Error while loading photos of user " + tmp_user.id);
                         }
                         delete element.password;
                         delete element.email;
-                        // delete element.location;
                         delete element.reset_password_token;
                         delete element.activation_token;
                     }
@@ -278,6 +291,29 @@ module.exports = function(app, io) {
      * PUT
      * 
      */
+
+    /**
+     * Update the location of an user
+     */
+    app.put("/api/users/:id/location", authMiddleware.getUserParams, (req, res) => {
+
+        const   user_id = parseInt(req.params.id);
+        const   lat = parseFloat(req.body.lat);
+        const   long = parseFloat(req.body.long);
+
+        try {
+            pool.query('UPDATE "User" SET location = point($1, $2) WHERE id = $3',
+            [lat, long, user_id],
+            (error) => {
+                if (error) throw error;
+                res.status(204).json({ message: 'location successfully updated' });
+            });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(400).json({ message: err.message });
+        }
+    });
 
     /**
     * Set an interest to a user                 //TODO check si les interest existent
