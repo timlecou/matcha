@@ -26,7 +26,7 @@ module.exports = function(app, io) {
     /**
      * Input messages in the DB
      */
-    app.post('/matches/:match_id/messages', (req, res) => {
+    app.post("/api/matches/:match_id/messages", (req, res) => {
         
         const   match_id = req.params.match_id;
         const   message = req.body.content;

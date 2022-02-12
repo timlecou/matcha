@@ -34,7 +34,7 @@ module.exports = function(app) {
      *
      */
 
-     app.get("/interests", (req, res) => {
+     app.get("/api/interests", (req, res) => {
 
          try {
              pool.query('SELECT * FROM "Interest"',
@@ -56,7 +56,7 @@ module.exports = function(app) {
       *
       */
 
-      app.post("/interests", (req, res) => {
+      app.post("/api/interests", (req, res) => {
 
           const interest = new Interest.Interest({
               name: req.body.name

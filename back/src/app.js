@@ -43,12 +43,14 @@ const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: {
     origin: "*",
-  }
+  },
+  path: '/api/socket.io/'
 });
 
 
 io.on('connection', (socket) =>
 {
+  socket.emit('connect')
   // Emit dans une room
   // io.to("some room").emit("some event", {qdd: 333});
 

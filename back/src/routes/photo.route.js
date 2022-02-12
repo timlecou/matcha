@@ -32,7 +32,7 @@ module.exports = function(app){
     /**
      * GET
      */
-    app.get("/users/:id/photos", (req, res) => {
+    app.get("/api/users/:id/photos", (req, res) => {
         const id = parseInt(req.params.id);
 
         try {
@@ -61,7 +61,7 @@ module.exports = function(app){
      * POST
      */                 
 
-    app.post("/users/:id/photos", authMiddleware.getUserParams, multerMiddleware, (req, res) => {
+    app.post("/api/users/:id/photos", authMiddleware.getUserParams, multerMiddleware, (req, res) => {
       const id = parseInt(req.params.id);
       const files = req.files;
 

@@ -16,7 +16,7 @@ app.use(cors());
 
 module.exports = function(app) {
 
-    app.get('/search', authMiddleware.getUserBody, (req, res) => {
+    app.get('/api/search', authMiddleware.getUserBody, (req, res) => {
         const age_min = parseInt(req.body.age_min);
         const age_max = parseInt(req.body.age_max);
         const score_min = parseInt(req.body.score_min);

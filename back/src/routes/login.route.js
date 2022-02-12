@@ -22,7 +22,7 @@ app.use(cors());
 
 module.exports = function(app, io) {
 
-    app.post("/login", (req, res) => {
+    app.post("/api/login", (req, res) => {
       var user;
       var lat = parseFloat(req.body.lat);
       var long = parseFloat(req.body.long);

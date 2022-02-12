@@ -40,7 +40,7 @@ module.exports = function(app, io) {
     /**
      * Register a new user and send a confirmation email with a link
      */
-    app.post("/register", (req, res) => {
+    app.post("/api/register", (req, res) => {
 
       try {
         pool.query('SELECT * FROM "User" WHERE username = $1 OR email = $2',
@@ -127,7 +127,7 @@ module.exports = function(app, io) {
     /**
      * Activate the user using its unique token
      */
-    app.post("/active", (req, res) => {
+    app.post("/api/active", (req, res) => {
       const token = req.body.token;
 
       try {

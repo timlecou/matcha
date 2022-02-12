@@ -82,7 +82,7 @@ export const actions =
 		});
 
 		socket.on("connect", () => {
-			console.log("SOCKET CONNECTED !!!");
+			alert("SOCKET CONNECTED !!!");
 		});
 
 		socket.on('new_connection', data =>

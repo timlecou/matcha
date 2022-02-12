@@ -35,7 +35,7 @@ module.exports = function(app) {
     /**
      * create the reset_password_token and send an email with the password reinitialization link
      */
-    app.post("/reset_password", (req, res) => {
+    app.post("/api/reset_password", (req, res) => {
         const username = req.body.username;
 
         try {
@@ -84,7 +84,7 @@ module.exports = function(app) {
     /**
      * change the password of a user, using its reset_password_token to authenticate the user
      */
-    app.post("/reset_password/:token", (req, res) => {
+    app.post("/api/reset_password/:token", (req, res) => {
         console.log('reset password');
         const token = req.params.token;
         const new_password = req.body.new_password;

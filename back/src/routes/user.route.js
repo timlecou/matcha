@@ -25,7 +25,7 @@ module.exports = function(app, io) {
     /**
      * GET
      */
-    app.get("/users", authMiddleware.getUserParams, (req, res) => {
+    app.get("/api/users", authMiddleware.getUserParams, (req, res) => {
         try {
             pool.query('SELECT * FROM "User" WHERE id != $1 ORDER BY id ASC',
             [req.user_id],
@@ -66,7 +66,7 @@ module.exports = function(app, io) {
     /**
      * gets a user by its id
      */
-    app.get("/users/:id", authMiddleware.getUserParams, (req, res) => {
+    app.get("/api/users/:id", authMiddleware.getUserParams, (req, res) => {
         const   id = parseInt(req.params.id);
 
         try {
@@ -90,7 +90,7 @@ module.exports = function(app, io) {
     /**
      * gets a user's matches
      */
-    app.get("/users/:id/matches", authMiddleware.getUserParams, (req, res) => {
+    app.get("/api/users/:id/matches", authMiddleware.getUserParams, (req, res) => {
         const   id = parseInt(req.params.id);
         try {
             pool.query('SELECT FROM "User" WHERE id = $1',
@@ -147,7 +147,7 @@ module.exports = function(app, io) {
     /**
      * Block an other user
      */
-    app.post("/users/:blocker_id/blocked/:blocked_id", authMiddleware.block, (req, res) => {
+    app.post("/api/users/:blocker_id/blocked/:blocked_id", authMiddleware.block, (req, res) => {
         const blocker_id = parseInt(req.params.blocker_id);
         const blocked_id = parseInt(req.params.blocked_id);
 
@@ -182,7 +182,7 @@ module.exports = function(app, io) {
     /**
      * Like an other user           //TODO verifier que le match n'existe pas deja
      */
-    app.post("/users/:liker_id/liked/:liked_id", authMiddleware.like, (req, res) => {
+    app.post("/api/users/:liker_id/liked/:liked_id", authMiddleware.like, (req, res) => {
         const liker_id = parseInt(req.params.liker_id);
         const liked_id = parseInt(req.params.liked_id);
 
@@ -236,7 +236,7 @@ module.exports = function(app, io) {
     /**
      * See an other user's profil
      */
-    app.post("/users/:viewer_id/viewed/:viewed_id", authMiddleware.view, (req, res) => {
+    app.post("/api/users/:viewer_id/viewed/:viewed_id", authMiddleware.view, (req, res) => {
         
         const   viewer_id = parseInt(req.params.viewer_id);
         const   viewed_id = parseInt(req.params.viewed_id);
@@ -282,7 +282,7 @@ module.exports = function(app, io) {
     /**
     * Set an interest to a user                 //TODO check si les interest existent
     */
-    app.put("/users/:user_id/interests", authMiddleware.getUserParams, (req, res) => {
+    app.put("/api/users/:user_id/interests", authMiddleware.getUserParams, (req, res) => {
 
         const user_id = parseInt(req.params.user_id);
         const interests = req.body.name;
@@ -350,7 +350,7 @@ module.exports = function(app, io) {
     /**
      * Update a user
      */
-    app.put("/users/:id", authMiddleware.getUserParams, (req, res) => {
+    app.put("/api/users/:id", authMiddleware.getUserParams, (req, res) => {
         const user_id = parseInt(req.params.id);
         const user = new User.User({id: user_id, ...req.body});
         
