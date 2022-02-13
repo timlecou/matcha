@@ -38,7 +38,7 @@ module.exports = function(app, io) {
                 user = results.rows[0];
 
                 bcrypt.compare(req.body.password, user.password)
-                .then(valid => {
+                .then(async valid => {
                   if (!valid) {
                     return res.status(401).json({ error: 'incorrect password' });
                   }
@@ -72,8 +72,12 @@ module.exports = function(app, io) {
                   delete user.reset_password_token;
                   delete user.activation_token;
 
+                  const userModel = new User.User({ id: user.id });
+
                   res.status(200).json({
                     user: user,
+                    photos: await userModel.getPhotos(),
+                    interests: await userModel.getInterests(),
                     token: jwt.sign(
                       { userId: user.id },
                       process.env.ACCESS_TOKEN_SECRET,

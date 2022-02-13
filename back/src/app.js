@@ -88,5 +88,6 @@ io.on('disconnection', (socket) => {
  const  interestRoute = require('./routes/interest.route')(app);
  const  resetPasswordRoute = require('./routes/reset_password.route')(app);
  const  messageRoute = require('./routes/message.route')(app, io);
+ const  searchRoute = require('./routes/search.route')(app);
 
 server.listen(4000, () => console.log('Server started on port 4000'))

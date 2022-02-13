@@ -65,8 +65,6 @@ module.exports = function(app){
       const id = parseInt(req.params.id);
       const files = req.files;
 
-      console.log(req);
-
       try {
         pool.query('SELECT * FROM "Photo" WHERE user_id = $1',
         [id],

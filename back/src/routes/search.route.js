@@ -21,8 +21,10 @@ module.exports = function(app) {
         const age_max = parseInt(req.body.age_max);
         const score_min = parseInt(req.body.score_min);
         const score_max = parseInt(req.body.score_max);
-        const lat = parseFloat(req.body.location.lat);
-        const long = parseFloat(req.body.location.long);
+        // const lat = parseFloat(req.body.location.lat);
+        // const long = parseFloat(req.body.location.long);
+        const lat = parseFloat(req.body.lat);   //to remove after test with postman
+        const long = parseFloat(req.body.long);
         const tabs = req.body.tags;
         const sort = req.body.sort;
 

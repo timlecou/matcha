@@ -136,8 +136,39 @@ class User {
                 photos.paths = paths;
                 for (let element of results.rows)
                     photos.paths.push(element.path);
+                // console.log(photos.paths);
                 resolve(photos.paths);
             });
+        });
+    }
+
+    async getInterests()
+    {
+        return new Promise((resolve, reject) =>
+        {
+            try {
+                pool.query('SELECT * FROM "Interest_User" WHERE user_id = $1',
+                [this.id],
+                (error, results) =>
+                {
+                    if (error)
+                        reject(error);
+                    var interests = [];
+        
+                    for (let element of results.rows) {
+                        pool.query('SELECT * FROM "Interest" WHERE id = $1',
+                        [element.interest_id],
+                        (error, results) => {
+                            if (error) throw error;
+                            interests.push(results.rows[0].name);
+                        });
+                    }
+                    resolve(interests);
+                });
+            }
+            catch (error) {
+                console.error(error);
+            }
         });
     }
 }
