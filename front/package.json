@@ -14,10 +14,15 @@
     "@nuxtjs/toast": "^3.3.1",
     "axios": "^0.24.0",
     "core-js": "^3.9.1",
+    "i": "^0.3.7",
     "nuxt": "^2.15.3",
     "socket.io-client": "^4.4.1",
     "vue-input-autosize": "^0.2.2",
+    "vue-property-decorator": "^9.1.2",
     "vuejs-google-maps": "^0.2.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@nuxtjs/vuetify": "^1.12.3",
+    "vue": "^2.6.12"
+  }
 }

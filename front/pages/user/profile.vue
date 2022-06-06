@@ -1,5 +1,5 @@
 <script>
-import ExpandableSection from '../components/ExpandableSection.vue';
+import ExpandableSection from '../../components/ExpandableSection.vue';
 
 export default {
 	components: { ExpandableSection },

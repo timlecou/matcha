@@ -1,5 +1,5 @@
 <script>
-import SearchBar from '../components/search/SearchBar.vue';
+import SearchBar from '../../components/search/SearchBar.vue';
 
 export default {
 	name: "Search",

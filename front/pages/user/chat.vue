@@ -1,6 +1,6 @@
 <script>
-import MatchList from '../components/match/MatchList.vue'
-import MatchView from '../components/match/MatchView.vue'
+import MatchList from '../../components/match/MatchList.vue'
+import MatchView from '../../components/match/MatchView.vue'
 
 /**
  * {
