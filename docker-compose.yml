@@ -1,0 +1,76 @@
+version: "3"
+
+services:
+  back:
+    build: ./back/
+    container_name: website-back
+    restart: always
+    volumes:
+      - ./back/src:/usr/src/app/src
+    environment:
+      PORT: 4000
+      FRONT_URI: "http://localhost:3000"
+      PGHOST: website-db
+      PGUSER: db_user
+      PGPASSWORD: db_password
+      PGDATABASE: matcha
+      PGPORT: 5432
+      ACCESS_TOKEN_SECRET: 8GR77w1SxCFil0hVJO15u8zEfmu4xtolovTHR6PfvtKv4iHBXqOzSs7drOEg
+      REFRESH_TOKEN_SECRET: znigLxd6wOjCLzpOyAglIpt6zzGJeOtHmCOCXhUx8AGdU6TCXSPHWOoZuqt3
+    command: "npm run start"
+    depends_on:
+      - db
+
+  front:
+    build: ./front/
+    container_name: website-front
+    restart: always
+    volumes:
+      - ./front/components:/usr/src/app/components
+      - ./front/layouts:/usr/src/app/layouts
+      - ./front/pages:/usr/src/app/pages
+      - ./front/store:/usr/src/app/store
+      - ./front/services:/usr/src/app/services
+      - ./back/src/uploads:/usr/src/app/assets/uploads
+    environment:
+      PORT: 3000
+      BACK_URI: "/api"
+    command: "npm run dev"
+    depends_on:
+      - back
+    
+  db:
+    container_name: website-db
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
+      POSTGRES_DB: matcha
+    volumes:
+     - ./postgres/dbdata:/var/lib/postgresql/data
+     - ./postgres/db.sql:/docker-entrypoint-initdb.d/db.sql
+
+  phppgadmin:
+    container_name: phppgadmin
+    image: neimheadh/phppgadmin:7.13.0
+    ports:
+      - 1234:80
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=db_user
+      - POSTGRES_PASS=db_password
+    depends_on:
+      - db
+
+  nginx:
+    container_name: nginx
+    image: nginx
+    volumes:
+        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+        - ./back/src/uploads:/usr/src/assets
+    ports:
+        - 80:80
+    depends_on:
+        - back
+        - front
