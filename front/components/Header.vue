@@ -62,6 +62,8 @@ export default {
 	justify-content: center;
 	width: 100%;
 	background: white;
+	position: sticky;
+	top: 0;
 }
 
 .content
