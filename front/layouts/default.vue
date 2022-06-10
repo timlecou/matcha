@@ -1,7 +1,9 @@
 <template>
 	<div class="layout">
 		<Header/>
-		<Nuxt />
+		<main>
+			<Nuxt/>
+		</main>
 	</div>
 </template>
 
@@ -12,6 +14,13 @@
 	width: 100%;
 	display: flex;
 	flex-direction: column;
+}
+
+main
+{
+	display: flex;
+	justify-content: center;
+	padding: 2rem 0;
 }
 
 </style>
