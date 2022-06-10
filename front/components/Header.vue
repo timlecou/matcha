@@ -78,7 +78,7 @@ export default {
 
 .content > *
 {
-	flex: 1 0 auto;
+	flex: 1 0 33.33%;
 }
 
 .brand
