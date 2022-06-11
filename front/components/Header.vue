@@ -21,7 +21,7 @@ export default {
 <template>
 	<div class="header">
 		<div class="content">
-			<p class="brand">Matcha</p>
+			<NuxtLink to="/" class="brand">Matcha</NuxtLink>
 
 			<div class="input_container">
 				<input type="text" placeholder="Rechercher"/>
