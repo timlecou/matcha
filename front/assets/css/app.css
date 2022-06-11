@@ -5,16 +5,21 @@
 	--primary-background-color: white;
 	--primary-color: rgb(38, 38, 38);
 	--secondary-background-color: rgb(250, 250, 250);
-	--secondary-text: rgb(142, 142, 142);
+	--secondary-text-color: rgb(142, 142, 142);
 
 	--highlight-background: rgb(239, 239, 239);
 	--separator-color: rgb(219, 219, 219);
 	--secondary-separator-color: rgb(239, 239, 239);
 
 	--photo-selector-default-color: rgb(168, 168, 168);
-	--photo-selector-selected-color: rgb(0, 149, 246);
+	--primary-blue: rgb(0, 149, 246);
 
 	--link-color: rgb(0, 55, 107);
+}
+
+*
+{
+	box-sizing: border-box;
 }
 
 body
@@ -38,11 +43,12 @@ input
 	display: block;
 	background: var(--highlight-background);
 	outline: none;
+	width: 100%;
 }
 
 input::placeholder
 {
-	color: var(--secondary-text);
+	color: var(--secondary-text-color);
 }
 
 a
@@ -55,4 +61,16 @@ svg
 {
 	width: 100%;
 	height: 100%;
+}
+
+h1, h2, h3, h4, h5
+{
+	font-weight: normal;
+}
+
+button
+{
+	border: none;
+	outline: none;
+	cursor: pointer;
 }
