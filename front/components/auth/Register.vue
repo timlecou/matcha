@@ -4,17 +4,29 @@ export default {
 	{
 		return {
 			email: "",
-			password: ""
+			password: "",
+			first_name: "",
+			last_name: ""
 		}
 	}
 }
 </script>
 
 <template>
-	<div class="login">
+	<div class="register">
 		<section>
-			<h1>Login</h1>
+			<h1>Register</h1>
 			<form>
+				<div class="flex">
+					<label class="field first_name" :class="{active: first_name != ''}">
+						<input type="text" autocomplete="first_name" v-model="first_name"/>
+						<span>First Name</span>
+					</label>
+					<label class="field" :class="{active: last_name != ''}">
+						<input type="last_name" autocomplete="email" v-model="last_name"/>
+						<span>Last Name</span>
+					</label>
+				</div>
 				<label class="field" :class="{active: email != ''}">
 					<input type="email" autocomplete="email" v-model="email"/>
 					<span>E-mail</span>
@@ -23,7 +35,7 @@ export default {
 					<input type="password" autocomplete="current-password" v-model="password"/>
 					<span>Password</span>
 				</label>
-				<button>Login</button>
+				<button>Register</button>
 				<NuxtLink to="/" class="forgotten_password">Forgotten password ?</NuxtLink>
 			</form>
 		</section>
@@ -58,6 +70,7 @@ form
 {
 	display: flex;
 	flex-direction: column;
+	max-width: 100%;
 	width: 100%;
 	padding: 1rem 2rem;
 }
@@ -75,8 +88,14 @@ form > button:not(:first-child)
 	border: solid 1px var(--separator-color);
 	padding: 1rem 0.5rem 0.25rem 0.5rem;
 	margin: 0 auto;
+	max-width: 100%;
 	width: 100%;
 	min-width: 15rem;
+}
+
+.field.first_name
+{
+	margin-right: 1rem;
 }
 
 .field > span

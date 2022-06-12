@@ -19,7 +19,6 @@ main
 {
 	display: flex;
 	justify-content: center;
-	padding: 2rem 0;
 }
 
 input
