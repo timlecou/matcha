@@ -21,7 +21,7 @@ export default {
 <template>
 	<div class="header">
 		<div class="content">
-			<NuxtLink to="/" class="brand">Matcha</NuxtLink>
+			<NuxtLink to="/browse" class="brand">Matcha</NuxtLink>
 
 			<div class="input_container">
 				<input type="text" placeholder="Rechercher"/>
@@ -29,22 +29,22 @@ export default {
 
 			<nav>
 				<div>
-					<NuxtLink to="/">
+					<NuxtLink to="/browse">
 						<HomeSVG/>
 					</NuxtLink>
 				</div>
 				<div>
-					<NuxtLink to="/">
+					<NuxtLink to="/browse">
 						<DirectSVG/>
 					</NuxtLink>
 				</div>
 				<div>
-					<NuxtLink to="/">
+					<NuxtLink to="/browse">
 						<HeartSVG/>
 					</NuxtLink>
 				</div>
 				<div>
-					<NuxtLink to="/">
+					<NuxtLink to="/browse">
 						<AvatarSVG/>
 					</NuxtLink>
 				</div>
