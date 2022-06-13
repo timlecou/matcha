@@ -4,14 +4,16 @@ import HomeSVG from '~/assets/icons/home.svg?inline';
 import DirectSVG from '~/assets/icons/direct.svg?inline';
 import HeartSVG from '~/assets/icons/heart.svg?inline';
 import AvatarSVG from '~/assets/icons/avatar.svg?inline';
+import NotificationPopup from './notification/NotificationPopup';
 
 export default {
 	name: 'Header',
-	components: { HomeSVG, DirectSVG, HeartSVG, AvatarSVG },
+	components: { HomeSVG, DirectSVG, HeartSVG, AvatarSVG, NotificationPopup },
 	data()
 	{
 		return {
-			search: ''
+			search: '',
+			show_notification_popup: false
 		}
 	}
 }
@@ -38,10 +40,11 @@ export default {
 						<DirectSVG/>
 					</NuxtLink>
 				</div>
-				<div>
-					<NuxtLink to="/browse">
+				<div class="notification_link">
+					<a href="#" @click="show_notification_popup = !show_notification_popup">
 						<HeartSVG/>
-					</NuxtLink>
+					</a>
+					<NotificationPopup v-if="show_notification_popup"/>
 				</div>
 				<div>
 					<NuxtLink to="/browse">
@@ -50,6 +53,7 @@ export default {
 				</div>
 			</nav>
 		</div>
+		<div class="popup_fade" @click="show_notification_popup = !show_notification_popup" v-if="show_notification_popup" ></div>
 	</div>
 </template>
 
@@ -64,6 +68,7 @@ export default {
 	background: white;
 	position: sticky;
 	top: 0;
+	z-index: 1;
 }
 
 .content
@@ -115,6 +120,16 @@ nav
 nav > div:not(:first-child)
 {
 	margin-left: 1.5rem;
+}
+
+.popup_fade
+{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: -1;
 }
 
 </style>

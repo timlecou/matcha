@@ -26,7 +26,7 @@ export default {
 		<div class="background"></div>
 		<section class="overview">
 			<h1>Matcha</h1>
-			<NuxtLink class="sign_in_button" to="/auth">Explore profiles</NuxtLink>
+			<NuxtLink class="sign_in_button" to="/browse">Explore profiles</NuxtLink>
 		</section>
 	</div>
 </template>
