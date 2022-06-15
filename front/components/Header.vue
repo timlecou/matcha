@@ -25,7 +25,7 @@ export default {
 		<div class="content">
 			<NuxtLink to="/browse" class="brand">Matcha</NuxtLink>
 
-			<div class="input_container">
+			<div class="search_bar">
 				<input type="text" placeholder="Rechercher"/>
 			</div>
 
@@ -92,9 +92,9 @@ export default {
 	font-size: 2rem;
 }
 
-.input_container
+.search_bar
 {
-	margin: 0 1rem;
+	padding: 0 1rem;
 }
 
 input
@@ -130,6 +130,36 @@ nav > div:not(:first-child)
 	width: 100vw;
 	height: 100vh;
 	z-index: -1;
+}
+
+@media screen and (max-width: 550px)
+{
+	.header
+	{
+		position: static;
+	}
+
+	.brand
+	{
+		width: 100%;
+		text-align: center;
+	}
+
+	.search_bar
+	{
+		display: none;
+	}
+
+	nav
+	{
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		justify-content: space-around;
+		padding: 0.5rem 0;
+		background: var(--primary-background-color);
+		border-top: solid 1px var(--separator-color);
+	}
 }
 
 </style>
