@@ -1,8 +1,10 @@
 <script>
 
 import MoreSVG from '~/assets/icons/more-horizontal.svg?inline';
-import RightChevronSVG from '~/assets/icons/chevron-right.svg?inline';
-import LeftChevronSVG from '~/assets/icons/chevron-left.svg?inline';
+import RightChevronSVG from '~/assets/icons/chevron-right-surrounded.svg?inline';
+import LeftChevronSVG from '~/assets/icons/chevron-left-surrounded.svg?inline';
+
+const ANGLE_THRESHOLD = 5;
 
 export default {
 	components: { MoreSVG, RightChevronSVG, LeftChevronSVG },
@@ -18,6 +20,8 @@ export default {
 	{
 		return {
 			photo_index: 0,
+			touchstartX: 0,
+			swipe_angle: 0,
 		}
 	},
 	computed:
@@ -25,6 +29,10 @@ export default {
 		card_size()
 		{
 			return '470px';
+		},
+		swipe_transform_rotation()
+		{
+			return {transform: `rotateZ(${this.swipe_angle}deg)`};
 		}
 	},
 	methods:
@@ -36,14 +44,60 @@ export default {
 				this.photo_index = this.user.photos.length - 1;
 			else if (this.photo_index < 0)
 				this.photo_index = 0;
-		}
+		},
+		swipeStart(e)
+		{
+			if (e.type == 'touchstart')
+				this.touchstartX = e.changedTouches[0].clientX;
+			else
+			{
+				this.touchstartX = e.clientX;
+				document.addEventListener('mousemove', this.swipeMove);
+				document.addEventListener('mouseup', this.swipeEnd);
+			}
+		},
+		swipeMove(e)
+		{
+			let diffX;
+			if (e.type == 'touchmove')
+				diffX = e.changedTouches[0].clientX - this.touchstartX;
+			else
+				diffX = e.clientX - this.touchstartX;
+			let height = this.$refs[`user_card_${this.user.id}`].offsetHeight;
+
+			this.swipe_angle = Math.atan(diffX / height) * 57,2958;
+
+			if (this.swipe_angle > ANGLE_THRESHOLD)
+				this.$emit('grow_taller', 'like');
+			else if (this.swipe_angle < -ANGLE_THRESHOLD)
+				this.$emit('grow_taller', 'skip');
+			else
+				this.$emit('grow_smaller');
+		},
+		swipeEnd(e)
+		{
+			if (this.swipe_angle > ANGLE_THRESHOLD)
+				this.$emit('like');
+			else if (this.swipe_angle < -ANGLE_THRESHOLD)
+				this.$emit('skip');
+				
+			if (e.type == 'mouseup')
+			{
+				document.removeEventListener('mousemove', this.swipeMove);
+				document.removeEventListener('mouseup', this.swipeEnd);
+			}
+			this.$emit('grow_smaller');
+			this.swipe_angle = 0;
+		},
 	}
 }
 
 </script>
 
 <template>
-	<article class="user_card">
+	<article class="user_card no-select" :ref="`user_card_${user.id}`" :style="swipe_transform_rotation"
+		@touchstart="swipeStart" @touchmove="swipeMove" @touchend="swipeEnd"
+		@mousedown="swipeStart">
 		<header>
 			<NuxtLink to="/">
 				{{ user.username }}
@@ -90,6 +144,7 @@ export default {
 	border-radius: 0.5rem;
 	background: white;
 	padding-bottom: 1rem;
+	transform-origin: center bottom;
 }
 
 header
@@ -120,6 +175,22 @@ header
 	width: 100%;
 	height: 100%;
 	object-fit: contain;
+}
+
+.image
+{
+	position: relative;
+	max-width: 100%;
+}
+
+.image::after
+{
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
 
 .image:not(.selected)
@@ -189,7 +260,7 @@ header
 
 .tag
 {
-	color: var(--link-color);
+	color: var(--tag-color);
 	margin: 0 0.125rem;
 }
 

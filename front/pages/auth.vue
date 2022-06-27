@@ -1,6 +1,6 @@
 <script>
 
-import ChevronLeftSVG from '@/assets/icons/chevron-left.svg?inline';
+import ChevronLeftSVG from '@/assets/icons/chevron-left-surrounded.svg?inline';
 import Login from '../components/auth/Login';
 import Register from '../components/auth/Register.vue';
 

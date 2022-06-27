@@ -36,7 +36,7 @@ export default {
 					</NuxtLink>
 				</div>
 				<div>
-					<NuxtLink to="/browse">
+					<NuxtLink to="/matches">
 						<DirectSVG/>
 					</NuxtLink>
 				</div>
@@ -47,7 +47,7 @@ export default {
 					<NotificationPopup v-if="show_notification_popup"/>
 				</div>
 				<div>
-					<NuxtLink to="/browse">
+					<NuxtLink to="/profile">
 						<AvatarSVG/>
 					</NuxtLink>
 				</div>

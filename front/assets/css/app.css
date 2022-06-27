@@ -3,7 +3,7 @@
 :root
 {
 	--primary-background-color: white;
-	--primary-color: rgb(38, 38, 38);
+	--primary-text-color: rgb(38, 38, 38);
 	--secondary-background-color: rgb(250, 250, 250);
 	--secondary-text-color: rgb(142, 142, 142);
 
@@ -13,11 +13,10 @@
 
 	--photo-selector-default-color: rgb(168, 168, 168);
 	--primary-blue: rgb(0, 149, 246);
-
-	--link-color: rgb(0, 55, 107);
-
+	--tag-color: rgb(0, 55, 107);
 	--like-color: rgb(52, 213, 184);
 	--skip-color: rgb(255, 108, 108);
+	--remove-color: rgb(237, 73, 86);
 }
 
 *
@@ -33,7 +32,7 @@ body
 	max-width: 100vw;
 	min-height: 100vh;
 	background-color: var(--secondary-background-color);
-	color: var(--primary-color);
+	color: var(--primary-text-color);
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -42,12 +41,15 @@ p
 	margin: 0;
 }
 
-input
+input,
+textarea
 {
 	display: block;
 	background: var(--highlight-background);
 	outline: none;
 	width: 100%;
+	font-size: inherit;
+	font-family: inherit;
 }
 
 input::placeholder
@@ -63,6 +65,7 @@ a
 
 svg
 {
+	display: block;
 	width: 100%;
 	height: 100%;
 }
@@ -83,6 +86,7 @@ button
 img
 {
 	width: 100%;
+	height: 100%;
 	max-width: 100%;
 	max-height: 100%;
 }
@@ -101,4 +105,9 @@ img
 	-moz-user-select: none; /* Old versions of Firefox */
 	-ms-user-select: none; /* Internet Explorer/Edge */
 	user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
+.bold
+{
+	font-weight: 600;
 }
