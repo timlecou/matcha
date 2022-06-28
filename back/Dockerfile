@@ -1,14 +1,11 @@
-FROM node:15
+FROM node:15-alpine
 
 WORKDIR /usr/src/app
 
-RUN npm i -g nodemon
-
 COPY package.json .
 
-# To keep the installation of modules in docker cache
 RUN npm install
 
 COPY . .
 
-EXPOSE 4000
+EXPOSE 3000
