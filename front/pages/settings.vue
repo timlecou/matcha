@@ -14,7 +14,8 @@ const user = {
 	email: "yass@gmail.com",
 	tel: "06 10 10 10 10",
 	biography: "Je suis un super test de profil. J'aime la bécane et Tatiana :)",
-	gender: "Man",
+	gender: "M",
+	sexual_orientation: "F",
 	photos:
 	[
 		{

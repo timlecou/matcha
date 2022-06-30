@@ -62,8 +62,17 @@ export default {
 					<td>Gender</td>
 					<td>
 						<select v-model="user.gender">
-							<option>Man</option>
-							<option>Woman</option>
+							<option value="M">Man</option>
+							<option value="F">Woman</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Sexual orientation</td>
+					<td>
+						<select v-model="user.sexual_orientation">
+							<option value="M">Man</option>
+							<option value="F">Woman</option>
 						</select>
 					</td>
 				</tr>
