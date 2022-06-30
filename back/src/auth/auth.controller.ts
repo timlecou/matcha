@@ -4,6 +4,10 @@ import { Service } from "typedi";
 import { UnauthorizedException } from "../exceptions/Unauthorized.exception";
 import { UserService } from "../user/user.service";
 import { LoginDTO, RegisterDTO } from "./auth.dto";
+import jwt from 'jsonwebtoken';
+import { User } from "../user/user.entity";
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 @Service()
 export class AuthController
@@ -22,11 +26,14 @@ export class AuthController
 		{
 			const login_dto = plainToInstance(LoginDTO, req.body);
 			this.user_service.checkLogin(login_dto.email, login_dto.password)
-			.then(user =>
+			.then((user: User | null) =>
 			{
 				if (user === null)
 					reject(new UnauthorizedException("Bad credentials"));
-				resolve(user);
+
+				user = user as User;
+				const access_token = jwt.sign({user_id: user.id}, JWT_SECRET as string);
+				resolve({access_token});
 			})
 			.catch(reject);
 		})

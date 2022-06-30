@@ -31,7 +31,7 @@ export class UserService
 	async checkLogin(username: String, password: String)
 	{
 		password = await this.hashPassword(password as string);
-		return new Promise((resolve) =>
+		return new Promise<User | null>((resolve) =>
 		{
 			this.user_repository.getUserByEmailAndPassword(username, password)
 			.then(user => resolve(user))

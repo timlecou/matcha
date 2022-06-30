@@ -20,7 +20,6 @@ export function handleController(controller: any, method: any)
 		}
 		catch (e)
 		{
-			console.error("Error");
 			if (e instanceof HttpException)
 			{
 				res.status(e.code as number);
