@@ -1,3 +1,4 @@
 postgres/dbdata
-front/node_modules
-back/node_modules
+*/node_modules
+.env
+*/.env

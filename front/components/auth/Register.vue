@@ -3,10 +3,11 @@ export default {
 	data()
 	{
 		return {
+			username: "",
 			email: "",
 			password: "",
 			first_name: "",
-			last_name: ""
+			last_name: "",
 		}
 	}
 }
@@ -17,6 +18,10 @@ export default {
 		<section>
 			<h1>Register</h1>
 			<form>
+				<label class="field" :class="{active: username != ''}">
+					<input type="text" autocomplete="username" v-model="username"/>
+					<span>Username</span>
+				</label>
 				<div class="flex">
 					<label class="field first_name" :class="{active: first_name != ''}">
 						<input type="text" autocomplete="first_name" v-model="first_name"/>

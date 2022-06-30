@@ -16,8 +16,8 @@ services:
       PGPASSWORD: db_password
       PGDATABASE: matcha
       PGPORT: 5432
-      ACCESS_TOKEN_SECRET: 8GR77w1SxCFil0hVJO15u8zEfmu4xtolovTHR6PfvtKv4iHBXqOzSs7drOEg
-      REFRESH_TOKEN_SECRET: znigLxd6wOjCLzpOyAglIpt6zzGJeOtHmCOCXhUx8AGdU6TCXSPHWOoZuqt3
+    env_file:
+      - ./back/.env
     command: "npm run start:dev"
     depends_on:
       - db

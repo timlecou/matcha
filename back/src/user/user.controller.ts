@@ -1,16 +1,18 @@
-import { Response } from 'express';
 import { Service } from 'typedi';
+import { User } from './user.entity';
+import { UserService } from './user.service';
 
 @Service()
 export class UserController
 {
-	constructor()
+	constructor(private user_service: UserService)
 	{
 		
 	}
 
-	getAllUsers(res: Response) : void
+	async getAllUsers() : Promise<User[]>
 	{
-		res.json({message: "Success"})
+		const users = await this.user_service.getAllUsers();
+		return users;
 	}
 }

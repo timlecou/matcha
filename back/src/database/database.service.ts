@@ -1,18 +1,18 @@
-import { Service } from 'typedi';
 import { Pool } from 'pg';
+import { Service } from 'typedi';
 
 @Service()
 export class DatabaseService
 {
-	pool : Pool = null;
+	private pool : any;
+
 	constructor()
 	{
-		this.pool = new Pool({
-			user: process.env.PGUSER,
-			host: process.env.PGHOST,
-			database: process.env.PGDATABASE,
-			password: process.env.PGPASSWORD,
-			port: 5432,
-		})
+		this.pool = new Pool();
+	}
+
+	getPool(): Pool
+	{
+		return this.pool;
 	}
 }
