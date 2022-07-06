@@ -1,5 +1,5 @@
 import { Expose } from "class-transformer";
-import { IsAlpha, IsDefined, IsEmail, IsNotEmpty } from "class-validator";
+import { IsDefined, IsEmail, IsNotEmpty } from "class-validator";
 
 export class RegisterDTO
 {
@@ -15,13 +15,11 @@ export class RegisterDTO
 
 	@Expose()
 	@IsDefined()
-	@IsAlpha()
 	@IsNotEmpty()
 	first_name: String;
 
 	@Expose()
 	@IsDefined()
-	@IsAlpha()
 	@IsNotEmpty()
 	last_name: String;
 

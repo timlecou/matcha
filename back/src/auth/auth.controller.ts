@@ -1,7 +1,7 @@
 import { plainToInstance } from "class-transformer";
 import { Request } from "express";
 import { Service } from "typedi";
-import { UnauthorizedException } from "../exceptions/Unauthorized.exception";
+import { UnauthorizedException } from "../exceptions/unauthorized.exception";
 import { UserService } from "../user/user.service";
 import { LoginDTO, RegisterDTO } from "./auth.dto";
 import jwt from 'jsonwebtoken';

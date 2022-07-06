@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HttpException } from "../exceptions/HttpException";
+import { HttpException } from "../exceptions/http-exception";
 
 function isPromise(func: any)
 {
@@ -24,6 +24,11 @@ export function handleController(controller: any, method: any)
 			{
 				res.status(e.code as number);
 				res.json({error: e.message});
+			}
+			else
+			{
+				res.status(500);
+				res.json({error: e});
 			}
 		}
 	}

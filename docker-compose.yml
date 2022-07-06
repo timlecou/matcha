@@ -9,6 +9,7 @@ services:
     restart: always
     volumes:
       - ./back/src:/usr/src/app/src
+      - ./back/uploads:/usr/src/app/uploads
     environment:
       PORT: 4000
       PGHOST: website-db

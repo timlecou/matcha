@@ -2,14 +2,12 @@ import { Service } from 'typedi';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 import bcrypt from 'bcrypt';
+import { Interest } from './interest/interest.entity';
 
 @Service()
 export class UserService
 {
-	constructor(private user_repository: UserRepository)
-	{
-
-	}
+	constructor(private user_repository: UserRepository) {}
 
 	private hashPassword(pass: string): Promise<String>
 	{
@@ -37,5 +35,35 @@ export class UserService
 			.then(user => resolve(user))
 			.catch(() => resolve(null))
 		})
+	}
+
+	async removeAllUsers()
+	{
+		return this.user_repository.removeAll();
+	}
+
+	async getUser(id: Number): Promise<User | null>
+	{
+		return this.user_repository.getUserById(id);
+	}
+
+	async updateUserProfile(user: User): Promise<void>
+	{
+		return this.user_repository.updateUserProfile(user);
+	}
+
+	async addInterestToUser(user: User, interest: Interest)
+	{
+		return this.user_repository.addInterestToUser(user, interest);
+	}
+
+	async getAllInterestsOfUser(user: User)
+	{
+		return this.user_repository.getAllInterestsOfUser(user);
+	}
+
+	async removeInterestOfUser(user: User, interest: Interest)
+	{
+		return this.user_repository.removeInterestOfUser(user, interest);
 	}
 };

@@ -22,7 +22,7 @@ CREATE TABLE "User" (
 
 CREATE TABLE "Interest" (
   id SERIAL PRIMARY KEY NOT NULL,
-  name varchar(255) NOT NULL
+  name varchar(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE "Photo" (
@@ -85,3 +85,6 @@ CREATE TABLE "Message" (
   FOREIGN KEY (to_id) REFERENCES "User"(id),
   FOREIGN KEY (match_id) REFERENCES "Matched_user"(id)
 );
+
+create unique index unique_matches_memberid_requestid
+    on "Interest_User"(least(user_id, interest_id), greatest(user_id, interest_id));
